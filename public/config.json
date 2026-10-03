@@ -1,12 +1,12 @@
 {
-  "_comment": "Alle Inhalte des Linktrees. Platzhalter ersetzen, kein Code-Change nötig.",
-  "siteUrl": "",
+  "_comment": "Alle Inhalte des Linktrees. Texte und Links hier ändern, kein Code-Change nötig.",
+  "siteUrl": "https://anstattpunkt.at/",
   "brand": {
-    "name": "Dein Name",
-    "monogram": "DN",
-    "tagline": "Design · Creative Direction · Musik",
-    "windowTitle": "iPod · Dein Name",
-    "email": "hallo@example.com"
+    "name": "Anstattpunkt.",
+    "monogram": "AP",
+    "tagline": "Vibecoder aus Österreich",
+    "windowTitle": "iPod · ASAP",
+    "email": ""
   },
   "menu": [
     {
@@ -16,24 +16,14 @@
       "title": "Kontakt",
       "items": [
         {
-          "label": "E-Mail",
-          "detail": "hallo@example.com",
-          "href": "mailto:hallo@example.com"
-        },
-        {
           "label": "Instagram",
-          "detail": "@deinname",
-          "href": "https://instagram.com/"
-        },
-        {
-          "label": "LinkedIn",
-          "detail": "Dein Name",
-          "href": "https://www.linkedin.com/"
+          "detail": "@anstattpunkt",
+          "href": "https://www.instagram.com/anstattpunkt"
         },
         {
           "label": "TikTok",
-          "detail": "@deinname",
-          "href": "https://www.tiktok.com/"
+          "detail": "@anstattpunkt",
+          "href": "https://www.tiktok.com/@anstattpunkt"
         }
       ]
     },
@@ -43,15 +33,11 @@
       "lang": "en",
       "type": "page",
       "title": "Work Together",
-      "body": "Du planst ein Projekt? Branding, Websites, Content: lass uns sprechen. Antwort meist innerhalb von 48 Stunden.",
+      "body": "Du hast eine Idee für eine Website, eine App oder ein Tool? Beschreib sie mir, ich setz sie um. Schreib mir einfach auf Instagram.",
       "actions": [
         {
-          "label": "Anfrage senden",
-          "href": "mailto:hallo@example.com?subject=Projektanfrage"
-        },
-        {
-          "label": "Termin buchen",
-          "href": "https://cal.com/"
+          "label": "Nachricht schreiben",
+          "href": "https://ig.me/m/anstattpunkt"
         }
       ]
     },
@@ -59,51 +45,22 @@
       "id": "playlist",
       "label": "Playlist",
       "type": "nowplaying",
-      "title": "Meine Playlist",
-      "artist": "Kuratiert von Dein Name",
-      "cover": "assets/playlist-cover.svg",
-      "spotifyUrl": "https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M",
+      "title": "Chill VibeCoding",
+      "artist": "Kuratiert von Anstattpunkt.",
+      "cover": "assets/playlist-cover.jpg",
+      "spotifyUrl": "https://open.spotify.com/playlist/0EjGjK4QwBUUF1FIwLn6jI",
       "tracks": [
         {
-          "title": "Titel eins",
-          "artist": "Interpret eins",
-          "duration": "3:24"
+          "title": "a lot",
+          "artist": "21 Savage"
         },
         {
-          "title": "Titel zwei",
-          "artist": "Interpret zwei",
-          "duration": "4:02"
+          "title": "Los Pollos Hermanos",
+          "artist": "Knucks"
         },
         {
-          "title": "Titel drei",
-          "artist": "Interpret drei",
-          "duration": "2:51"
-        }
-      ]
-    },
-    {
-      "id": "downloads",
-      "label": "Downloads",
-      "type": "downloads",
-      "title": "Gratis-Downloads",
-      "items": [
-        {
-          "label": "Portfolio 2026",
-          "file": "downloads/portfolio-2026.pdf",
-          "format": "PDF",
-          "size": "440 kB"
-        },
-        {
-          "label": "Case Study: Projekt X",
-          "file": "downloads/case-study-projekt-x.pdf",
-          "format": "PDF",
-          "size": "386 kB"
-        },
-        {
-          "label": "Media Kit",
-          "file": "downloads/media-kit.pdf",
-          "format": "PDF",
-          "size": "386 kB"
+          "title": "Runaway",
+          "artist": "Kanye West"
         }
       ]
     },
@@ -112,7 +69,7 @@
       "label": "Über mich",
       "type": "page",
       "title": "Über mich",
-      "body": "Kurzer Text über dich: wer du bist, was du machst und woran du gerade arbeitest.",
+      "body": "Vibecoder. Bruder, was soll ich dir sagen: Ich kann einfach gut beschreiben, was ich will, und es dann umsetzen.",
       "actions": []
     }
   ],
