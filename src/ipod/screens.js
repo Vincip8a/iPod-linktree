@@ -245,13 +245,10 @@ export function createScreens(ctx) {
 
   function buildPreview(item) {
     const pane = h('div', 'ipodc-pv ipodc-pv--icon');
-    if (item.type === 'nowplaying') {
-      pane.className = 'ipodc-pv ipodc-pv--art';
-      pane.append(coverArt(item, 'ipodc-pv-cover'));
-      return pane;
-    }
+    // Now Playing shows its cover inside the medallion, the same size as the other entries' icons
+    const cover = item.type === 'nowplaying' ? (item.cover && safeHref(item.cover)) || null : null;
     const kind = iconOf(item, true);
-    const icon = () => previewIcon(kind, mono, `${ctx.P}s`);
+    const icon = () => previewIcon(kind, mono, `${ctx.P}s`, cover);
     pane.innerHTML = `<div class="ipodc-pv-floor"></div><div class="ipodc-pv-refl"><div class="ipodc-pv-float-in">${icon()}</div></div><div class="ipodc-pv-float">${icon()}</div>`;
     return pane;
   }

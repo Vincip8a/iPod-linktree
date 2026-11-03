@@ -45,9 +45,17 @@ const ICON = {
   game: '<rect x="27" y="51" width="10" height="10" rx="2"/><rect x="39" y="51" width="10" height="10" rx="2"/><rect x="51" y="51" width="10" height="10" rx="2"/><rect x="51" y="39" width="10" height="10" rx="2"/><rect x="63" y="39" width="10" height="10" rx="2"/><circle cx="69.6" cy="41.8" r="1.3" fill="#fff" stroke="none"/><circle cx="69.6" cy="46.2" r="1.3" fill="#fff" stroke="none"/><circle cx="68" cy="58" r="4.2" fill="#24734d" stroke="none"/>',
 };
 export const ICON_KINDS = [...Object.keys(ICON), 'monogram'];
-export function previewIcon(kind, monogram, s) {
+let clipSeq = 0;
+/** `img`: a picture (the playlist cover) cut round inside the ring instead of the glyph; the monogram
+ *  under it shows when the picture does not load */
+export function previewIcon(kind, monogram, s, img = null) {
   const m = esc(String(monogram ?? '').slice(0, 3));
-  const inner = ICON[kind] ? `<g fill="url(#${s}bl)" stroke="#164f9e" stroke-width="1.2">${ICON[kind]}</g>`
+  let inner = ICON[kind] && !img ? `<g fill="url(#${s}bl)" stroke="#164f9e" stroke-width="1.2">${ICON[kind]}</g>`
     : `<text x="50" y="50" dy=".35em" text-anchor="middle" font-family="Helvetica Neue,Helvetica,Arial,sans-serif" font-weight="700" font-size="${m.length > 2 ? 26 : 34}" letter-spacing="-1.5" fill="#43474e">${m}</text>`;
-  return svg('0 0 100 100', `<circle cx="50" cy="50" r="42" fill="url(#${s}md)" stroke="#80868e" stroke-width="1.5"/><circle cx="50" cy="50" r="35" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.2"/>${inner}<path d="M14 44a36 36 0 0 1 72 0c-22 8-50 8-72 0z" fill="url(#${s}gl)" opacity=".5"/>`);
+  if (img) {
+    const id = `${s}cv${++clipSeq}`;
+    inner += `<clipPath id="${id}"><circle cx="50" cy="50" r="35"/></clipPath><image href="${esc(img)}" x="15" y="15" width="70" height="70" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>`;
+  }
+  const ring = '<circle cx="50" cy="50" r="35" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.2"/>';
+  return svg('0 0 100 100', `<circle cx="50" cy="50" r="42" fill="url(#${s}md)" stroke="#80868e" stroke-width="1.5"/>${img ? inner + ring : ring + inner}<path d="M14 44a36 36 0 0 1 72 0c-22 8-50 8-72 0z" fill="url(#${s}gl)" opacity=".5"/>`);
 }

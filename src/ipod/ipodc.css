@@ -284,13 +284,6 @@
   from { transform: translateY(calc(var(--ipodc-p) * 1)) scale(1); }
   to { transform: translateY(calc(var(--ipodc-p) * -2)) scale(1.035); }
 }
-/* media: full-height cover with a slow horizontal pan */
-.ipodc-pv--art { background: #000; }
-.ipodc-pv-cover { --ipodc-cs: 218; transform: translateX(calc(var(--ipodc-p) * -29)); }
-@keyframes ipodc-pan {
-  from { transform: translateX(calc(var(--ipodc-p) * -12)); }
-  to { transform: translateX(calc(var(--ipodc-p) * -46)); }
-}
 
 /* cover art (image over a procedural fallback with the monogram); --ipodc-cs = size in logical px */
 .ipodc-art {
@@ -601,10 +594,9 @@
 .ipodc-view[class*=bump] { animation: ipodc-bump .22s ease-out; }
 .ipodc-pv { transition: opacity .45s; }
 /* the preview pane drifts for a while after each change of selection, then rests (an idle page must not
-   repaint forever): 6 x 7 s and 4 x 16 s, and they hold their last frame */
+   repaint forever): 6 x 7 s, and it holds its last frame */
 .ipodc-pv.is-on :is(.ipodc-pv-float, .ipodc-pv-float-in) { animation: ipodc-float 7s ease-in-out 6 alternate both; }
 .ipodc-page-art-in { animation: ipodc-float 7s ease-in-out 6 alternate both; }
-.ipodc-pv.is-on .ipodc-pv-cover { animation: ipodc-pan 16s ease-in-out 4 alternate both; }
 .ipodc-toast { transition: .18s; transition-property: opacity, transform; }
 .ipodc-toast.is-on { transform: translate(-50%, -50%) scale(1); }
 /* handoff: the intro canvas fades out over 220 ms; what its frontal last frame does not show (the drop

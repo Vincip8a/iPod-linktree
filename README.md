@@ -81,7 +81,7 @@ Jeder Eintrag hat vier gemeinsame Felder und zwei optionale:
 | `label` | String | Beschriftung im Menü                                                    |
 | `type`  | String | Bauart der Unterseite: `list`, `page`, `nowplaying`, `downloads` oder `game` |
 | `title` | String | Überschrift der Unterseite                                              |
-| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `game`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt immer das Cover |
+| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `game`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt sein Cover rund im selben Medaillon |
 | `lang`  | String | Optional: Sprache von `label` und `title`, wenn sie nicht Deutsch ist, z. B. `"en"` für „Work Together“ (Screenreader sprechen sie dann richtig aus). Gilt für beide Felder: nur setzen, wenn `label` und `title` in dieser Sprache sind |
 
 Je nach `type` kommen weitere Felder dazu. Zeilen (`items[]`, `actions[]`) können ebenfalls ein
