@@ -93,6 +93,13 @@
       ]
     },
     {
+      "id": "snake",
+      "label": "Snake",
+      "type": "game",
+      "icon": "game",
+      "title": "Snake"
+    },
+    {
       "id": "about",
       "label": "Über mich",
       "type": "page",
@@ -109,6 +116,6 @@
   "settings": {
     "finish": "black",
     "clickSound": true,
-    "intro": true
+    "intro": false
   }
 }

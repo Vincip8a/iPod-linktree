@@ -170,6 +170,7 @@
   touch-action: none;
 }
 .ipodc-screen, .ipodc-view { position: absolute; inset: 0; overflow: hidden; background: #fff; }
+.ipodc-game { position: absolute; inset: 0; width: 100%; height: 100%; display: block; } /* game.js draws it */
 .ipodc-screen.is-split .ipodc-view { right: 50%; }
 .ipodc-screen.has-sb .ipodc-view { right: calc(var(--ipodc-p) * 9); }
 .ipodc-screen.is-split.has-sb .ipodc-view { right: calc(50% + var(--ipodc-p) * 9); }
@@ -503,9 +504,9 @@
 }
 .ipodc-wheel.is-spinning { cursor: grabbing; }
 /* pressed button: a soft shade masked to the 90° sector under the finger (below labels and centre) */
-.ipodc-wheel[data-press="next"] { --ipodc-q: 90deg; }
-.ipodc-wheel[data-press="play"] { --ipodc-q: 180deg; }
-.ipodc-wheel[data-press="prev"] { --ipodc-q: 270deg; }
+.ipodc-wheel[data-press="right"] { --ipodc-q: 90deg; }
+.ipodc-wheel[data-press="down"] { --ipodc-q: 180deg; }
+.ipodc-wheel[data-press="left"] { --ipodc-q: 270deg; }
 .ipodc-wheel { --ipodc-q: 0deg; }
 .ipodc-wheel::before {
   content: "";
@@ -522,16 +523,14 @@
   position: absolute;
   left: 50%; top: 50%;
   color: var(--ipodc-c-wheelLabel);
-  font: 700 calc(var(--ipodc-u) * 2.1)/1 var(--ipodc-font);
-  letter-spacing: .05em;
   transform: translate(-50%, -50%) translate(var(--ipodc-dx, 0px), var(--ipodc-dy, 0px));
   pointer-events: none;
 }
 .ipodc-wbtn svg { display: block; width: calc(var(--ipodc-u) * 4.7); height: calc(var(--ipodc-u) * 2.1); fill: currentColor; }
-.ipodc-wbtn--menu { --ipodc-dy: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r) * -1); padding-left: .05em; }
-.ipodc-wbtn--play { --ipodc-dy: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r)); }
-.ipodc-wbtn--next { --ipodc-dx: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r)); }
-.ipodc-wbtn--prev { --ipodc-dx: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r) * -1); }
+.ipodc-wbtn--up { --ipodc-dy: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r) * -1); }
+.ipodc-wbtn--down { --ipodc-dy: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r)); }
+.ipodc-wbtn--right { --ipodc-dx: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r)); }
+.ipodc-wbtn--left { --ipodc-dx: calc(var(--ipodc-u) * var(--ipodc-mm-lab-r) * -1); }
 
 /* centre button: smooth matte aluminium tone, slightly concave (shadowed top, lit bottom) */
 .ipodc-center {

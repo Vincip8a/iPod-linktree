@@ -18,10 +18,10 @@ import { createScreens } from './screens.js';
 
 const SLIDE_MS = 260;
 // a freshly opened screen ignores the centre button / Enter this long: a double press opens an item,
-// never also the first link on the screen it opened (going back with MENU is not guarded)
+// never also the first link on the screen it opened (going back is not guarded)
 const SETTLE_MS = 450;
 const EASE = 'cubic-bezier(.32,.08,.24,1)';
-const SCREEN_TYPES = ['list', 'page', 'nowplaying', 'downloads'];
+const SCREEN_TYPES = ['list', 'page', 'nowplaying', 'downloads', 'game'];
 let seq = 0;
 
 // UI strings (not content): German 6G firmware wording.
@@ -39,10 +39,20 @@ const DEFAULT_UI = {
   mail: 'E-Mail-Link',
   download: 'Download',
   downloadStarted: 'Download gestartet',
-  backHint: 'Zurück mit MENU',
+  backHint: 'Zurück: Rad links drücken',
   back: 'Zurück',
   empty: 'Keine Einträge',
-  hint: 'Pfeiltasten blättern, Enter wählt, Escape zurück, Leertaste Wiedergabe.',
+  hint: 'Pfeil hoch und runter blättern, rechts oder Enter wählt, links oder Escape zurück, Leertaste Wiedergabe.',
+  // the game (game.js)
+  score: 'Punkte',
+  best: 'Rekord',
+  gameStart: 'Start: Mitte oder Enter',
+  gameSteer: 'Lenken: Pfeile oder Rad drehen',
+  gamePaused: 'Pause',
+  gameResume: 'Weiter: Mitte · Zurück: links',
+  gameOver: 'Game over',
+  gameAgain: 'Nochmal: Mitte · Zurück: links',
+  newBest: 'Neuer Rekord!',
 };
 
 export function mountIpod(container, { config } = {}) {
@@ -51,7 +61,7 @@ export function mountIpod(container, { config } = {}) {
   // entries without a name or with an unknown type would be blank or broken rows: skip them, with a hint
   const menu = (Array.isArray(config.menu) ? config.menu : []).filter((m) => {
     const ok = m && typeof m === 'object' && firstText(m.label, m.title) && SCREEN_TYPES.includes(m.type);
-    if (!ok) console.warn('[ipod] config.json: menu entry skipped (needs label or title and type list | page | nowplaying | downloads):', m);
+    if (!ok) console.warn('[ipod] config.json: menu entry skipped (needs label or title and type list | page | nowplaying | downloads | game):', m);
     return ok;
   });
   const L = DEFAULT_UI;
@@ -94,8 +104,8 @@ export function mountIpod(container, { config } = {}) {
     + '<div class="ipodc-window"><div class="ipodc-lcd"><div class="ipodc-ui">'
     + `<div class="ipodc-bar" ${hid}><span class="ipodc-ind">${playIndicator(P)}</span><div class="ipodc-title"></div><span class="ipodc-batt">${battery(P)}</span></div>`
     + `<div class="ipodc-stage"></div><div class="ipodc-toast" ${hid}></div><div class="ipodc-boot" ${hid}><div class="ipodc-boot-mono"></div></div>`
-    + `</div></div><div class="ipodc-glare"></div></div><div class="ipodc-wheel" ${hid}><span class="ipodc-wbtn ipodc-wbtn--menu">${IPOD.wheelLabels.menu ?? 'MENU'}</span>`
-    + ['next', 'prev', 'play'].map((n) => `<span class="ipodc-wbtn ipodc-wbtn--${n}">${GLYPH[n]}</span>`).join('')
+    + `</div></div><div class="ipodc-glare"></div></div><div class="ipodc-wheel" ${hid}>`
+    + ['up', 'right', 'down', 'left'].map((n) => `<span class="ipodc-wbtn ipodc-wbtn--${n}">${GLYPH[n]}</span>`).join('')
     + `<div class="ipodc-center"></div></div>${sharedDefs(`${P}s`)}`;
   const [lcd, ind, titleEl, stage, toast, boot, wheel, centerBtn] = ['lcd', 'ind', 'title', 'stage', 'toast', 'boot', 'wheel', 'center']
     .map((c) => el.querySelector(`.ipodc-${c}`));
@@ -116,7 +126,7 @@ export function mountIpod(container, { config } = {}) {
   const nameId = nid('name');
   const nameEl = h('div', 'ipodc-sr', { id: nameId, 'aria-hidden': 'true' });
   el.setAttribute('aria-labelledby', nameId);
-  // the wheel is aria-hidden, so touch screen-reader users (VoiceOver, TalkBack) get MENU as an
+  // the wheel is aria-hidden, so touch screen-reader users (VoiceOver, TalkBack) get "back" as an
   // invisible button; it is outside the tab order (keyboard users have Esc / Backspace)
   const backBtn = h('button', 'ipodc-sr', { type: 'button', tabindex: -1, hidden: '' });
   backBtn.textContent = L.back;
@@ -285,18 +295,26 @@ export function mountIpod(container, { config } = {}) {
     el.classList.remove('is-centre');
     delete wheel.dataset.press;
   }
+  /** the pressed look of a zone or the centre; Escape / Backspace show the back zone, keys without a zone
+   *  (Space, Shift + arrows) none */
   function flash(zone) {
     unflash();
-    if (zone === 'center') { centerBtn.classList.add('is-pressed'); el.classList.add('is-centre'); } else wheel.dataset.press = zone;
+    if (zone === 'menu') zone = 'left';
+    if (zone === 'center') { centerBtn.classList.add('is-pressed'); el.classList.add('is-centre'); } else if (GLYPH[zone]) wheel.dataset.press = zone;
     flashT = timers.later(unflash, 160);
   }
-  /** `at`: when the press began (the centre acts on release, a slow second tap still counts as early) */
+  /** A wheel zone ('up' | 'right' | 'down' | 'left', the D-pad), the centre or a key action ('menu', 'play',
+   *  'next', 'prev'). Up / down move the selection like a wheel step, left goes back, right opens like the
+   *  centre. A screen with its own controls (the game) takes the press first.
+   *  `at`: when the press began (the centre acts on release, a slow second tap still counts as early) */
   function press(btn, at = performance.now()) {
     if (phase !== 'ready' || destroyed) return;
-    sound.play('press');
     const s = current();
-    if (btn === 'menu') back();
-    else if (btn === 'center') { if (!s.opened || at - s.enteredAt >= SETTLE_MS) s.activate(); }
+    if (s.press?.(btn)) return void sound.play('press');
+    if (btn === 'up' || btn === 'down') return void step(btn === 'down' ? 1 : -1);
+    sound.play('press');
+    if (btn === 'menu' || btn === 'left') back();
+    else if (btn === 'center' || btn === 'right') { if (!s.opened || at - s.enteredAt >= SETTLE_MS) s.activate(); }
     else if (btn === 'play' && tracks.length) {
       player.setPlaying(!player.playing);
       announce(player.playing ? L.playing : L.paused);
@@ -435,8 +453,9 @@ export function mountIpod(container, { config } = {}) {
   }, { passive: false });
 
   // ── keyboard
+  // the arrows are the wheel's D-pad: up / down move (held, they repeat), left goes back, right opens
   const KEYS = {
-    ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1,
+    ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
     Enter: 'center', Escape: 'menu', Backspace: 'menu', ' ': 'play',
   };
   function onKey(e) {
@@ -444,12 +463,12 @@ export function mountIpod(container, { config } = {}) {
     const k = e.key;
     const i = current().index;
     let a = KEYS[k];
-    if (e.shiftKey && /^Arrow(Left|Right)$/.test(k)) a = a > 0 ? 'next' : 'prev';
+    if (e.shiftKey && /^Arrow(Left|Right)$/.test(k)) a = a === 'right' ? 'next' : 'prev';
     sound.ensure();
     if (k === 'Home' || k === 'End') jump(k === 'Home' ? -Infinity : Infinity);
     else if (k === 'PageDown' || k === 'PageUp') jump(i + (k === 'PageDown' ? 4 : -4)); // half a screen
-    else if (typeof a === 'number') step(a);
     else if (!a) return;
+    else if (a === 'up' || a === 'down') press(a);
     else if (!e.repeat) tap(a, e.timeStamp);
     e.preventDefault();
     // browser zoom made the stage scroll (focus moves with preventScroll): a key never changes the
@@ -480,14 +499,14 @@ export function mountIpod(container, { config } = {}) {
   show(menuScr);
   setTitle(menuScr.title);
 
-  /** "Links" in the menu bar: back to the main menu in one slide, MENU flashes, focus (with its ring when
+  /** "Links" in the menu bar: back to the main menu in one slide, the back zone flashes, focus (with its ring when
    *  "Links" was activated from the keyboard). Pressed before the iPod is ready (intro, boot screen), it
    *  runs once it is. */
   let homeAfterBoot = null;
   function home({ keyboard = el.dataset.input === 'key' } = {}) {
     if (destroyed) return;
     if (phase !== 'ready') { homeAfterBoot = { keyboard }; return; }
-    flash('menu');
+    flash('left');
     sound.play('press');
     if (stack.length > 2) stack.splice(1, stack.length - 2); // slide straight from the top screen
     back();

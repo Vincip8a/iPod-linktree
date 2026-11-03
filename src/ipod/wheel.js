@@ -1,16 +1,17 @@
 // Click-wheel input: rotational drag on the ring (pointer capture + angle accumulation) and
-// presses on the four printed zones. Like the capacitive wheel there is no inertia: the list stops
-// the moment the finger lifts. Faster spins need less arc per step (the authentic acceleration).
+// presses on the four zones, which work as a D-pad (their arrows are printed on the wheel). Like the
+// capacitive wheel there is no inertia: the list stops the moment the finger lifts. Faster spins need
+// less arc per step (the authentic acceleration).
 const SLOP = 7; // arc (degrees) below this still counts as a press
 const PRESS_SLIDE = 0.15; // a press slid further than this (x wheel radius) from where it began is cancelled
 const CENTRE = 0.4; // centre button radius / wheel radius (ipodSpec: 15.4 / 38.6): lifting there presses nothing
-const ZONES = ['next', 'play', 'prev', 'menu']; // clockwise from 3 o'clock
+const ZONES = ['right', 'down', 'left', 'up']; // clockwise from 3 o'clock
 
 /**
  * @param wheel element covering the whole wheel (the centre button inside it is ignored)
  * @param on(target, type, fn) adds a listener that the caller removes on destroy
  * @param cb.onStep(dir) → boolean (false at a list end drops the remainder)
- * @param cb.onPress(zone)  a completed press on 'menu' | 'next' | 'prev' | 'play'
+ * @param cb.onPress(zone)  a completed press on 'up' | 'right' | 'down' | 'left'
  * @param cb.onDown()       first touch (focus, audio unlock)
  * @returns stop(): cancels a gesture in progress, including its pressed-zone visual
  */

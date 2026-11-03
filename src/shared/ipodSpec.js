@@ -20,15 +20,16 @@ export const IPOD = {
   // Click wheel (concentric ring + centre button)
   wheel: { cx: 30.9, cy: 73.6, diameter: 38.6 },
   centerButton: { diameter: 15.4 },
-  // Labels on the wheel: their distance from the centre as a fraction of the wheel radius, the word
-  // MENU and the transport glyphs (SVG path data in a 20 × 9 box; the DOM wheel and the 3D wheel texture)
+  // Labels on the wheel: their distance from the centre as a fraction of the wheel radius and one arrow
+  // per zone, since the wheel works as a D-pad (up / down move the selection, left goes back, right opens).
+  // SVG path data in a 20 × 9 box; the DOM wheel and the 3D wheel texture draw the same arrows.
   wheelLabels: {
     radiusFactor: 0.72,
-    menu: 'MENU',
     glyphs: {
-      next: 'M0 0l7.2 4.5L0 9zM7.2 0l7.2 4.5L7.2 9zM15.4 0h2.4v9h-2.4z',
-      prev: 'M20 0l-7.2 4.5L20 9zM12.8 0L5.6 4.5l7.2 4.5zM4.6 0H2.2v9h2.4z',
-      play: 'M1 0l7.4 4.5L1 9zM11.4 0h2.6v9h-2.6zM16.2 0h2.6v9h-2.6z',
+      up: 'M5.5 8.4 10 .6l4.5 7.8z',
+      right: 'M6.1 0l7.8 4.5L6.1 9z',
+      down: 'M5.5.6h9L10 8.4z',
+      left: 'M13.9 0v9L6.1 4.5z',
     },
   },
 
@@ -65,7 +66,7 @@ export const FINISHES = {
     wheel: '#e4e5e7',
     wheelHi: '#f0f1f2',
     wheelLo: '#d9dbde',
-    wheelLabel: '#5f6368', // printed grey, 4.8:1 on the wheel (WCAG 1.4.3 for the word MENU, 1.4.11 for the glyphs)
+    wheelLabel: '#5f6368', // printed grey, 4.8:1 on the wheel (WCAG 1.4.11 for the arrows)
     centerButton: '#cfd2d6',
     face: '#e1e4e7',
     light: 1,

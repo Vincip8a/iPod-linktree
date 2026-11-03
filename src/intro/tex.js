@@ -117,11 +117,11 @@ export function wheelCanvas(dMm, labelFactor, cbMm, f = FINISHES.silver) {
   const cb = cbMm * px;
   dot(g, R, R + 0.19 * px, cb + 0.13 * px, lit(f, 0.65));
   dot(g, R, R, cb + 0.15 * px, shaded(f, 0.5, f.shade > 1 ? '0,0,0' : '100,104,110'));
-  // the word and the glyphs of the DOM wheel (ipodSpec.js), so the intro's last frame matches it
-  const { menu = 'MENU', glyphs } = IPOD.wheelLabels;
-  for (const d of [-0.04, 0.04]) text(g, menu, R + (0.0525 + d) * px, R - lr, 2.1 * px, 700, f.wheelLabel, 'center', 0.105 * px);
+  // the arrows of the DOM wheel (ipodSpec.js), so the intro's last frame matches it
+  const { glyphs } = IPOD.wheelLabels;
   const k = (2.1 / 9) * px;
-  [[glyphs.next, R + lr, R], [glyphs.prev, R - lr, R], [glyphs.play, R, R + lr]].forEach(([d, x, y]) => {
+  g.fillStyle = f.wheelLabel;
+  [[glyphs.up, R, R - lr], [glyphs.right, R + lr, R], [glyphs.down, R, R + lr], [glyphs.left, R - lr, R]].forEach(([d, x, y]) => {
     g.setTransform(k, 0, 0, k, x - 10 * k, y - 4.5 * k);
     g.fill(new Path2D(d));
   });

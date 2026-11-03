@@ -51,8 +51,8 @@ with nothing to show, are skipped with a console warning.
 
 ### `src/shared/ipodSpec.js`: single source of truth
 
-`IPOD` (geometry in mm: body, display window, LCD, click wheel with its MENU label and transport
-glyph paths, edge details), `PARTS` (exploded layers, front to back), `FINISHES` (silver, black: plate,
+`IPOD` (geometry in mm: body, display window, LCD, click wheel with the arrow paths of its four
+zones, edge details), `PARTS` (exploded layers, front to back), `FINISHES` (silver, black: plate,
 wheel, labels, centre button, and the 3D plate colour and lip strengths tuned so the intro's last frame
 matches the DOM plate) with `finishOf(config)` / `finishName(config)` (`settings.finish`, silver for anything
 else), `COLORS` (the shared parts and iPod UI colours), `aspect` (width / height). Every value is read by both iPods or by one of them;
@@ -120,9 +120,9 @@ mountIpod(container, { config }) → {
   el,                       // the iPod body (role=listbox, the focus target)
   getShellRect(),           // DOMRect of the body, valid before reveal()
   reveal({ boot = true }),  // → Promise: show, boot screen, main menu
-  press(button),            // 'menu' | 'center' | 'play' | 'next' | 'prev'
+  press(button),            // 'up' | 'right' | 'down' | 'left' (the wheel's D-pad) | 'center' | 'menu' | 'play' | 'next' | 'prev'
   scroll(steps),            // +down / -up, like turning the wheel
-  home({ keyboard }),       // back to the main menu, MENU flashes, focus (ring for keyboard); waits for reveal
+  home({ keyboard }),       // back to the main menu, the back zone flashes, focus (ring for keyboard); waits for reveal
   focus(),                  // focus the key target (the selected row on a screen of links, else the body)
   getState(),               // { screen, path, index }
   destroy(),
@@ -130,12 +130,16 @@ mountIpod(container, { config }) → {
 ```
 Height is `var(--ipod-h)`, every inner size is `calc(var(--ipod-h) / 103.5 * <mm>)` from `IPOD`.
 The LCD UI is a logical 320×240 px space. Files: `wheel.js` (click-wheel input), `screens.js`
-(main menu with preview pane, list, page, Now Playing, downloads), `player.js` (simulated
+(main menu with preview pane, list, page, Now Playing, downloads), `game.js` (Snake, menu type
+`game`: a canvas, its own `press` / `move` take the D-pad, the centre and the wheel), `player.js` (simulated
 playback), `sound.js` (WebAudio clicks, `settings.clickSound`), `art.js` (procedural SVG),
 `util.js` (helpers, re-exports `h` from `src/shared/dom.js` and `safeHref`), `ipodc.css`.
 
-Input: wheel drag, mouse wheel, touch, keys on the focused iPod (↑/↓/←/→ scroll, Enter centre,
-Esc/Backspace MENU, Space play, Shift+←/→ prev/next, Home/End, PageUp/PageDown). A ring press
+Input: wheel drag, mouse wheel, touch, keys on the focused iPod. The four wheel zones are a D-pad
+with arrows printed on them, and the arrow keys are the same D-pad: ↑/↓ move the selection (held,
+they repeat), ← goes back, → opens like the centre. Enter centre, Esc/Backspace back, Space play,
+Shift+←/→ prev/next, Home/End, PageUp/PageDown. A screen with its own controls (the game) gets
+every press first through `s.press(button)` and keeps the ones it uses. A ring press
 that slides off its zone (or onto the centre button) presses nothing on lift. The mouse wheel
 never scrolls the page, except when browser zoom made the window larger than the screen: then,
 at the end of the list, it scrolls the stage so the click wheel can be reached.
