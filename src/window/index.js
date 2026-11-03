@@ -1,7 +1,8 @@
 // Aqua-era desktop + brushed-metal window that frames the iPod.
-// API (see ARCHITECTURE.md): createDesktop(host, { config, onLinks, onFocus }) -> { el, contentEl, setInteractive, destroy }
+// API (see ARCHITECTURE.md): createDesktop(host, { config, lang, langs, onLang, onLinks, onFocus }) -> { el, contentEl, setInteractive, destroy }
 import './window.css';
 import { prefersReducedMotion } from '../shared/config.js';
+import { uiText } from '../shared/i18n.js';
 import { safeHref, firstText } from '../shared/href.js';
 import { aspect, finishName } from '../shared/ipodSpec.js';
 import { h } from '../shared/dom.js';
@@ -12,6 +13,22 @@ const ZOOM_MIN_GAIN = 12;
 const MENUBAR_H = 22;
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
+
+// the window's own words; `clock`: the locale of the menu bar clock (24 h in both)
+const UI = {
+  de: {
+    bar: 'Menüleiste', links: 'Links', contact: 'Kontakt', legal: 'Rechtliches', impressum: 'Impressum',
+    datenschutz: 'Datenschutz', language: 'Sprache', window: 'Fenster', close: 'Schließen', minimise: 'Minimieren',
+    zoom: 'Zoomen', restore: 'iPod wiederherstellen', clock: 'de-DE',
+  },
+  en: {
+    bar: 'Menu bar', links: 'Links', contact: 'Contact', legal: 'Legal', impressum: 'Imprint',
+    datenschutz: 'Privacy', language: 'Language', window: 'Window', close: 'Close', minimise: 'Minimise',
+    zoom: 'Zoom', restore: 'Restore iPod', clock: 'en-GB',
+  },
+};
+// each language's name in itself, for the switch's buttons (their text is the code: DE, EN)
+const LANG_NAMES = { de: 'Deutsch', en: 'English' };
 
 // gsap runs only the genie (minimise / restore): loaded on idle once the window is interactive,
 // so it stays out of the entry chunk. A failed load falls back to the instant (reduced-motion) path.
@@ -31,7 +48,8 @@ function glyph(pathD) {
   return svg;
 }
 
-export function createDesktop(host, { config, onLinks, onFocus }) {
+export function createDesktop(host, { config, lang = 'de', langs = [], onLang, onLinks, onFocus }) {
+  const T = uiText(UI, lang);
   const brand = config?.brand ?? {};
   const winTitle = firstText(brand.windowTitle, brand.name); // a blank windowTitle: the name stands in
   const mobileMq = window.matchMedia(MOBILE_MQ);
@@ -52,21 +70,34 @@ export function createDesktop(host, { config, onLinks, onFocus }) {
 
   // menu bar
   const bar = h('header', 'dt-bar');
-  const barLeft = h('nav', 'dt-bar-left', { 'aria-label': 'Menüleiste' });
+  const barLeft = h('nav', 'dt-bar-left', { 'aria-label': T.bar });
   // only what has something to show or do: no empty name slot, no "Links" without an iPod (the
   // config error window), no "Kontakt" without brand.email
   if (brand.monogram) barLeft.append(h('span', 'dt-mono', { 'aria-hidden': 'true', text: brand.monogram }));
   if (brand.name) barLeft.append(h('strong', 'dt-brand', { text: brand.name }));
-  const linksBtn = h('button', 'dt-bar-item dt-bar-links', { type: 'button', text: 'Links' });
+  const linksBtn = h('button', 'dt-bar-item dt-bar-links', { type: 'button', text: T.links });
   if (onLinks) barLeft.append(linksBtn);
   const mailHref = brand.email ? safeHref(`mailto:${brand.email}`) : null;
-  if (mailHref) barLeft.append(h('a', 'dt-bar-item', { href: mailHref, text: 'Kontakt' }));
+  if (mailHref) barLeft.append(h('a', 'dt-bar-item', { href: mailHref, text: T.contact }));
   const clock = h('time', 'dt-clock');
-  // right side: small legal links (config.legal), then the clock
+  // right side: the language switch (when the site has more than one, settings.languages), small legal
+  // links (config.legal), then the clock
   const barRight = h('div', 'dt-bar-right');
+  if (onLang && langs.length > 1) {
+    const switcher = h('div', 'dt-lang', { role: 'group', 'aria-label': T.language });
+    langs.forEach((l, i) => {
+      if (i) switcher.append(h('span', 'dt-lang-sep', { 'aria-hidden': 'true', text: '|' }));
+      const b = h('button', 'dt-legal-link dt-lang-btn', {
+        type: 'button', text: l.toUpperCase(), lang: l, 'aria-label': LANG_NAMES[l] ?? l, 'aria-pressed': String(l === lang),
+      });
+      b.addEventListener('click', (e) => onLang(l, e));
+      switcher.append(b);
+    });
+    barRight.append(switcher);
+  }
   const legal = config?.legal ?? {};
-  const legalNav = h('nav', 'dt-legal', { 'aria-label': 'Rechtliches' });
-  for (const [key, label] of [['impressum', 'Impressum'], ['datenschutz', 'Datenschutz']]) {
+  const legalNav = h('nav', 'dt-legal', { 'aria-label': T.legal });
+  for (const [key, label] of [['impressum', T.impressum], ['datenschutz', T.datenschutz]]) {
     const href = legal[key] ? safeHref(legal[key]) : null; // same rule as the iPod links
     if (href) legalNav.append(h('a', 'dt-legal-link', { href, text: label }));
   }
@@ -77,12 +108,12 @@ export function createDesktop(host, { config, onLinks, onFocus }) {
   // window
   const stage = h('main', 'dt-stage');
   const pos = h('div', 'dt-pos');
-  const win = h('section', 'dt-win', { 'aria-label': winTitle || 'Fenster', tabindex: '-1' });
+  const win = h('section', 'dt-win', { 'aria-label': winTitle || T.window, tabindex: '-1' });
   const titlebar = h('div', 'dt-titlebar');
   const lights = h('div', 'dt-lights');
-  const btnClose = h('button', 'dt-tl dt-tl-close', { type: 'button', 'aria-label': 'Schließen' });
-  const btnMin = h('button', 'dt-tl dt-tl-min', { type: 'button', 'aria-label': 'Minimieren' });
-  const btnZoom = h('button', 'dt-tl dt-tl-zoom', { type: 'button', 'aria-label': 'Zoomen', 'aria-pressed': 'false' });
+  const btnClose = h('button', 'dt-tl dt-tl-close', { type: 'button', 'aria-label': T.close });
+  const btnMin = h('button', 'dt-tl dt-tl-min', { type: 'button', 'aria-label': T.minimise });
+  const btnZoom = h('button', 'dt-tl dt-tl-zoom', { type: 'button', 'aria-label': T.zoom, 'aria-pressed': 'false' });
   btnClose.append(glyph('M3.2 3.2l5.6 5.6M8.8 3.2L3.2 8.8'));
   btnMin.append(glyph('M2.6 6h6.8'));
   btnZoom.append(glyph('M2.8 6h6.4M6 2.8v6.4'));
@@ -98,7 +129,7 @@ export function createDesktop(host, { config, onLinks, onFocus }) {
   stage.append(pos);
 
   // minimised icon
-  const icon = h('button', 'dt-icon', { type: 'button', 'aria-label': 'iPod wiederherstellen' });
+  const icon = h('button', 'dt-icon', { type: 'button', 'aria-label': T.restore });
   const iconArt = h('span', 'dt-icon-art', { 'aria-hidden': 'true' });
   iconArt.append(h('i', 'dt-icon-screen'), h('i', 'dt-icon-wheel'));
   icon.append(iconArt, h('span', 'dt-icon-label', { text: 'iPod' }));
@@ -119,7 +150,7 @@ export function createDesktop(host, { config, onLinks, onFocus }) {
   const zoomOff = () => isMobile() || ipodH(probeZ) - ipodH(probeN) < ZOOM_MIN_GAIN;
 
   /* ---------- clock ---------- */
-  const fmt = new Intl.DateTimeFormat('de-DE', { hour: '2-digit', minute: '2-digit' });
+  const fmt = new Intl.DateTimeFormat(T.clock, { hour: '2-digit', minute: '2-digit' });
   let clockTimer = 0;
   const tickClock = () => {
     const now = new Date();

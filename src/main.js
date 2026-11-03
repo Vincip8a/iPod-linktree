@@ -3,6 +3,7 @@
 // waiting for it. Without WebGL, or if the intro fails in any way, the iPod is revealed directly.
 import './base.css';
 import { loadConfig, prefersReducedMotion, introEnabled } from './shared/config.js';
+import { languagesOf, localize, uiText } from './shared/i18n.js';
 import { createDesktop } from './window/index.js';
 import { mountIpod } from './ipod/index.js';
 
@@ -31,6 +32,33 @@ const INTRO_SEEN = 'ipodc-intro-seen';
 const introSeen = () => { try { return sessionStorage.getItem(INTRO_SEEN) === '1'; } catch { return false; } };
 const markIntroSeen = () => { try { sessionStorage.setItem(INTRO_SEEN, '1'); } catch { /* storage blocked */ } };
 
+// the language picked in the menu bar, remembered on this device (a convenience: without storage the
+// browser language decides again next time)
+const LANG_KEY = 'anstatt-lang';
+/** The visitor's language among the site's (`langs`): ?lang=…, else the one picked before, else the first
+ *  browser language the site has, else English when it has English, else its first language. */
+function pickLang(langs) {
+  const asked = params.get('lang')?.trim().toLowerCase();
+  if (langs.includes(asked)) return asked;
+  let saved = null;
+  try { saved = localStorage.getItem(LANG_KEY); } catch { /* storage blocked */ }
+  if (langs.includes(saved)) return saved;
+  for (const l of navigator.languages?.length ? navigator.languages : [navigator.language]) {
+    const base = String(l ?? '').split('-')[0].toLowerCase();
+    if (langs.includes(base)) return base;
+  }
+  return langs.includes('en') ? 'en' : langs[0];
+}
+
+// the few words main.js shows itself: the error window comes before config.json (so the browser language
+// picks them), the skip button with the page's language
+const UI = {
+  de: { errorTitle: 'Die Inhalte konnten gerade nicht geladen werden.', errorText: 'Bitte lade die Seite in einem Moment neu.', reload: 'Neu laden', skip: 'Intro überspringen' },
+  en: { errorTitle: 'The content could not be loaded just now.', errorText: 'Please reload the page in a moment.', reload: 'Reload', skip: 'Skip intro' },
+};
+let pageLang = null; // set once config.json is in
+const pageText = () => uiText(UI, pageLang ?? (/^de\b/i.test(navigator.language ?? 'de') ? 'de' : 'en'));
+
 /** The desktop without content, for the config error window and while config.json is slow: the
  *  Impressum and Datenschutz links must stay reachable, so config.legal as it was at build time
  *  (vite.config.js defines __LEGAL__), else the static pages next to this one. */
@@ -39,18 +67,19 @@ function bareDesktop(windowTitle) {
   return createDesktop(app, { config: { brand: { windowTitle }, legal } });
 }
 
-/** The short German error in the window: in a desktop of its own, or (`desktop`) in the one that is up */
+/** The short error in the window: in a desktop of its own, or (`desktop`) in the one that is up */
 function showConfigError(desktop = bareDesktop('iPod')) {
+  const T = pageText();
   const box = document.createElement('div');
   box.className = 'app-error';
   box.setAttribute('role', 'alert');
   const title = document.createElement('strong');
-  title.textContent = 'Die Inhalte konnten gerade nicht geladen werden.';
+  title.textContent = T.errorTitle;
   const text = document.createElement('p');
-  text.textContent = 'Bitte lade die Seite in einem Moment neu.';
+  text.textContent = T.errorText;
   const retry = document.createElement('button');
   retry.type = 'button';
-  retry.textContent = 'Neu laden';
+  retry.textContent = T.reload;
   retry.addEventListener('click', () => location.reload());
   box.append(title, text, retry);
   desktop.el.classList.remove('is-waiting');
@@ -58,12 +87,12 @@ function showConfigError(desktop = bareDesktop('iPod')) {
   desktop.contentEl.replaceChildren(box);
 }
 
-/** "Intro überspringen" (button + Esc) for as long as the intro runs. */
+/** "Intro überspringen" / "Skip intro" (button + Esc) for as long as the intro runs. */
 function createSkipControl(onSkip) {
   const btn = document.createElement('button');
   btn.className = 'intro-skip';
   btn.type = 'button';
-  btn.textContent = 'Intro überspringen';
+  btn.textContent = pageText().skip;
   btn.addEventListener('click', onSkip);
   const onKey = (e) => { if (e.key === 'Escape') onSkip(); };
   window.addEventListener('keydown', onKey);
@@ -118,7 +147,12 @@ async function main() {
   clearTimeout(shellT);
   shell?.destroy(); // (the real desktop replaces it in the same task: no flash)
 
-  const brand = config.brand ?? {};
+  // texts in config.json may come in each of settings.languages: window and iPod get the visitor's
+  const langs = languagesOf(config);
+  let lang = pickLang(langs);
+  document.documentElement.lang = pageLang = lang;
+  let view = localize(config, lang, langs);
+  const brand = view.brand ?? {};
   if (brand.name) document.title = `${brand.name} · Links`;
   // reduced motion: the intro would only fade in its last frame, which is the DOM iPod itself
   const introModP = introEnabled(config) && !introSeen() && !prefersReducedMotion() && hasWebGL2() ? import('./intro/index.js') : null;
@@ -132,10 +166,36 @@ async function main() {
     skipIntro?.();
     ipod?.home({ keyboard: e?.detail === 0 }); // (before the reveal it waits for it; none after a failed start)
   };
-  desktop = createDesktop(app, { config, onLinks, onFocus: () => ipod?.focus() });
-  if (introModP) desktop.el.classList.add('is-waiting'); // before the iPod mounts: a throw there keeps it
-  ipod = mountIpod(desktop.contentEl, { config });
-  if (DEBUG) window.__ipod = ipod;
+  // the menu bar's DE | EN: the choice is remembered, and window and iPod are built again in the other
+  // language, the iPod at its main menu without the boot screen (a ?lang= in the address is dropped, so a
+  // reload keeps the choice). Not before the iPod is up (the intro, its boot screen).
+  const onLang = (next, e) => {
+    if (next === lang || !langs.includes(next) || !ipod?.el.classList.contains('is-revealed')) return;
+    lang = next;
+    try { localStorage.setItem(LANG_KEY, next); } catch { /* storage blocked */ }
+    const search = location.search.replace(/([?&])lang=[^&]*&?/i, '$1').replace(/[?&]$/, ''); // the rest as it was
+    if (search !== location.search) history.replaceState(history.state, '', location.pathname + search + location.hash);
+    document.documentElement.lang = pageLang = next;
+    view = localize(config, next, langs);
+    ipod.destroy();
+    desktop.destroy();
+    build();
+    desktop.setInteractive(true);
+    ipod.reveal({ boot: false });
+    // a keyboard press stays on the switch (its button for the new language), a click goes to the iPod
+    if (e?.detail === 0) desktop.el.querySelector('.dt-lang-btn[aria-pressed="true"]')?.focus();
+    else {
+      ipod.el.dataset.input = 'pointer';
+      ipod.focus();
+    }
+  };
+  const build = () => {
+    desktop = createDesktop(app, { config: view, lang, langs, onLang, onLinks, onFocus: () => ipod?.focus() });
+    ipod = mountIpod(desktop.contentEl, { config: view, lang });
+    if (DEBUG) window.__ipod = ipod;
+  };
+  build();
+  if (introModP) desktop.el.classList.add('is-waiting');
 
   let intro = null;
   let removeSkip = null;
@@ -156,7 +216,7 @@ async function main() {
         const win = desktop.contentEl.closest('.dt-win');
         intro = runIntro({
           getTargetRect: () => ipod.getShellRect(), getFrameRect: () => win?.getBoundingClientRect(),
-          reducedMotion: prefersReducedMotion(), config,
+          reducedMotion: prefersReducedMotion(), config: view,
         });
         markIntroSeen();
         // its setup runs as short tasks (the skip button keeps working, the spinner keeps turning);

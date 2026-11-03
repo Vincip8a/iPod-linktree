@@ -92,6 +92,11 @@
 .dt-legal-link:active { background: linear-gradient(#2a64d8, #1846a8); color: #fff; text-shadow: 0 -1px 0 rgba(0,0,0,.4); }
 .dt-legal-link:focus-visible { outline: 2px solid #2a64d8; outline-offset: -2px; }
 .dt-clock { font-variant-numeric: tabular-nums; padding-left: 12px; text-shadow: 0 1px 0 rgba(255,255,255,.6); white-space: nowrap; }
+/* language switch "DE | EN": buttons in the legal links' style, the current language in bold */
+.dt-lang { display: flex; align-items: center; height: 100%; margin-right: 8px; }
+.dt-lang-btn { appearance: none; background: none; border: 0; margin: 0; font-family: inherit; cursor: default; }
+.dt-lang-btn[aria-pressed="true"] { font-weight: 700; }
+.dt-lang-sep { font-size: 11px; color: #8a8a8a; padding: 0 1px; text-shadow: 0 1px 0 rgba(255,255,255,.6); }
 
 /* ---------- stage + window ---------- */
 .dt-stage {
@@ -297,6 +302,7 @@
   .dt-bar-left { overflow: hidden; }
   .dt-bar-links { display: none; } /* "Links" (focuses the iPod) makes room for the legal links */
   .dt-legal-link { padding: 0 4px; }
+  .dt-lang { margin-right: 4px; }
   .dt-clock { padding-left: 6px; }
 }
 

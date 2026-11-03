@@ -5,11 +5,14 @@
 import { readFileSync } from 'node:fs'
 
 import { FINISHES, finishOf } from '../../src/shared/ipodSpec.js'
+import { languagesOf, localize } from '../../src/shared/i18n.js'
 
 // Name, Monogramm, Tagline, E-Mail, Playlist-Titel und Menuepunkte kommen aus
 // public/config.json, damit Social-Bild, Cover und PDFs zur Seite passen.
 // Nach einer Aenderung dort: node tools/make-all.mjs
-const config = JSON.parse(readFileSync(new URL('../../public/config.json', import.meta.url), 'utf8'))
+// (Texte in mehreren Sprachen: die erste aus settings.languages, wie die gebaute Seite)
+const rawConfig = JSON.parse(readFileSync(new URL('../../public/config.json', import.meta.url), 'utf8'))
+const config = localize(rawConfig, languagesOf(rawConfig)[0])
 const cfgBrand = config.brand ?? {}
 const menu = (Array.isArray(config.menu) ? config.menu : []).filter((m) => m && typeof m === 'object')
 

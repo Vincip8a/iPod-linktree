@@ -66,6 +66,18 @@ intro's last frame matches the DOM iPod exactly. Change a dimension here, never 
 `early`: a response promise the page already started), `introEnabled(config)` (the one reading
 of `settings.intro`, also used by the build), `prefersReducedMotion()`.
 
+### `src/shared/i18n.js`
+
+`languagesOf(config)` (`settings.languages`, `['de']` when unset), `localize(config, lang)` (every
+object whose keys are all languages of the site becomes its entry for `lang`, else the first language
+that has one: the plain config of one language, which window, iPod, build and tools read) and
+`uiText(table, lang)` for the code's own words. No DOM: `vite.config.js` and `tools/lib/brand.mjs`
+localize to the first language. main.js picks the visitor's language (`?lang=`, then `localStorage`
+`anstatt-lang`, then `navigator.languages`, then English, then the first) and sets `<html lang>`;
+the menu bar's switch (`onLang`) stores the choice, drops `?lang=` from the address and builds window
+and iPod again in the other language (the iPod at its main menu, without the boot screen; focus stays
+on the switch after a key press, goes to the iPod after a click).
+
 ### `src/shared/href.js`
 
 `safeHref(href, base?)`: the one link rule for the iPod rows, the menu bar and (imported by
@@ -83,7 +95,7 @@ text: a blank label, title or window title counts as missing).
 ### `src/window/index.js`: desktop + window
 
 ```js
-createDesktop(host, { config, onLinks, onFocus }) → { el, contentEl, setInteractive(bool), destroy() }
+createDesktop(host, { config, lang, langs, onLang, onLinks, onFocus }) → { el, contentEl, setInteractive(bool), destroy() }
 ```
 Night wallpaper in the brand colours (night blue, signal green and yellow light; CSS only, public/static.css carries the same; the drift runs two slow sweeps, then rests), menu bar (monogram,
 `brand.name`, which ellipsizes first when the bar is narrow and, under 400 px with a monogram, is
@@ -116,7 +128,7 @@ running lands before the window is measured again (drag, resize, a second zoom c
 ### `src/ipod/index.js`: iPod UI
 
 ```js
-mountIpod(container, { config }) → {
+mountIpod(container, { config, lang }) → {
   el,                       // the iPod body (role=listbox, the focus target)
   getShellRect(),           // DOMRect of the body, valid before reveal()
   reveal({ boot = true }),  // → Promise: show, boot screen, main menu
@@ -156,8 +168,10 @@ readers complete it, because the wheel is `aria-hidden`. Now Playing's drawn scr
 `aria-hidden`; a visually hidden block carries the playing track and the track list. Rows and
 screen titles get `lang` from `config.json`; the iPod's name ("<title>, iPod", `aria-labelledby`)
 and the live announcement carry the title in a span with that `lang`. The keys also scroll the LCD
-back into view when browser zoom made the stage scroll. Ctrl + wheel (and pinch) zoom the page. The UI strings (German 6G firmware wording) are `DEFAULT_UI` in
-`src/ipod/index.js`; they are not read from `config.json`.
+back into view when browser zoom made the stage scroll. Ctrl + wheel (and pinch) zoom the page. The UI strings (the 6G firmware wording in German and English) are `UI` in
+`src/ipod/index.js`, picked by `lang`; they are not read from `config.json`. The window's own words
+are `UI` in `src/window/index.js` (with the clock's locale), main.js has the error window's and the
+skip button's.
 
 ### `src/intro/index.js`: 3D intro
 

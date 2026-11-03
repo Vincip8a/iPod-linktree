@@ -1,13 +1,16 @@
 {
-  "_comment": "Alle Inhalte des Linktrees. Texte und Links hier ändern, kein Code-Change nötig.",
+  "_comment": "Alle Inhalte des Linktrees. Texte und Links hier ändern, kein Code-Change nötig. Ein Text kann { \"de\": …, \"en\": … } sein (settings.languages).",
   "siteUrl": "https://anstattpunkt.com/",
   "brand": {
     "name": "Anstattpunkt.",
     "monogram": "A.",
     "monogramArt": "assets/monogram.svg",
-    "tagline": "Erklärvideos für Software-Firmen, in einer Woche fertig",
+    "tagline": {
+      "de": "Erklärvideos für Software-Firmen, in einer Woche fertig",
+      "en": "Explainer videos for software companies, done in a week"
+    },
     "windowTitle": "Anstattpunkt.",
-    "email": ""
+    "email": "hallo@anstattpunkt.com"
   },
   "menu": [
     {
@@ -17,10 +20,16 @@
       "type": "page",
       "icon": "book",
       "title": "Free Guide",
-      "body": "Wie kurze KI-Videos entstehen, in 6 Teilen. Jeder Teil hat echte Zahlen aus meinen 28 Videos, auch von den Flops. Der Guide ist kostenlos und auf Englisch. Eine Anmeldung ist nicht nötig.",
+      "body": {
+        "de": "Wie kurze KI-Videos entstehen, in 6 Teilen. Jeder Teil hat echte Zahlen aus meinen 28 Videos, auch von den Flops. Der Guide ist kostenlos und auf Englisch. Eine Anmeldung ist nicht nötig.",
+        "en": "How short AI videos get made, in 6 parts. Each part shows real numbers from my 28 videos, the flops too. The guide is free, and you don't need to sign up."
+      },
       "actions": [
         {
-          "label": "Guide lesen",
+          "label": {
+            "de": "Guide lesen",
+            "en": "Read the guide"
+          },
           "href": "guide/"
         }
       ]
@@ -32,15 +41,24 @@
       "type": "page",
       "icon": "box",
       "title": "Shorts Kit",
-      "body": "Die Dateien hinter dem Guide: Prompts, Checklisten, Untertitel-Regeln und drei echte Beispiele. Damit startet man mit meinen Regeln statt bei null. Der Shop öffnet bald.",
+      "body": {
+        "de": "Die Dateien hinter dem Guide: Prompts, Checklisten, Untertitel-Regeln und drei echte Beispiele. Damit startet man mit meinen Regeln statt bei null. Der Shop öffnet bald.",
+        "en": "The files behind the guide: prompts, checklists, caption rules and three real examples. You start with my rules instead of from zero. The shop opens soon."
+      },
       "actions": []
     },
     {
       "id": "contact",
-      "label": "Kontakt",
+      "label": {
+        "de": "Kontakt",
+        "en": "Contact"
+      },
       "type": "list",
       "icon": "chat",
-      "title": "Kontakt",
+      "title": {
+        "de": "Kontakt",
+        "en": "Contact"
+      },
       "items": [
         {
           "label": "Instagram",
@@ -51,6 +69,14 @@
           "label": "TikTok",
           "detail": "@anstattpunkt",
           "href": "https://www.tiktok.com/@anstattpunkt"
+        },
+        {
+          "label": {
+            "de": "E-Mail",
+            "en": "Email"
+          },
+          "detail": "hallo@anstattpunkt.com",
+          "href": "mailto:hallo@anstattpunkt.com"
         }
       ]
     },
@@ -61,10 +87,16 @@
       "type": "page",
       "icon": "film",
       "title": "Work Together",
-      "body": "Ich mache Erklärvideos für Software-Firmen. 3D, App-Screens und Untertitel baue ich in Code. Ändert sich ein Preis, ändere ich eine Zeile. Eine neue Produktion braucht es dafür nicht. Schreiben Sie mir auf Instagram.",
+      "body": {
+        "de": "Ich mache Erklärvideos für Software-Firmen. 3D, App-Screens und Untertitel baue ich in Code. Ändert sich ein Preis, ändere ich eine Zeile. Eine neue Produktion braucht es dafür nicht. Schreiben Sie mir auf Instagram.",
+        "en": "I make explainer videos for software companies. I build the 3D, app screens and captions in code. When a price changes, I change one line. You don't need a new production for that. Message me on Instagram."
+      },
       "actions": [
         {
-          "label": "Nachricht schreiben",
+          "label": {
+            "de": "Nachricht schreiben",
+            "en": "Send a message"
+          },
           "href": "https://ig.me/m/anstattpunkt"
         }
       ]
@@ -74,7 +106,10 @@
       "label": "Playlist",
       "type": "nowplaying",
       "title": "Chill VibeCoding",
-      "artist": "Kuratiert von Anstattpunkt.",
+      "artist": {
+        "de": "Kuratiert von Anstattpunkt.",
+        "en": "Curated by Anstattpunkt."
+      },
       "cover": "assets/playlist-cover.jpg",
       "spotifyUrl": "https://open.spotify.com/playlist/0EjGjK4QwBUUF1FIwLn6jI",
       "tracks": [
@@ -101,11 +136,20 @@
     },
     {
       "id": "about",
-      "label": "Über mich",
+      "label": {
+        "de": "Über mich",
+        "en": "About me"
+      },
       "type": "page",
       "icon": "person",
-      "title": "Über mich",
-      "body": "Ich komme aus Österreich und baue Videos in Code. In 10 Tagen habe ich so 28 kurze Videos gemacht. Was dabei klappt und was floppt, zeige ich auf Instagram. Mit demselben System mache ich Erklärvideos für Software-Firmen.",
+      "title": {
+        "de": "Über mich",
+        "en": "About me"
+      },
+      "body": {
+        "de": "Ich komme aus Österreich und baue Videos in Code. In 10 Tagen habe ich so 28 kurze Videos gemacht. Was dabei klappt und was floppt, zeige ich auf Instagram. Mit demselben System mache ich Erklärvideos für Software-Firmen.",
+        "en": "I'm from Austria and I build videos in code. That way I made 28 short videos in 10 days. On Instagram I show what works and what flops. I use the same system to make explainer videos for software companies."
+      },
       "actions": []
     }
   ],
@@ -114,6 +158,10 @@
     "datenschutz": "datenschutz.html"
   },
   "settings": {
+    "languages": [
+      "de",
+      "en"
+    ],
     "finish": "black",
     "clickSound": true,
     "intro": false

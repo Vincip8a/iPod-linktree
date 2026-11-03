@@ -37,6 +37,12 @@ bauen (das erledigt der Deploy-Workflow bei jedem Push). Ein Tippfehler in der D
 Komma nach dem letzten Eintrag) bricht Dev-Server und Build mit
 `public/config.json is not valid JSON: … (line …)` ab: die genannte Zeile prüfen.
 
+**Zwei Sprachen:** Jeder Text kann statt einer Zeichenkette ein Objekt mit einem Eintrag pro Sprache
+aus `settings.languages` sein, z. B. `"label": { "de": "Über mich", "en": "About me" }`. Ein
+einfacher Text gilt in jeder Sprache (z. B. „Free Guide“). Fehlt einer Sprache der Eintrag, steht
+dort der Text der ersten Sprache, die einen hat. Rechts in der Menüleiste wechselt „DE | EN“ die
+Sprache; mehr dazu unter `settings`.
+
 **Pfade** zu eigenen Dateien (Cover, Downloads, Rechtliches) relativ angeben, ohne `/` am Anfang,
 z. B. `"downloads/media-kit.pdf"`. Sie gelten relativ zur Seite und funktionieren so auch unter
 `https://<nutzer>.github.io/<repo>/`. Ein führendes `/` wird genauso behandelt. Erlaubt sind
@@ -158,6 +164,7 @@ Fehlt ein Feld, fehlt auch der Link.
 | `finish`     | String  | Farbe der Front: `"black"` (schwarz eloxiert im Nachtblau der Marke, dunkles Click Wheel) oder `"silver"` (Standard, auch bei jedem anderen Wert). Gilt für iPod, Intro, Desktop-Symbol, Favicon und Social-Bild (diese beiden nach `node tools/make-all.mjs`) |
 | `clickSound` | Boolean | `true` spielt beim Navigieren ein Klickgeräusch                      |
 | `intro`      | Boolean | `true` zeigt die 3D-Einstiegsanimation beim ersten Aufruf, `false` nie |
+| `languages`  | Array   | Die Sprachen der Texte, z. B. `["de", "en"]`; die erste gilt für die gebaute Seite (Meta-Tags, Linkliste ohne JavaScript, Social-Bild). Ab zwei Sprachen zeigt die Menüleiste den Umschalter. Ohne Angabe: nur Deutsch |
 
 Als „aus“ gelten bei beiden auch `"false"`, `"off"`, `"never"`, `"no"` und `0` (z. B. versehentlich
 in Anführungszeichen geschrieben). Die Animation läuft einmal pro Browser-Sitzung: wer vom
@@ -166,6 +173,12 @@ Impressum zurückkommt oder neu lädt, sieht gleich den iPod. Sie lässt sich je
 Systemeinstellung „Bewegung reduzieren“ entfällt sie, auf einem zu langsamen Gerät endet sie früher. Wer sie nur in der
 veröffentlichten `config.json` abschaltet, ohne neu zu bauen, spart die Animation, aber nicht den
 Download ihres Skripts: dafür neu bauen.
+
+**Welche Sprache ein Besucher sieht:** `?lang=en` (oder `?lang=de`) in der Adresse, sonst die zuletzt
+in der Menüleiste gewählte (auf dem Gerät gemerkt, `localStorage` `anstatt-lang`), sonst die erste
+Browsersprache, die die Seite hat, sonst Englisch. Der Umschalter baut Fenster und iPod in der neuen
+Sprache neu auf (zurück zum Hauptmenü). Impressum und Datenschutz bleiben deutsch; auf Englisch heißen
+die Links „Imprint“ und „Privacy“.
 
 ### Beispiel
 

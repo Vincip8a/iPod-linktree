@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { linkAttrs, fileName, rowLabel, langOf, safeHref, serviceName, firstText } from './src/shared/href.js';
 import { introEnabled } from './src/shared/config.js';
+import { languagesOf, localize } from './src/shared/i18n.js';
 import { formatSize } from './tools/lib/size.mjs';
 
 const CONFIG_PATH = fileURLToPath(new URL('./public/config.json', import.meta.url));
@@ -116,7 +117,9 @@ function configHtml() {
       order: 'pre',
       handler(html, ctx) {
         if (ctx?.path && !/(^|\/)index\.html$/.test(ctx.path)) return html; // dev/*.html stay as they are
-        const config = readConfig();
+        // the built page (meta, <noscript>) is in the site's first language; the browser switches later
+        const raw = readConfig();
+        const config = localize(raw, languagesOf(raw)[0]);
         const brand = config.brand ?? {};
         const title = esc(brand.name ? `${brand.name} · Links` : 'Links');
         const desc = esc(brand.tagline ?? '');

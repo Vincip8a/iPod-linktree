@@ -1,5 +1,5 @@
 // iPod Classic (6th/7th gen, silver) linktree UI.
-// API per ARCHITECTURE.md: mountIpod(container, { config }) → { el, getShellRect, reveal, press, scroll, home, focus, getState, destroy }
+// API per ARCHITECTURE.md: mountIpod(container, { config, lang }) → { el, getShellRect, reveal, press, scroll, home, focus, getState, destroy }
 //
 // The LCD UI is laid out in a logical 320×240 px space with container-query units
 // (--ipodc-p = 100cqw / 320 is one logical px), so text renders at its real size and stays crisp.
@@ -10,6 +10,7 @@ import { IPOD, COLORS, finishOf, finishName } from '../shared/ipodSpec.js';
 import { prefersReducedMotion as isReduced, isOff } from '../shared/config.js';
 import { h, createTimers, safeHref } from './util.js';
 import { firstText } from '../shared/href.js';
+import { uiText } from '../shared/i18n.js';
 import { GLYPH, playIndicator, battery, sharedDefs } from './art.js';
 import { createSound } from './sound.js';
 import { createPlayer } from './player.js';
@@ -24,8 +25,9 @@ const EASE = 'cubic-bezier(.32,.08,.24,1)';
 const SCREEN_TYPES = ['list', 'page', 'nowplaying', 'downloads', 'game'];
 let seq = 0;
 
-// UI strings (not content): German 6G firmware wording.
-const DEFAULT_UI = {
+// UI strings (not content), per language: the 6G firmware wording in German and English.
+const UI = {};
+UI.de = {
   nowPlaying: 'Sie hören',
   openIn: 'In {service} öffnen', // {service}: Spotify, Apple Music, … (serviceName in src/shared/href.js)
   openPlaylist: 'Playlist öffnen',
@@ -54,8 +56,37 @@ const DEFAULT_UI = {
   gameAgain: 'Nochmal: Mitte · Zurück: links',
   newBest: 'Neuer Rekord!',
 };
+UI.en = {
+  nowPlaying: 'Now Playing',
+  openIn: 'Open in {service}',
+  openPlaylist: 'Open playlist',
+  tracklist: 'Tracks',
+  of: 'of',
+  volume: 'Volume',
+  playing: 'Playing',
+  paused: 'Paused',
+  link: 'Link',
+  newTab: 'Link, opens in a new tab',
+  mail: 'Email link',
+  download: 'Download',
+  downloadStarted: 'Download started',
+  backHint: 'Back: press left on the wheel',
+  back: 'Back',
+  empty: 'No items',
+  hint: 'Up and down arrows move, right or Enter selects, left or Escape goes back, Space plays.',
+  score: 'Score',
+  best: 'Best',
+  gameStart: 'Start: centre or Enter',
+  gameSteer: 'Steer: arrows or turn the wheel',
+  gamePaused: 'Paused',
+  gameResume: 'Resume: centre · Back: left',
+  gameOver: 'Game over',
+  gameAgain: 'Again: centre · Back: left',
+  newBest: 'New best!',
+};
 
-export function mountIpod(container, { config } = {}) {
+/** `config`: one language's config (localize in src/shared/i18n.js); `lang`: the language of the UI words */
+export function mountIpod(container, { config, lang = 'de' } = {}) {
   config ??= {};
   const brand = config.brand ?? {};
   // entries without a name or with an unknown type would be blank or broken rows: skip them, with a hint
@@ -64,7 +95,7 @@ export function mountIpod(container, { config } = {}) {
     if (!ok) console.warn('[ipod] config.json: menu entry skipped (needs label or title and type list | page | nowplaying | downloads | game):', m);
     return ok;
   });
-  const L = DEFAULT_UI;
+  const L = uiText(UI, lang);
   const P = `ipodc${++seq}`;
   let uid = 0;
   const nid = (s) => `${P}-${s}${++uid}`;
