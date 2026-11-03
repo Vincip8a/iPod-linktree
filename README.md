@@ -292,6 +292,27 @@ Gestaltung und Farben liegen zentral in [`tools/lib/brand.mjs`](tools/lib/brand.
 
 ---
 
+## Gratis-Guide unter `/guide/`
+
+`public/guide/index.html` ist der englische Gratis-Guide „The 6 parts of every AI video pipeline“,
+erreichbar unter `anstattpunkt.com/guide/` und im iPod-Menü unter „Free Guide“. Die Seite wird
+nicht von Hand bearbeitet: Sie entsteht aus `free_guide.html` im Motion-Studio (ein
+Artifact-Body ohne `<head>`).
+
+```bash
+node tools/sync-guide.mjs                        # Quelle: ../motion_studio/sales/creator/free_guide.html
+node tools/sync-guide.mjs pfad/free_guide.html   # andere Quelle
+node tools/sync-guide.mjs --check                # ändert nichts, Code 1, wenn die Seite veraltet ist
+```
+
+Das Skript ergänzt doctype, Viewport, Beschreibung und og-Tags (absolute Adressen aus `siteUrl`)
+und ersetzt den Impressum-Platzhalter im Footer durch Links auf die Seiten aus `legal`. Shop-Links
+und das Entwurfsbanner stehen in der Quelle: dort ändern und neu synchronisieren. Der
+Entwicklungsserver liefert `/guide/` wie GitHub Pages aus (jeder Ordner in `public/` mit eigener
+`index.html`).
+
+---
+
 ## Deployment auf GitHub Pages
 
 Der Workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) baut das Projekt
@@ -335,6 +356,7 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ og-image.png               1200x630, Social-Media-Vorschau
 │  ├─ assets/
 │  │  └─ playlist-cover.svg      600x600, Album-Cover der Playlist
+│  ├─ guide/index.html           Gratis-Guide, erzeugt von tools/sync-guide.mjs
 │  └─ downloads/                 die drei Platzhalter-PDFs
 ├─ src/                          Anwendungscode
 │  ├─ main.js                    Ablauf: Desktop, iPod, Intro, Übergabe
@@ -356,7 +378,8 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ make-icons.mjs             Icons und Playlist-Cover
 │  ├─ make-og.mjs                Social-Media-Bild
 │  ├─ make-downloads.mjs         die drei PDFs
-│  └─ file-sizes.mjs             Dateigrößen für "size" in config.json
+│  ├─ file-sizes.mjs             Dateigrößen für "size" in config.json
+│  └─ sync-guide.mjs             baut public/guide/ aus dem Gratis-Guide
 ├─ index.html                    Einstiegspunkt
 ├─ vite.config.js                Build-Konfiguration (füllt Meta-Tags und <noscript> aus config.json)
 ├─ ARCHITECTURE.md               Architektur für Entwickler

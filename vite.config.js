@@ -181,6 +181,34 @@ function downloadSizes() {
   };
 }
 
+/** A folder in public/ with its own index.html (public/guide/) opens at its address in the dev server as it
+ *  does on GitHub Pages: /guide/ serves guide/index.html and /guide redirects there. Without this the dev
+ *  server answers every unknown path with the linktree. The build copies such folders as they are. */
+function publicIndexes() {
+  let publicDir = '';
+  return {
+    name: 'public-indexes',
+    apply: 'serve',
+    configResolved(c) { publicDir = c.publicDir; },
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const [path, query] = (req.url ?? '').split(/\?(.*)/s);
+        const search = query ? `?${query}` : '';
+        let dir;
+        try { dir = resolve(publicDir, decodeURIComponent(path).replace(/^\/+|\/+$/g, '')); } catch { return next(); }
+        if (dir === publicDir || relative(publicDir, dir).startsWith('..') || !existsSync(join(dir, 'index.html'))) return next();
+        if (!path.endsWith('/')) {
+          res.statusCode = 301;
+          res.setHeader('Location', `${path}/${search}`);
+          return res.end();
+        }
+        req.url = `${path}index.html${search}`;
+        next();
+      });
+    },
+  };
+}
+
 /** Preload for the lazily imported intro chunk: its download starts while the HTML is parsed, not after
  *  the entry ran and config.json arrived (main.js imports it only then). A tiny inline script adds the
  *  <link rel="modulepreload"> only where the intro will play: a WebGL 2 context can really be created (the
@@ -215,7 +243,7 @@ export default defineConfig({
   base: './',
   // the lazily loaded intro chunk carries three.js (~610 kB minified, ~160 kB gzip) by design
   build: { target: 'es2022', chunkSizeWarningLimit: 700 },
-  plugins: [configHtml(), introPreload(), downloadSizes()],
+  plugins: [configHtml(), introPreload(), downloadSizes(), publicIndexes()],
   // config.legal at build time: the config error window still links the Impressum and Datenschutz
   define: { __LEGAL__: JSON.stringify(readConfig().legal ?? null) },
   server: {

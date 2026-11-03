@@ -4,11 +4,34 @@
   "brand": {
     "name": "Anstattpunkt.",
     "monogram": "AP",
-    "tagline": "Vibecoder aus Österreich",
+    "tagline": "Erklärvideos für Software-Firmen, in einer Woche fertig",
     "windowTitle": "iPod · ASAP",
     "email": ""
   },
   "menu": [
+    {
+      "id": "guide",
+      "label": "Free Guide",
+      "lang": "en",
+      "type": "page",
+      "title": "Free Guide",
+      "body": "Wie kurze KI-Videos entstehen, in 6 Teilen. Jeder Teil hat echte Zahlen aus meinen 28 Videos, auch von den Flops. Der Guide ist kostenlos und auf Englisch. Eine Anmeldung ist nicht nötig.",
+      "actions": [
+        {
+          "label": "Guide lesen",
+          "href": "guide/"
+        }
+      ]
+    },
+    {
+      "id": "kit",
+      "label": "Shorts Kit",
+      "lang": "en",
+      "type": "page",
+      "title": "Shorts Kit",
+      "body": "Die Dateien hinter dem Guide: Prompts, Checklisten, Untertitel-Regeln und drei echte Beispiele. Damit startet man mit meinen Regeln statt bei null. Der Shop öffnet bald.",
+      "actions": []
+    },
     {
       "id": "contact",
       "label": "Kontakt",
@@ -33,7 +56,7 @@
       "lang": "en",
       "type": "page",
       "title": "Work Together",
-      "body": "Du hast eine Idee für eine Website, eine App oder ein Tool? Beschreib sie mir, ich setz sie um. Schreib mir einfach auf Instagram.",
+      "body": "Ich mache Erklärvideos für Software-Firmen. 3D, App-Screens und Untertitel baue ich in Code. Ändert sich ein Preis, ändere ich eine Zeile. Eine neue Produktion braucht es dafür nicht. Schreiben Sie mir auf Instagram.",
       "actions": [
         {
           "label": "Nachricht schreiben",
@@ -69,7 +92,7 @@
       "label": "Über mich",
       "type": "page",
       "title": "Über mich",
-      "body": "Vibecoder. Bruder, was soll ich dir sagen: Ich kann einfach gut beschreiben, was ich will, und es dann umsetzen.",
+      "body": "Ich komme aus Österreich und baue Videos in Code. In 10 Tagen habe ich so 28 kurze Videos gemacht. Was dabei klappt und was floppt, zeige ich auf Instagram. Mit demselben System mache ich Erklärvideos für Software-Firmen.",
       "actions": []
     }
   ],

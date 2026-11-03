@@ -1,0 +1,547 @@
+<!doctype html>
+<!-- Erzeugt von tools/sync-guide.mjs aus free_guide.html. Nicht hier ändern, sondern in der Quelle, dann neu synchronisieren. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The 6 parts of every AI video pipeline</title>
+<meta name="description" content="How short AI videos get made, from the first idea to the posted reel. Every part comes with real numbers from the 28 videos I made in 10 days, including the ones that flopped.">
+<link rel="canonical" href="https://anstattpunkt.com/guide/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Anstattpunkt.">
+<meta property="og:title" content="The 6 parts of every AI video pipeline">
+<meta property="og:description" content="How short AI videos get made, from the first idea to the posted reel. Every part comes with real numbers from the 28 videos I made in 10 days, including the ones that flopped.">
+<meta property="og:url" content="https://anstattpunkt.com/guide/">
+<meta property="og:image" content="https://anstattpunkt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: an editing-timeline hero whose six tracks are the six chapters; each chapter is a two-column row
+   (sticky part label left, text right) that stacks on phones. Colours from the reels' BRAND.json. */
+:root {
+  --bg: #f6f1e6;
+  --surface: #fffcf5;
+  --ink: #171c2a;
+  --muted: #566074;
+  --line: #e0d7c3;
+  --accent: #24734d;
+  --alarm: #c2392c;
+  --hl: #ffd60a;
+  --hl-ink: #171c2a;
+  --lane: #ede5d3;
+  --clip-a: #5fa07a;
+  --clip-b: #86b89a;
+  --clip-ink: #0e1119;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --step-s: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.7rem, 4vw, 2.3rem);
+  --step-3: clamp(2.3rem, 7vw, 4.2rem);
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171c2a; --surface: #212839; --ink: #f4ebd8; --muted: #8e9bb0; --line: #313a52;
+    --accent: #8df7c4; --alarm: #ff6a5b; --lane: #1b2132; --clip-a: #5fa07a; --clip-b: #4a8566;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171c2a; --surface: #212839; --ink: #f4ebd8; --muted: #8e9bb0; --line: #313a52;
+  --accent: #8df7c4; --alarm: #ff6a5b; --lane: #1b2132; --clip-a: #5fa07a; --clip-b: #4a8566;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1080px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1, h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+mark { background: var(--hl); color: var(--hl-ink); padding: 0 0.2em; border-radius: 3px; font-variant-numeric: tabular-nums; }
+.label { font: 600 0.74rem/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Draft note + top bar */
+.draft { background: var(--hl); color: var(--hl-ink); font: 600 0.85rem/1.4 var(--f-body); }
+.draft .wrap { padding-block: 8px; }
+.top .wrap { padding-block: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { font: 800 1.45rem var(--f-display); letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--accent); }
+.top nav a { font-weight: 600; font-size: var(--step-s); }
+
+/* Hero */
+.hero .wrap { padding-block: 32px 56px; display: flex; flex-direction: column; gap: 28px; }
+.hero-copy { display: flex; flex-direction: column; gap: 16px; max-width: 46rem; }
+.lead { font-size: var(--step-1); line-height: 1.5; color: var(--muted); max-width: 40rem; }
+
+/* Timeline */
+.tl-fig { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.tl { --label: 168px; --pad: 16px; position: relative; display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: var(--pad); }
+.tl-row { display: grid; grid-template-columns: var(--label) minmax(0, 1fr); align-items: center; gap: 0; color: inherit; text-decoration: none; border-radius: 8px; }
+.tl-name { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; padding-right: 10px; font-weight: 600; font-size: 0.95rem; line-height: 1.2; }
+.tl-name b { font: 600 0.78rem var(--f-mono); color: var(--muted); }
+.tl-tag { font: 600 0.64rem/1.2 var(--f-mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.tl-tag.hot { background: var(--hl); color: var(--hl-ink); border-color: var(--hl); }
+.lane { position: relative; height: 34px; background: var(--lane); border-radius: 6px; overflow: hidden; }
+a.tl-row:hover .lane { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.lane > i { position: absolute; top: 5px; bottom: 5px; left: calc(var(--a) * 100% / 30); width: calc((var(--b) - var(--a)) * 100% / 30 - 2px); border-radius: 4px; font: 600 0.66rem/24px var(--f-mono); font-style: normal; padding-inline: 6px; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+.lane-script i { background: color-mix(in srgb, var(--ink) 13%, transparent); color: var(--ink); }
+.lane-script i.hook { background: var(--hl); color: var(--hl-ink); }
+.lane-pics i { background: var(--clip-a); color: var(--clip-ink); }
+.lane-pics i:nth-child(even) { background: var(--clip-b); }
+.lane-checks i { background: transparent; border: 1px solid var(--accent); color: var(--accent); line-height: 22px; }
+.lane-voice span { position: absolute; top: 50%; width: 2px; border-radius: 1px; background: var(--ink); opacity: 0.55; transform: translateY(-50%); }
+.lane-timing span { position: absolute; top: 9px; bottom: 9px; width: 1.5px; background: var(--accent); }
+.lane-sound .bed { position: absolute; left: 0; right: 0; bottom: 6px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--muted) 45%, transparent); }
+.lane-sound .sfx { position: absolute; top: 9px; width: 9px; height: 9px; margin-left: -4.5px; transform: rotate(45deg); background: var(--accent); border-radius: 1px; }
+.ruler { position: relative; height: 18px; font: 400 0.66rem var(--f-mono); color: var(--muted); }
+.ruler span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.ruler span:first-child { transform: none; }
+.ruler span:last-child { transform: translateX(-100%); }
+.ruler .ten-lbl { color: var(--alarm); font-weight: 600; }
+.tl-over { position: absolute; top: var(--pad); bottom: var(--pad); left: calc(var(--pad) + var(--label)); right: var(--pad); pointer-events: none; }
+.ten { position: absolute; left: 33.333%; top: 0; bottom: 0; border-left: 2px dashed var(--alarm); }
+.ten span { position: absolute; left: 14px; top: 0; font: 600 0.66rem/1.2 var(--f-mono); color: var(--alarm); background: var(--surface); padding: 1px 4px; white-space: nowrap; }
+.head { position: absolute; top: 18px; bottom: 0; left: 0; width: 2px; background: var(--ink); animation: sweep 7s linear 0.5s 1 both; }
+.head::before { content: ""; position: absolute; top: -6px; left: -5px; border: 6px solid transparent; border-top-color: var(--ink); }
+@keyframes sweep { from { left: 0; } to { left: 100%; } }
+.tl-fig figcaption { color: var(--muted); font-size: var(--step-s); max-width: 46rem; }
+
+/* Intro */
+.intro .wrap { padding-block: 0 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.intro .body { display: flex; flex-direction: column; gap: 20px; max-width: 65ch; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; }
+.facts div { border-top: 1px solid var(--line); padding-top: 10px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.facts dt { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-weight: 500; }
+
+/* Parts */
+.part { border-top: 1px solid var(--line); }
+.part .wrap { padding-block: 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.side { align-self: start; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); display: flex; flex-direction: column; gap: 10px; }
+.part-no { font: 600 0.8rem var(--f-mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+.does { font-size: var(--step-1); line-height: 1.45; color: var(--muted); }
+.body { display: flex; flex-direction: column; gap: 28px; min-width: 0; max-width: 65ch; }
+.blk { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.blk h3 { font: 600 0.74rem/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.blk ul, .blk ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+.mistake { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+.mistake h3 { color: var(--alarm); display: flex; align-items: center; gap: 8px; }
+.mistake h3::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--alarm); box-shadow: 0 0 8px var(--alarm); }
+.try h3 { color: var(--accent); }
+.try p { font-weight: 500; }
+
+/* Routes table */
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.94rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+thead th { font: 600 0.7rem var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+tbody th { font-weight: 600; }
+tbody th small { display: block; font-weight: 400; color: var(--muted); }
+tr.mine th, tr.mine td { background: color-mix(in srgb, var(--hl) 16%, transparent); }
+.pill { display: inline-block; margin-top: 4px; font: 600 0.62rem var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em; background: var(--hl); color: var(--hl-ink); padding: 2px 6px; border-radius: 999px; }
+
+/* Safe box */
+.checks { display: grid; grid-template-columns: minmax(0, 1fr) 150px; gap: 24px; align-items: start; }
+.safe { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.safe svg { width: 100%; max-width: 150px; height: auto; display: block; }
+.safe figcaption { font: 400 0.72rem/1.4 var(--f-mono); color: var(--muted); }
+.sv-frame { fill: var(--surface); stroke: var(--ink); stroke-width: 12; }
+.sv-box { fill: color-mix(in srgb, var(--hl) 35%, transparent); stroke: var(--hl); stroke-width: 10; stroke-dasharray: 36 24; }
+.sv-ui { fill: var(--muted); opacity: 0.45; }
+.sv-text { fill: var(--ink); font: 600 104px var(--f-mono); }
+
+/* This week */
+.week .wrap { padding-block: 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; border-top: 1px solid var(--line); }
+.todo { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; max-width: 65ch; }
+.todo label { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); cursor: pointer; }
+.todo input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--accent); }
+.todo input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--muted); }
+
+/* Kit */
+.kit { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.kit .wrap { padding-block: 64px; display: flex; flex-direction: column; gap: 28px; }
+.kit-head { display: flex; flex-direction: column; gap: 12px; max-width: 46rem; }
+.kit-head p { color: var(--muted); font-size: var(--step-1); line-height: 1.5; }
+.offers { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; align-items: start; }
+.offer { border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; background: var(--bg); }
+.offer.main { border: 2px solid var(--ink); }
+.offer h3 { font: 800 1.3rem var(--f-display); letter-spacing: -0.01em; }
+.price { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.price strong { font: 800 2.6rem/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.price span { color: var(--muted); font-size: var(--step-s); }
+.offer ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.offer li { padding-left: 24px; position: relative; }
+.offer li::before { content: ""; position: absolute; left: 3px; top: 0.6em; width: 10px; height: 6px; border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg); }
+.btn { display: inline-flex; justify-content: center; align-items: center; min-height: 48px; padding: 12px 22px; border-radius: 999px; font: 600 1rem var(--f-body); text-decoration: none; background: var(--ink); color: var(--bg); align-self: flex-start; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
+.fine { font-size: var(--step-s); color: var(--muted); }
+
+footer .wrap { padding-block: 28px 40px; display: flex; flex-direction: column; gap: 8px; font-size: var(--step-s); color: var(--muted); }
+.ph { font-family: var(--f-mono); font-size: 0.8rem; }
+
+@media (max-width: 860px) {
+  .intro .wrap, .part .wrap, .week .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .side { position: static; }
+  .offers { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .tl { --label: 104px; --pad: 12px; }
+  .tl-name { font-size: 0.8rem; padding-right: 6px; }
+  .tl-tag { font-size: 0.56rem; padding: 1px 5px; }
+  .lane > i { font-size: 0; padding: 0; }
+  .ruler .minor { display: none; }
+  .ten span { display: none; }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+  .checks { grid-template-columns: minmax(0, 1fr) 110px; gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .head { animation: none; left: 33.333%; }
+}
+</style>
+</head>
+<body>
+<div class="draft" role="note"><div class="wrap">Draft: the shop link and the imprint are still missing.</div></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top">anstatt<span>.</span></a>
+    <nav aria-label="On this page"><a href="#kit">The kit</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="label">Free guide · 6-minute read</span>
+        <h1>The 6 parts of every AI video pipeline</h1>
+        <p class="lead">How short AI videos get made, from the first idea to the posted reel. Every part comes with real numbers from the 28 videos I made in 10 days, including the ones that flopped.</p>
+      </div>
+
+      <figure class="tl-fig">
+        <div class="tl" id="timeline">
+          <div class="tl-row" aria-hidden="true">
+            <span></span>
+            <div class="ruler"><span>0 s</span><span class="minor" style="left:16.667%">5</span><span class="ten-lbl" style="left:33.333%">10</span><span class="minor" style="left:50%">15</span><span style="left:66.667%">20</span><span class="minor" style="left:83.333%">25</span><span style="left:100%">30 s</span></div>
+          </div>
+          <a class="tl-row" href="#script">
+            <span class="tl-name"><b>1</b> Script <span class="tl-tag hot">views are won here</span></span>
+            <span class="lane lane-script" aria-hidden="true"><i class="hook" style="--a:0;--b:3">hook</i><i style="--a:3;--b:7">next event</i><i style="--a:7;--b:22">one thread</i><i style="--a:22;--b:28">payoff</i><i style="--a:28;--b:30">loop</i></span>
+          </a>
+          <a class="tl-row" href="#voice">
+            <span class="tl-name"><b>2</b> Voice</span>
+            <span class="lane lane-voice" id="lane-voice" aria-hidden="true"></span>
+          </a>
+          <a class="tl-row" href="#timing">
+            <span class="tl-name"><b>3</b> Timing</span>
+            <span class="lane lane-timing" id="lane-timing" aria-hidden="true"></span>
+          </a>
+          <a class="tl-row" href="#pictures">
+            <span class="tl-name"><b>4</b> Pictures <span class="tl-tag">my time went here</span></span>
+            <span class="lane lane-pics" aria-hidden="true"><i style="--a:0;--b:3">head CU</i><i style="--a:3;--b:9">wide</i><i style="--a:9;--b:16">insert</i><i style="--a:16;--b:23">top view</i><i style="--a:23;--b:30">POV</i></span>
+          </a>
+          <a class="tl-row" href="#sound">
+            <span class="tl-name"><b>5</b> Sound</span>
+            <span class="lane lane-sound" aria-hidden="true"><span class="bed"></span><span class="sfx" style="left:10%"></span><span class="sfx" style="left:18.3%"></span><span class="sfx" style="left:30%"></span><span class="sfx" style="left:40%"></span><span class="sfx" style="left:53.3%"></span><span class="sfx" style="left:63.3%"></span><span class="sfx" style="left:76.7%"></span><span class="sfx" style="left:86.7%"></span></span>
+          </a>
+          <a class="tl-row" href="#checks">
+            <span class="tl-name"><b>6</b> Checks</span>
+            <span class="lane lane-checks" aria-hidden="true"><i style="--a:1;--b:9.5">safe box ✓</i><i style="--a:10.8;--b:19.3">≤ 20 cps ✓</i><i style="--a:20.6;--b:29">−14 LUFS ✓</i></span>
+          </a>
+          <div class="tl-over" aria-hidden="true">
+            <div class="ten"><span>about half still watching</span></div>
+            <div class="head"></div>
+          </div>
+        </div>
+        <figcaption>Every short video runs on these six tracks, whatever tools you use. The red line marks second 10, where only about half of my viewers were still watching. Tap a track to jump to its part.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="intro" aria-labelledby="h-start">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Before you start</span>
+        <h2 id="h-start">Same six parts, any tools</h2>
+      </div>
+      <div class="body">
+        <p>Every AI video system has the same six parts, whatever tools it uses. I spent most of my time on part 4, the pictures. My data says the views are won or lost in part 1. I learned that the slow way.</p>
+        <dl class="facts">
+          <div><dt>Team</dt><dd>One person, a Mac and Claude Code</dd></div>
+          <div><dt>Output</dt><dd>28 vertical videos in 10 days, with a 3D mascot, captions, voice, music and sound effects</dd></div>
+          <div><dt>AI cost</dt><dd>$15 to $40 per video, my estimate</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="script" aria-labelledby="h-script">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Part 1</span>
+        <h2 id="h-script">Script</h2>
+        <p class="does">Decides what people hear and see, second by second.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Your options</h3><p>Any chat AI (Claude, ChatGPT, Gemini) can draft a script. The draft is easy. Judging it is the hard part.</p></div>
+        <div class="blk"><h3>What I use</h3>
+          <p>Claude writes the drafts. A small checker script then reads each draft and warns me when it breaks one of my rules:</p>
+          <ul>
+            <li>The first second shows something concrete. A face, an object, a number.</li>
+            <li>Something new happens right after the hook. No backstory between second 3 and second 10.</li>
+            <li>One story thread. Every number is said out loud before it appears on screen.</li>
+            <li>Sentences of 14 words or fewer, in everyday words.</li>
+          </ul>
+        </div>
+        <div class="blk mistake"><h3>The mistake I made</h3><p>My early videos opened with a strong hook and then explained the background. People left at second 10. Across my tracked videos, only about half the viewers were still watching at 10 seconds (<mark>48–57 %</mark>).</p></div>
+        <div class="blk try"><h3>Try this</h3><p>Write your hook, then write what happens at second 4. If second 4 is an explanation, cut it and show the next event instead.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="voice" aria-labelledby="h-voice">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Part 2</span>
+        <h2 id="h-voice">Voice</h2>
+        <p class="does">Turns the script into speech.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Your options</h3><p>Text-to-speech services such as ElevenLabs, or your own voice recorded on a phone.</p></div>
+        <div class="blk"><h3>What I use</h3><p>An ElevenLabs voice, which I run through Higgsfield. A new voice track for a whole video costs a few credits.</p></div>
+        <div class="blk mistake"><h3>The mistake I made</h3><p>I sped up the hook to make it punchier. You could hear the tempo jump. Now every line runs at the same speed.</p></div>
+        <div class="blk try"><h3>Try this</h3><p>Check the voice service's terms before you use it for paid work. Free plans often don't allow commercial use. And think about using your own voice. I think a real voice earns more trust, and it costs nothing.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="timing" aria-labelledby="h-timing">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Part 3</span>
+        <h2 id="h-timing">Timing</h2>
+        <p class="does">Finds the exact moment each word is spoken. Captions, cuts and sound effects all hang on these timestamps.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Your options</h3><p>Speech-to-text tools give you word timestamps. <a href="https://github.com/openai/whisper" target="_blank" rel="noopener">Whisper</a> is free and open source. Some voice services return timestamps directly.</p></div>
+        <div class="blk"><h3>What I use</h3><p>Word timestamps from the voice file. A script turns them into caption screens and a cut list.</p></div>
+        <div class="blk mistake"><h3>The mistake I made</h3><p>Captions came up to <mark>0.65 seconds</mark> after the word. It felt off, even before I could say why. Now no caption comes more than <mark>0.1 seconds</mark> after its word.</p></div>
+        <div class="blk try"><h3>Try this</h3><p>Build captions from timestamps, never by hand. You will change the script often, and the captions should follow by themselves.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="pictures" aria-labelledby="h-pictures">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Part 4</span>
+        <h2 id="h-pictures">Pictures</h2>
+        <p class="does">Everything the viewer sees.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Your options</h3>
+          <p>There are three main routes, and each one costs you something different.</p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th scope="col">Route</th><th scope="col">Cost per video</th><th scope="col">Same character every time?</th><th scope="col">Changes later</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">AI video generators<small>Kling, Runway, Veo and others</small></th><td>Credits per clip, adds up fast</td><td>Hard</td><td>New generation needed</td></tr>
+                <tr><th scope="row">Stock footage and templates</th><td>Low</td><td>No character of your own</td><td>Easy</td></tr>
+                <tr class="mine"><th scope="row">Code-rendered 3D or motion graphics<small>Remotion, Blender scripts, SceneKit</small><span class="pill">What I use</span></th><td>Almost $0, costs time</td><td>Yes, always</td><td>Change a line, render again</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="blk"><h3>What I use</h3><p>Code. The mascot, the sets and the infographics are 3D scenes written in Swift (SceneKit) by Claude Code. A test frame in my 3D set renders in about <mark>0.06 seconds</mark>.</p></div>
+        <div class="blk mistake"><h3>The mistake I made</h3><p>I built one video in four versions. Code makes changes cheap, which makes it easy to keep polishing instead of posting.</p></div>
+        <div class="blk try"><h3>Try this</h3><p>Pick one route for your first ten videos. Mixing all three eats your time.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="sound" aria-labelledby="h-sound">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Part 5</span>
+        <h2 id="h-sound">Sound</h2>
+        <p class="does">Music, sound effects and the final mix.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Your options</h3><p>Music libraries with a licence for social media, or music you make yourself.</p></div>
+        <div class="blk"><h3>What I use</h3><p>The music and every sound effect are generated in code. Each visual event gets its own sound. A splash gets a splash, a stamp gets a thud.</p></div>
+        <div class="blk mistake"><h3>The mistake I made</h3><p>I left a <mark>0.6-second</mark> silent pause in the middle of one video. Voice, music and room sound all stopped. Watching it back, it felt like the video was over. On a feed, a video that seems over gets swiped away. Pauses now last half a second at most, and the background sound keeps going.</p></div>
+        <div class="blk try"><h3>Try this</h3><p>Watch your video once with your eyes closed. Every moment without sound is a moment someone can leave.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="checks" aria-labelledby="h-checks">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Part 6</span>
+        <h2 id="h-checks">Checks and posting</h2>
+        <p class="does">Catches mistakes before the world sees them, then tells you what worked.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Your options</h3><p>Your own eyes, or small scripts that check the same things every time.</p></div>
+        <div class="blk"><h3>What I check</h3>
+          <div class="checks">
+            <ul>
+              <li><strong>Loudness:</strong> I mix to −14 LUFS, a common target for social and streaming platforms.</li>
+              <li><strong>Captions:</strong> they stay inside a safe box where the app's buttons don't cover them.</li>
+              <li><strong>Reading time:</strong> every caption stays up long enough to read. <a href="https://partnerhelp.netflixstudios.com/hc/en-us/articles/217350977-English-USA-Timed-Text-Style-Guide" target="_blank" rel="noopener">Netflix's subtitle guide</a> allows about 20 characters per second for adults, so I stay under that.</li>
+              <li><strong>Overlap:</strong> captions never cover an infographic.</li>
+            </ul>
+            <figure class="safe">
+              <svg viewBox="0 0 1080 1920" role="img" aria-labelledby="safe-cap">
+                <rect class="sv-frame" x="6" y="6" width="1068" height="1908" rx="60"></rect>
+                <rect class="sv-box" x="120" y="270" width="720" height="978"></rect>
+                <text class="sv-text" x="480" y="730" text-anchor="middle">safe</text>
+                <text class="sv-text" x="480" y="860" text-anchor="middle">box</text>
+                <circle class="sv-ui" cx="975" cy="1080" r="48"></circle>
+                <circle class="sv-ui" cx="975" cy="1240" r="48"></circle>
+                <circle class="sv-ui" cx="975" cy="1400" r="48"></circle>
+                <circle class="sv-ui" cx="975" cy="1560" r="48"></circle>
+                <rect class="sv-ui" x="70" y="1560" width="560" height="44" rx="22"></rect>
+                <rect class="sv-ui" x="70" y="1650" width="760" height="36" rx="18"></rect>
+                <rect class="sv-ui" x="70" y="1730" width="420" height="36" rx="18"></rect>
+              </svg>
+              <figcaption id="safe-cap">1080 × 1920 frame. Safe box x 120–840, y 270–1248. Grey: the app's buttons and text.</figcaption>
+            </figure>
+          </div>
+        </div>
+        <div class="blk"><h3>How I read the numbers</h3><p>I wait until a video has more than 1,000 viewers before judging it. Below that, the numbers jump around too much. I change one thing per video, so I know what made the difference.</p></div>
+        <div class="blk mistake"><h3>The mistake I made</h3><p>My videos looked good and still stopped at about 1,200 viewers. The four I have full stats for reached <mark>1,229, 1,324, 1,207 and 1,131</mark> viewers. The pictures were fine. The stories lost people at second 10.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" aria-labelledby="h-week">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Your turn</span>
+        <h2 id="h-week">What to do this week</h2>
+      </div>
+      <ol class="todo">
+        <li><label for="wk1"><input type="checkbox" id="wk1"><span>Write one script and run it against the four rules in part 1.</span></label></li>
+        <li><label for="wk2"><input type="checkbox" id="wk2"><span>Pick one picture route and stick with it.</span></label></li>
+        <li><label for="wk3"><input type="checkbox" id="wk3"><span>Post the video, wait for 1,000 viewers, then look at second 10.</span></label></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="kit" id="kit" aria-labelledby="h-kit">
+    <div class="wrap">
+      <div class="kit-head">
+        <span class="label">anstatt. Shorts Kit</span>
+        <h2 id="h-kit">Want my exact files?</h2>
+        <p>The kit has the files behind this guide, so you can start from my rules instead of from zero.</p>
+      </div>
+      <div class="offers">
+        <article class="offer main">
+          <h3>Shorts Kit</h3>
+          <div class="price"><strong>€15</strong><span>launch price for the first 50 buyers, then €29</span></div>
+          <ul>
+            <li>Script prompts for the hook, the beats, the captions and the post copy</li>
+            <li>The script checklist: every rule my checker enforces, in plain words</li>
+            <li>Caption rules and a 1080 × 1920 safe-zone overlay (PNG)</li>
+            <li>A starter rules file for Claude Code that keeps every video in the same style</li>
+            <li>Post templates: caption, pinned comment with sources, upload labels</li>
+            <li>A stats sheet, and how to read it</li>
+            <li>Three worked examples with the full script, timing, post copy and what the numbers said, one flop included</li>
+          </ul>
+          <a class="btn" data-shop="kit" href="#kit">Get the kit for €15</a>
+        </article>
+        <article class="offer">
+          <h3>Kit + review</h3>
+          <div class="price"><strong>€49</strong></div>
+          <p>The kit, plus a written review of one finished video. You send the video, and I send the review within 3 working days.</p>
+          <a class="btn ghost" data-shop="review" href="#kit">Get kit + review</a>
+        </article>
+      </div>
+      <p class="fine">Prices in euros.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>All numbers in this guide come from my own videos and logs unless a source is named.</span>
+    <span><a href="../impressum.html" hreflang="de">Imprint</a> · <a href="../datenschutz.html" hreflang="de">Privacy policy</a></span>
+    <span>© 2026 anstatt.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Paste the shop links here once the shop is live.
+  var SHOP = { kit: "", review: "" };
+
+  document.querySelectorAll("[data-shop]").forEach(function (a) {
+    var url = SHOP[a.getAttribute("data-shop")];
+    if (url) {
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener";
+    } else {
+      a.removeAttribute("href");
+      a.setAttribute("aria-disabled", "true");
+      a.setAttribute("role", "link");
+      a.textContent = "Shop opens soon";
+    }
+  });
+
+  // Timeline: a fixed pseudo-random waveform and word ticks, with the voice paused at the gaps.
+  var seed = 7;
+  function rand() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  var gaps = [[2.8, 3.25], [9.6, 10.05], [21.7, 22.15], [27.9, 28.3]];
+  function inGap(t) { return gaps.some(function (g) { return t >= g[0] && t <= g[1]; }); }
+
+  var voice = document.getElementById("lane-voice");
+  for (var t = 0.15; t < 29.9; t += 0.25) {
+    if (inGap(t)) continue;
+    var b = document.createElement("span");
+    b.style.left = (t / 30 * 100) + "%";
+    b.style.height = Math.round(5 + rand() * 19) + "px";
+    voice.appendChild(b);
+  }
+
+  var timing = document.getElementById("lane-timing");
+  var w = 0.2;
+  while (w < 29.8) {
+    if (!inGap(w)) {
+      var k = document.createElement("span");
+      k.style.left = (w / 30 * 100) + "%";
+      timing.appendChild(k);
+    }
+    w += 0.28 + rand() * 0.22;
+  }
+
+  // "This week" ticks are remembered in this browser only.
+  ["wk1", "wk2", "wk3"].forEach(function (id) {
+    var box = document.getElementById(id);
+    try { box.checked = localStorage.getItem("guide-" + id) === "1"; } catch (e) {}
+    box.addEventListener("change", function () {
+      try { localStorage.setItem("guide-" + id, box.checked ? "1" : "0"); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>
