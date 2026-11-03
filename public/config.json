@@ -3,9 +3,10 @@
   "siteUrl": "https://anstattpunkt.com/",
   "brand": {
     "name": "Anstattpunkt.",
-    "monogram": "AP",
+    "monogram": "A.",
+    "monogramArt": "assets/monogram.svg",
     "tagline": "Erklärvideos für Software-Firmen, in einer Woche fertig",
-    "windowTitle": "iPod · ASAP",
+    "windowTitle": "Anstattpunkt.",
     "email": ""
   },
   "menu": [
@@ -14,6 +15,7 @@
       "label": "Free Guide",
       "lang": "en",
       "type": "page",
+      "icon": "book",
       "title": "Free Guide",
       "body": "Wie kurze KI-Videos entstehen, in 6 Teilen. Jeder Teil hat echte Zahlen aus meinen 28 Videos, auch von den Flops. Der Guide ist kostenlos und auf Englisch. Eine Anmeldung ist nicht nötig.",
       "actions": [
@@ -28,6 +30,7 @@
       "label": "Shorts Kit",
       "lang": "en",
       "type": "page",
+      "icon": "box",
       "title": "Shorts Kit",
       "body": "Die Dateien hinter dem Guide: Prompts, Checklisten, Untertitel-Regeln und drei echte Beispiele. Damit startet man mit meinen Regeln statt bei null. Der Shop öffnet bald.",
       "actions": []
@@ -36,6 +39,7 @@
       "id": "contact",
       "label": "Kontakt",
       "type": "list",
+      "icon": "chat",
       "title": "Kontakt",
       "items": [
         {
@@ -55,6 +59,7 @@
       "label": "Work Together",
       "lang": "en",
       "type": "page",
+      "icon": "film",
       "title": "Work Together",
       "body": "Ich mache Erklärvideos für Software-Firmen. 3D, App-Screens und Untertitel baue ich in Code. Ändert sich ein Preis, ändere ich eine Zeile. Eine neue Produktion braucht es dafür nicht. Schreiben Sie mir auf Instagram.",
       "actions": [
@@ -91,6 +96,7 @@
       "id": "about",
       "label": "Über mich",
       "type": "page",
+      "icon": "person",
       "title": "Über mich",
       "body": "Ich komme aus Österreich und baue Videos in Code. In 10 Tagen habe ich so 28 kurze Videos gemacht. Was dabei klappt und was floppt, zeige ich auf Instagram. Mit demselben System mache ich Erklärvideos für Software-Firmen.",
       "actions": []
@@ -101,6 +107,7 @@
     "datenschutz": "datenschutz.html"
   },
   "settings": {
+    "finish": "black",
     "clickSound": true,
     "intro": true
   }

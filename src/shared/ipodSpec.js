@@ -53,12 +53,46 @@ export const PARTS = [
   { id: 'backShell',   label: 'Back shell (polished stainless)',  z: 9.4 },
 ];
 
-// Palette (silver iPod Classic). sRGB hex strings.
+// Front finishes: `settings.finish` in config.json picks one (finishOf; silver when unset or unknown). Both
+// iPods read the same values: the DOM iPod as --ipodc-c-* (plate, wheel, labels, centre button; ipodc.css
+// adds the finish's own highlights under [data-finish]) and the intro's plate, wheel and centre textures.
+// face: the 3D plate's base colour, tuned so the intro's lit last frame matches the DOM plate; wheelHi /
+// wheelLo: the wheel's radial light (centre of the light, rim); light / shade: how strong the white lips and
+// the dark seams of the 3D wheel and centre button are against silver's (1). sRGB hex strings.
+export const FINISHES = {
+  silver: {
+    aluminium: '#c8cbcf',
+    wheel: '#e4e5e7',
+    wheelHi: '#f0f1f2',
+    wheelLo: '#d9dbde',
+    wheelLabel: '#5f6368', // printed grey, 4.8:1 on the wheel (WCAG 1.4.3 for the word MENU, 1.4.11 for the glyphs)
+    centerButton: '#cfd2d6',
+    face: '#e1e4e7',
+    light: 1,
+    shade: 1,
+  },
+  // black anodised front in the brand's night blue, matte dark wheel, light grey print
+  black: {
+    aluminium: '#1d2232',
+    wheel: '#242a3a',
+    wheelHi: '#30374a',
+    wheelLo: '#1b202d',
+    wheelLabel: '#b3b9c6', // 7.6:1 on the wheel
+    centerButton: '#1f2434',
+    face: '#383e4c',
+    light: 0.16,
+    shade: 2.2,
+  },
+};
+/** The finish config.json asks for (`settings.finish`), silver for anything else. */
+export const finishOf = (config) => {
+  const k = String(config?.settings?.finish ?? '').trim().toLowerCase();
+  return Object.hasOwn(FINISHES, k) ? FINISHES[k] : FINISHES.silver; // (own keys only: "constructor" is no finish)
+};
+export const finishName = (config) => Object.keys(FINISHES).find((k) => FINISHES[k] === finishOf(config));
+
+// Palette (the parts every finish shares). sRGB hex strings.
 export const COLORS = {
-  aluminium: '#c8cbcf',
-  wheel: '#e4e5e7',
-  wheelLabel: '#5f6368', // printed grey, 4.8:1 on the wheel (WCAG 1.4.3 for the word MENU, 1.4.11 for the glyphs)
-  centerButton: '#cfd2d6',
   screenWindow: '#0b0c0e',
   lcdOff: '#14171a',
   steel: '#d9dde2',

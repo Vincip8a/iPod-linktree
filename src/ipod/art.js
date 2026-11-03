@@ -26,13 +26,23 @@ export const SPEAKER_NOW = svg('0 0 13 11', SPK + WAVES, 'ipodc-trk-ico'); // "n
 // Gradients shared by the indicator and every preview icon (and its reflection copy): emitted once per iPod.
 export const sharedDefs = (p) => `<svg class="ipodc-defs" aria-hidden="true" focusable="false"><defs>${lg(`${p}gl`, '0 #fff 0.8,1 #fff 0.04')}${lg(`${p}bl`, '0 #a3d2ff,0.48 #3f8fe6,1 #1b56b0')}<radialGradient id="${p}md" cx=".5" cy=".38" r=".62"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#d9dce0"/><stop offset="1" stop-color="#9ea3aa"/></radialGradient></defs></svg>`;
 
-// Large preview icons for the split-screen pane: a glossy silver medallion carrying the brand
-// monogram or a blue glyph for the item type (100×100 viewBox, gradients from sharedDefs(s)).
+// Large preview icons for the split-screen pane and text pages: a glossy silver medallion carrying the
+// brand monogram or a blue glyph (100×100 viewBox, gradients from sharedDefs(s)). A menu entry picks one
+// with `icon` in config.json (ICON_KINDS), else its type does (iconOf in screens.js).
+const PERSON = '<circle cx="50" cy="39" r="11"/><path d="M29 70c0-12 9-20 21-20s21 8 21 20z"/>';
 const ICON = {
-  contacts: '<circle cx="50" cy="39" r="11"/><path d="M29 70c0-12 9-20 21-20s21 8 21 20z"/>',
+  contacts: PERSON,
+  person: PERSON,
   chat: '<path d="M31 29h38a9 9 0 0 1 9 9v17a9 9 0 0 1-9 9H50L37 74l2-10h-8a9 9 0 0 1-9-9V38a9 9 0 0 1 9-9z"/>',
   download: '<path d="M44 25h12v22h11L50 66 33 47h11zM31 70h38v7H31z"/>',
+  // an open book, the spine drawn by the group's stroke
+  book: '<path d="M50 35c-6-4.5-13.5-6.5-22-6.5v35c8.5 0 16 2 22 6.5 6-4.5 13.5-6.5 22-6.5v-35c-8.5 0-16 2-22 6.5z"/><path d="M50 35v35" fill="none"/>',
+  // a closed box seen from above, its lid lighter
+  box: '<path d="M50 26.5 72 37v26L50 73.5 28 63V37z"/><path d="M50 26.5 72 37 50 47.5 28 37z" fill="#fff" fill-opacity=".35"/><path d="M50 47.5v26" fill="none"/>',
+  // a film clapperboard, its arm open
+  film: '<path d="M29 47h42v21a4 4 0 0 1-4 4H33a4 4 0 0 1-4-4z"/><path d="m28.2 44.6-1.7-7.2 40.9-9.6 1.7 7.2z"/><path d="m33.5 35.8 6.6 5 6.2-1.5-6.6-5zm14.2-3.3 6.6 5 6.2-1.5-6.6-5z" fill="#fff" fill-opacity=".8" stroke="none"/>',
 };
+export const ICON_KINDS = [...Object.keys(ICON), 'monogram'];
 export function previewIcon(kind, monogram, s) {
   const m = esc(String(monogram ?? '').slice(0, 3));
   const inner = ICON[kind] ? `<g fill="url(#${s}bl)" stroke="#164f9e" stroke-width="1.2">${ICON[kind]}</g>`

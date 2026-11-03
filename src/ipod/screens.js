@@ -3,11 +3,13 @@
 // Now Playing layout. All geometry is in logical px; `ctx` is supplied by index.js.
 import { h, clamp, fmtTime, safeHref } from './util.js';
 import { linkAttrs, fileName, rowLabel, langOf, serviceName, firstText } from '../shared/href.js';
-import { CHEVRON, SPEAKER_LO, SPEAKER_HI, SPEAKER_NOW, previewIcon } from './art.js';
+import { CHEVRON, SPEAKER_LO, SPEAKER_HI, SPEAKER_NOW, previewIcon, ICON_KINDS } from './art.js';
 
 const ROW = 27;        // 8 rows per screen, like the 6G
 const TEXT_STEP = 34;  // two text lines per wheel step on text pages
 const TRK_VIS = 3;     // rows of the compact track list on Now Playing
+const ART_MIN = 64;    // free height a text page needs to show its icon below the text (else none)
+const ART_MAX = 84;    // the icon's largest size there
 
 export function createScreens(ctx) {
   const { L, brand, nid, timers } = ctx;
@@ -40,8 +42,18 @@ export function createScreens(ctx) {
     return row;
   }
 
-  /** Generic scrolling list screen. `pre` is optional content above the rows (page text). */
-  function listScreen(kind, id, title, specs, pre) {
+  /** The icon of a menu entry: its own `icon` (ICON_KINDS), else one for its type: contacts for a list,
+   *  download for downloads, chat for a page with buttons, the monogram for a page without. */
+  function iconOf(item, warn = false) {
+    const own = String(item.icon ?? '').trim();
+    if (ICON_KINDS.includes(own)) return own;
+    if (own && warn) console.warn(`[ipod] config.json: unknown icon "${own}" (one of ${ICON_KINDS.join(', ')}):`, item);
+    return { list: 'contacts', downloads: 'download' }[item.type] ?? (item.actions?.length ? 'chat' : 'monogram');
+  }
+
+  /** Generic scrolling list screen. `pre` is optional content above the rows (page text); `art` an optional
+   *  picture below them, shown only where the screen has room for it (it never scrolls into view). */
+  function listScreen(kind, id, title, specs, pre, art) {
     specs = specs.filter(Boolean);
     // an empty list says so (centred grey note, like the 6G), it never shows a bare white screen
     if (!specs.length && !pre && kind !== 'nowplaying') pre = h('div', 'ipodc-empty', { text: L.empty });
@@ -61,6 +73,7 @@ export function createScreens(ctx) {
     list.append(hl, ...rows);
     if (pre) content.append(pre);
     content.append(list);
+    if (art) content.append(art);
     view.append(content);
     sb.append(thumb);
     node.append(view, sb);
@@ -86,6 +99,12 @@ export function createScreens(ctx) {
         node.classList.remove('has-sb');
         s.measure();
         if (s.contentH > s.viewH + 1) { node.classList.add('has-sb'); s.measure(); }
+        if (art) {
+          const room = s.viewH - s.contentH;
+          art.hidden = room < ART_MIN;
+          css(art, 'room', room);
+          css(art, 'art', Math.min(ART_MAX, room - 16));
+        }
         s.off = clamp(s.off, 0, s.maxOff());
         if (rows.length) s.setIndex(s.index, true, !page || s.index > 0);
         else s.paint(true);
@@ -230,7 +249,7 @@ export function createScreens(ctx) {
       pane.append(coverArt(item, 'ipodc-pv-cover'));
       return pane;
     }
-    const kind = { list: 'contacts', downloads: 'download' }[item.type] ?? (item.actions?.length ? 'chat' : 'monogram');
+    const kind = iconOf(item, true);
     const icon = () => previewIcon(kind, mono, `${ctx.P}s`);
     pane.innerHTML = `<div class="ipodc-pv-floor"></div><div class="ipodc-pv-refl"><div class="ipodc-pv-float-in">${icon()}</div></div><div class="ipodc-pv-float">${icon()}</div>`;
     return pane;
@@ -268,7 +287,10 @@ export function createScreens(ctx) {
       case 'nowplaying':
         return nowPlayingScreen(item, id);
       default: {
-        const s = listScreen('page', id, title, links(item.actions), h('div', 'ipodc-text', { text: item.body ?? '' }));
+        // the entry's icon fills the free space under a short text, as on the preview pane
+        const art = h('div', 'ipodc-page-art', { 'aria-hidden': 'true' });
+        art.innerHTML = `<div class="ipodc-page-art-in">${previewIcon(iconOf(item), mono, `${ctx.P}s`)}</div>`;
+        const s = listScreen('page', id, title, links(item.actions), h('div', 'ipodc-text', { text: item.body ?? '' }), art);
         s.summary = item.body;
         return s;
       }

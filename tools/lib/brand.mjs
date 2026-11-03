@@ -4,6 +4,8 @@
 
 import { readFileSync } from 'node:fs'
 
+import { FINISHES, finishOf } from '../../src/shared/ipodSpec.js'
+
 // Name, Monogramm, Tagline, E-Mail, Playlist-Titel und Menuepunkte kommen aus
 // public/config.json, damit Social-Bild, Cover und PDFs zur Seite passen.
 // Nach einer Aenderung dort: node tools/make-all.mjs
@@ -39,6 +41,28 @@ export const palette = {
   paper: '#f3f6f9',
 }
 
+// Die Farbe des gezeichneten Players folgt settings.finish (wie der iPod auf der Seite), der Hintergrund
+// von Favicon, Touch-Icon und Social-Bild ist der Nacht-Desktop der Seite (src/window/window.css).
+const finish = finishOf(config)
+const dark = finish !== FINISHES.silver
+export const look = dark
+  ? {
+      body: ['#3a4155', '#262c3d', '#1d2232', '#2a3044', '#121520'],
+      wheel: [finish.wheelHi, finish.wheel, finish.wheelLo],
+      button: ['#2c3243', finish.centerButton, '#181c28'],
+      edge: '#07080c', rim: 0.18, ring: '#0b0d14', label: finish.wheelLabel,
+      outline: '#c9ced8', // Umriss der kleinen Icons, damit der dunkle Player auf dem dunklen Grund steht
+    }
+  : {
+      body: ['#ffffff', '#eef1f4', '#ccd3da', '#e7ebef', '#aab2bb'],
+      wheel: ['#fbfcfd', '#e2e7ec', '#bfc7d0'],
+      button: ['#ffffff', '#edf0f3', '#c9d1d9'],
+      edge: palette.edge, rim: 0.75, ring: palette.silverDark, label: '#6d7884',
+      outline: '#2a4a6b',
+    }
+// Nacht-Desktop: Markenfarbe night, Signalgruen und Gelb als Licht
+export const night = { top: '#2b3a4a', mid: '#1f2638', base: '#171c2a', deep: '#0e1119', green: '36,115,77', mint: '141,247,196', yellow: '255,214,10', ink: '#171c2a' }
+
 export const fontStack =
   '"Helvetica Neue", Helvetica, Arial, "Liberation Sans", "DejaVu Sans", sans-serif'
 
@@ -47,16 +71,20 @@ export const fontStack =
 // font-family-Attribut zerreissen und die Datei unlesbar machen.
 export const svgFontStack = fontStack.replaceAll('"', "'")
 
+// Markenschrift fuer Monogramme in den gerenderten Bildern (OG-Bild): Bricolage Grotesque aus tools/fonts
+// (SIL OFL). brandFontFace gehoert in das <style> der Vorlage, die Schrift wird lokal geladen.
+export const brandFontFace = `@font-face { font-family: "Bricolage Grotesque"; src: url("${new URL('../fonts/BricolageGrotesque.ttf', import.meta.url).href}") format("truetype"); font-weight: 200 800; }`
+export const brandFont = `"Bricolage Grotesque", ${fontStack}`
+export const svgBrandFont = brandFont.replaceAll('"', "'")
+/** Monogramm als HTML mit hervorgehobenem Punkt (<span class="dot">), wie im Logo "anstatt." */
+export const monogramHtml = brand.monogram.replaceAll('.', '<span class="dot">.</span>')
+
 /** Verlaeufe und Filter, die alle Motive teilen. ns haelt die IDs eindeutig. */
 function defs(ns) {
   return `
   <defs>
     <linearGradient id="${ns}-body" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".18" stop-color="#eef1f4"/>
-      <stop offset=".55" stop-color="#ccd3da"/>
-      <stop offset=".82" stop-color="#e7ebef"/>
-      <stop offset="1" stop-color="#aab2bb"/>
+      ${[0, 0.18, 0.55, 0.82, 1].map((o, i) => `<stop offset="${o}" stop-color="${look.body[i]}"/>`).join('')}
     </linearGradient>
     <linearGradient id="${ns}-screen" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1d3449"/>
@@ -72,14 +100,10 @@ function defs(ns) {
       <stop offset="1" stop-color="${palette.aquaDeep}"/>
     </linearGradient>
     <radialGradient id="${ns}-wheel" cx=".5" cy=".36" r=".78">
-      <stop offset="0" stop-color="#fbfcfd"/>
-      <stop offset=".62" stop-color="#e2e7ec"/>
-      <stop offset="1" stop-color="#bfc7d0"/>
+      ${[0, 0.62, 1].map((o, i) => `<stop offset="${o}" stop-color="${look.wheel[i]}"/>`).join('')}
     </radialGradient>
     <radialGradient id="${ns}-button" cx=".5" cy=".3" r=".85">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".55" stop-color="#edf0f3"/>
-      <stop offset="1" stop-color="#c9d1d9"/>
+      ${[0, 0.55, 1].map((o, i) => `<stop offset="${o}" stop-color="${look.button[i]}"/>`).join('')}
     </radialGradient>
   </defs>`
 }
@@ -114,8 +138,8 @@ export function playerSvg({ ns = 'pl', width = 260, height = 420, showScreenCont
     ? `
       <g>
         <rect x="46" y="50" width="56" height="56" rx="5" fill="url(#${ns}-aqua)"/>
-        <text x="74" y="88" text-anchor="middle" font-family="${svgFontStack}" font-size="26"
-              font-weight="700" fill="#ffffff" opacity=".92">${brand.monogram}</text>
+        <text x="74" y="88" text-anchor="middle" font-family="${svgBrandFont}" font-size="27"
+              font-weight="800" fill="#ffffff" opacity=".94">${brand.monogram}</text>
         <rect x="114" y="54" width="94" height="9" rx="4.5" fill="#8fd0ff" opacity=".95"/>
         <rect x="114" y="70" width="72" height="7" rx="3.5" fill="#9db3c7" opacity=".85"/>
         <rect x="114" y="84" width="58" height="7" rx="3.5" fill="#9db3c7" opacity=".6"/>
@@ -127,41 +151,41 @@ export function playerSvg({ ns = 'pl', width = 260, height = 420, showScreenCont
     : ''
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 420" width="${width}" height="${height}" role="img" aria-label="Stilisierter MP3-Player mit Click Wheel">
   ${defs(ns)}
-  <rect x="10" y="10" width="240" height="400" rx="28" fill="url(#${ns}-body)" stroke="${palette.edge}" stroke-width="2"/>
-  <rect x="17" y="17" width="226" height="386" rx="22" fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="2"/>
+  <rect x="10" y="10" width="240" height="400" rx="28" fill="url(#${ns}-body)" stroke="${look.edge}" stroke-width="2"/>
+  <rect x="17" y="17" width="226" height="386" rx="22" fill="none" stroke="#ffffff" stroke-opacity="${look.rim}" stroke-width="2"/>
   <rect x="32" y="32" width="196" height="156" rx="10" fill="#79838e"/>
   <rect x="34" y="34" width="192" height="152" rx="9" fill="url(#${ns}-screen)"/>
   ${screen}
   <path d="M34 34 h192 v44 q-96 26 -192 0 Z" fill="url(#${ns}-gloss)"/>
-  <circle cx="130" cy="300" r="80" fill="url(#${ns}-wheel)" stroke="${palette.silverDark}" stroke-width="1.5"/>
-  <circle cx="130" cy="300" r="80" fill="none" stroke="#ffffff" stroke-opacity=".6" stroke-width="1" transform="translate(0,1.5)"/>
-  <circle cx="130" cy="300" r="31" fill="url(#${ns}-button)" stroke="${palette.silverDark}" stroke-width="1.2"/>
+  <circle cx="130" cy="300" r="80" fill="url(#${ns}-wheel)" stroke="${look.ring}" stroke-width="1.5"/>
+  <circle cx="130" cy="300" r="80" fill="none" stroke="#ffffff" stroke-opacity="${look.rim * 0.8}" stroke-width="1" transform="translate(0,1.5)"/>
+  <circle cx="130" cy="300" r="31" fill="url(#${ns}-button)" stroke="${look.ring}" stroke-width="1.2"/>
   <text x="130" y="243" text-anchor="middle" font-family="${svgFontStack}" font-size="15"
-        font-weight="600" letter-spacing="1.5" fill="#6d7884">MENU</text>
-  ${transportGlyphs(130, 300, 80, '#6d7884')}
+        font-weight="600" letter-spacing="1.5" fill="${look.label}">MENU</text>
+  ${transportGlyphs(130, 300, 80, look.label)}
 </svg>`
 }
 
-/** Favicon: 32x32, Aqua-Kachel mit Player-Silhouette, auch bei 16 px lesbar. */
+/** Favicon: 32x32, Nacht-Kachel mit Player-Silhouette, auch bei 16 px lesbar. */
 export function faviconSvg() {
   const ns = 'fv'
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="MP3-Player mit Click Wheel">
   <defs>
     <linearGradient id="${ns}-bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="${palette.aquaLight}"/>
-      <stop offset="1" stop-color="${palette.aquaDeep}"/>
+      <stop offset="0" stop-color="${night.top}"/>
+      <stop offset="1" stop-color="${night.deep}"/>
     </linearGradient>
     <linearGradient id="${ns}-body" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".55" stop-color="#dde3e9"/>
-      <stop offset="1" stop-color="#aeb7c0"/>
+      <stop offset="0" stop-color="${look.body[0]}"/>
+      <stop offset=".55" stop-color="${look.body[2]}"/>
+      <stop offset="1" stop-color="${look.body[4]}"/>
     </linearGradient>
   </defs>
   <rect width="32" height="32" rx="7" fill="url(#${ns}-bg)"/>
-  <rect x="8" y="3" width="16" height="26" rx="3.4" fill="url(#${ns}-body)" stroke="#2a4a6b" stroke-width="1"/>
-  <rect x="10.5" y="5.5" width="11" height="9" rx="1.4" fill="#10212f"/>
-  <circle cx="16" cy="22" r="5.4" fill="#f2f5f8" stroke="#8d97a2" stroke-width="1"/>
-  <circle cx="16" cy="22" r="1.9" fill="#b9c2cb"/>
+  <rect x="8" y="3" width="16" height="26" rx="3.4" fill="url(#${ns}-body)" stroke="${look.outline}" stroke-width="1"/>
+  <rect x="10.5" y="5.5" width="11" height="9" rx="1.4" fill="${dark ? '#dfe9f5' : '#10212f'}"/>
+  <circle cx="16" cy="22" r="5.4" fill="${look.wheel[1]}" stroke="${dark ? look.outline : '#8d97a2'}" stroke-width="1"/>
+  <circle cx="16" cy="22" r="1.9" fill="${look.button[2]}"/>
 </svg>
 `
 }
@@ -172,35 +196,35 @@ export function touchIconSvg() {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
   <defs>
     <linearGradient id="${ns}-bg" x1="0" y1="0" x2=".3" y2="1">
-      <stop offset="0" stop-color="#7fc9ff"/>
-      <stop offset=".55" stop-color="${palette.aqua}"/>
-      <stop offset="1" stop-color="#0c437a"/>
+      <stop offset="0" stop-color="${night.top}"/>
+      <stop offset=".55" stop-color="${night.base}"/>
+      <stop offset="1" stop-color="${night.deep}"/>
     </linearGradient>
+    <radialGradient id="${ns}-glow" cx=".15" cy="1.05" r=".9">
+      <stop offset="0" stop-color="rgb(${night.green})" stop-opacity=".75"/>
+      <stop offset="1" stop-color="rgb(${night.green})" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="${ns}-body" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".2" stop-color="#f0f3f6"/>
-      <stop offset=".6" stop-color="#ced5dc"/>
-      <stop offset="1" stop-color="#a8b1bb"/>
+      ${[0, 0.2, 0.6, 1].map((o, i) => `<stop offset="${o}" stop-color="${look.body[[0, 1, 2, 4][i]]}"/>`).join('')}
     </linearGradient>
     <linearGradient id="${ns}-screen" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1d3449"/>
       <stop offset="1" stop-color="#09131d"/>
     </linearGradient>
     <radialGradient id="${ns}-wheel" cx=".5" cy=".35" r=".8">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset=".65" stop-color="#e4e9ed"/>
-      <stop offset="1" stop-color="#bcc4cd"/>
+      ${[0, 0.65, 1].map((o, i) => `<stop offset="${o}" stop-color="${look.wheel[i]}"/>`).join('')}
     </radialGradient>
   </defs>
   <rect width="180" height="180" fill="url(#${ns}-bg)"/>
-  <path d="M0 0 h180 v74 q-90 30 -180 0 Z" fill="#ffffff" fill-opacity=".16"/>
-  <rect x="48" y="16" width="84" height="148" rx="16" fill="url(#${ns}-body)" stroke="#1d4570" stroke-width="3"/>
+  <rect width="180" height="180" fill="url(#${ns}-glow)"/>
+  <path d="M0 0 h180 v74 q-90 30 -180 0 Z" fill="#ffffff" fill-opacity=".06"/>
+  <rect x="48" y="16" width="84" height="148" rx="16" fill="url(#${ns}-body)" stroke="${dark ? look.outline : '#1d4570'}" stroke-width="3"/>
   <rect x="59" y="28" width="62" height="52" rx="6" fill="url(#${ns}-screen)"/>
   <rect x="66" y="38" width="30" height="6" rx="3" fill="#7fc3ff"/>
   <rect x="66" y="50" width="42" height="5" rx="2.5" fill="#8299ad"/>
   <rect x="66" y="61" width="24" height="5" rx="2.5" fill="#8299ad" opacity=".7"/>
-  <circle cx="90" cy="124" r="29" fill="url(#${ns}-wheel)" stroke="#9aa4ae" stroke-width="2"/>
-  <circle cx="90" cy="124" r="10.5" fill="#ced6de" stroke="#9aa4ae" stroke-width="1.5"/>
+  <circle cx="90" cy="124" r="29" fill="url(#${ns}-wheel)" stroke="${dark ? '#0b0d14' : '#9aa4ae'}" stroke-width="2"/>
+  <circle cx="90" cy="124" r="10.5" fill="${look.button[1]}" stroke="${dark ? '#0b0d14' : '#9aa4ae'}" stroke-width="1.5"/>
 </svg>
 `
 }

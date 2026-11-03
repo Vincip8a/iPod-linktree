@@ -9,23 +9,23 @@ body {
   font: 13px/1.55 "Lucida Grande", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif; color: #1c1c1c;
   -webkit-font-smoothing: antialiased;
   background:
-    radial-gradient(130% 100% at 50% 118%, #6cc0f7 0%, #3f9bea 36%, #1f6fd0 62%, #12489f 100%) fixed;
-  background-color: #1f6fd0;
+    radial-gradient(130% 100% at 50% 118%, #2b3a4a 0%, #1f2638 36%, #171c2a 62%, #0e1119 100%) fixed;
+  background-color: #171c2a;
 }
 /* the same desktop as the main page (src/window/window.css): drifting wallpaper, grain, vignette */
 body::before, body::after { content: ''; position: fixed; z-index: -1; pointer-events: none; }
 body::before {
   inset: -12%;
   background:
-    radial-gradient(60% 38% at 22% 108%, rgba(255,255,255,.55), rgba(255,255,255,0) 70%),
-    radial-gradient(46% 30% at 82% 98%, rgba(190,235,255,.55), rgba(190,235,255,0) 70%),
-    radial-gradient(34% 22% at 70% 16%, rgba(255,255,255,.28), rgba(255,255,255,0) 72%),
-    radial-gradient(40% 52% at 8% 22%, rgba(110,215,255,.50), rgba(110,215,255,0) 70%),
+    radial-gradient(60% 38% at 22% 108%, rgba(36,115,77,.62), rgba(36,115,77,0) 70%),
+    radial-gradient(46% 30% at 82% 98%, rgba(255,214,10,.20), rgba(255,214,10,0) 70%),
+    radial-gradient(34% 22% at 70% 16%, rgba(244,235,216,.07), rgba(244,235,216,0) 72%),
+    radial-gradient(40% 52% at 8% 22%, rgba(141,247,196,.16), rgba(141,247,196,0) 70%),
     conic-gradient(from 196deg at 64% 138%,
-      rgba(255,255,255,0) 0deg, rgba(255,255,255,.34) 22deg, rgba(120,200,255,.0) 46deg,
-      rgba(255,255,255,0) 130deg, rgba(160,225,255,.30) 168deg, rgba(255,255,255,0) 210deg,
+      rgba(255,255,255,0) 0deg, rgba(141,247,196,.10) 22deg, rgba(141,247,196,0) 46deg,
+      rgba(255,255,255,0) 130deg, rgba(244,235,216,.07) 168deg, rgba(255,255,255,0) 210deg,
       rgba(255,255,255,0) 360deg),
-    radial-gradient(130% 100% at 50% 118%, #6cc0f7 0%, #3f9bea 36%, #1f6fd0 62%, #12489f 100%);
+    radial-gradient(130% 100% at 50% 118%, #2b3a4a 0%, #1f2638 36%, #171c2a 62%, #0e1119 100%);
   animation: drift 70s ease-in-out 2 alternate both; /* two slow sweeps, then it rests */
 }
 body::after {
@@ -34,7 +34,7 @@ body::after {
 }
 html::after { /* soft vignette */
   content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,0) 55%, rgba(0,20,70,.26) 100%);
+  background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,0) 55%, rgba(5,7,12,.42) 100%);
 }
 @keyframes drift {
   0%   { transform: translate3d(-2%, -1%, 0) rotate(-1.2deg) scale(1.02); }

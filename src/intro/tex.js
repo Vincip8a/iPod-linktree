@@ -1,6 +1,6 @@
 // Procedural canvas textures for intro C (no image files).
 import * as THREE from 'three';
-import { IPOD, COLORS } from '../shared/ipodSpec.js';
+import { IPOD, COLORS, FINISHES } from '../shared/ipodSpec.js';
 
 const { PI, abs, floor, imul, min, round } = Math;
 const FONT = '"Helvetica Neue", Helvetica, Arial, sans-serif';
@@ -102,20 +102,24 @@ function inset(g, cx, cy, r, dy, blur, color) {
   g.restore();
 }
 
-export function wheelCanvas(dMm, labelFactor, cbMm) {
+// white and black at an alpha scaled by the finish (FINISHES: light, shade), capped at 1
+const lit = (f, a) => `rgba(255,255,255,${min(1, a * f.light)})`;
+const shaded = (f, a, rgb = '0,0,0') => `rgba(${rgb},${min(1, a * f.shade)})`;
+
+export function wheelCanvas(dMm, labelFactor, cbMm, f = FINISHES.silver) {
   const S = 512, px = S / dMm, R = S / 2, lr = R * labelFactor;
   const [c, g] = canvas(S, S);
   g.save(); g.translate(R, S * 0.16); g.scale(1.3, 1.1);
-  fill(g, grad(g.createRadialGradient(0, 0, 0, 0, 0, S), [[0, '#f0f1f2'], [0.52, COLORS.wheel], [1, '#d9dbde']]), -S, -S, 3 * S, 3 * S);
+  fill(g, grad(g.createRadialGradient(0, 0, 0, 0, 0, S), [[0, f.wheelHi], [0.52, f.wheel], [1, f.wheelLo]]), -S, -S, 3 * S, 3 * S);
   g.restore();
-  inset(g, R, R, R, 0.22 * px, 0.45 * px, 'rgba(0,0,0,.12)');
-  inset(g, R, R, R, -0.2 * px, 0.3 * px, 'rgba(255,255,255,.9)');
+  inset(g, R, R, R, 0.22 * px, 0.45 * px, shaded(f, 0.12));
+  inset(g, R, R, R, -0.2 * px, 0.3 * px, lit(f, 0.9));
   const cb = cbMm * px;
-  dot(g, R, R + 0.19 * px, cb + 0.13 * px, 'rgba(255,255,255,.65)');
-  dot(g, R, R, cb + 0.15 * px, 'rgba(100,104,110,.5)');
+  dot(g, R, R + 0.19 * px, cb + 0.13 * px, lit(f, 0.65));
+  dot(g, R, R, cb + 0.15 * px, shaded(f, 0.5, f.shade > 1 ? '0,0,0' : '100,104,110'));
   // the word and the glyphs of the DOM wheel (ipodSpec.js), so the intro's last frame matches it
   const { menu = 'MENU', glyphs } = IPOD.wheelLabels;
-  for (const d of [-0.04, 0.04]) text(g, menu, R + (0.0525 + d) * px, R - lr, 2.1 * px, 700, COLORS.wheelLabel, 'center', 0.105 * px);
+  for (const d of [-0.04, 0.04]) text(g, menu, R + (0.0525 + d) * px, R - lr, 2.1 * px, 700, f.wheelLabel, 'center', 0.105 * px);
   const k = (2.1 / 9) * px;
   [[glyphs.next, R + lr, R], [glyphs.prev, R - lr, R], [glyphs.play, R, R + lr]].forEach(([d, x, y]) => {
     g.setTransform(k, 0, 0, k, x - 10 * k, y - 4.5 * k);
@@ -124,12 +128,12 @@ export function wheelCanvas(dMm, labelFactor, cbMm) {
   return c;
 }
 
-export function centreCanvas(dMm) {
+export function centreCanvas(dMm, f = FINISHES.silver) {
   const S = 512, u = S / dMm, R = S / 2;
-  const [c, g] = canvas(S, S, COLORS.centerButton);
-  fill(g, grad(g.createLinearGradient(0, 0, 0, S), [[0, 'rgba(0,0,0,.1)'], [0.4, 'rgba(0,0,0,.024)'], [0.7, 'rgba(255,255,255,.08)'], [1, 'rgba(255,255,255,.24)']]), 0, 0, S, S);
-  inset(g, R, R, R, 0.35 * u, 0.7 * u, 'rgba(0,0,0,.14)');
-  inset(g, R, R, R, -0.25 * u, 0.45 * u, 'rgba(255,255,255,.5)');
+  const [c, g] = canvas(S, S, f.centerButton);
+  fill(g, grad(g.createLinearGradient(0, 0, 0, S), [[0, shaded(f, 0.1)], [0.4, shaded(f, 0.024)], [0.7, lit(f, 0.08)], [1, lit(f, 0.24)]]), 0, 0, S, S);
+  inset(g, R, R, R, 0.35 * u, 0.7 * u, shaded(f, 0.14));
+  inset(g, R, R, R, -0.25 * u, 0.45 * u, lit(f, 0.5));
   return c;
 }
 

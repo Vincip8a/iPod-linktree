@@ -1,7 +1,7 @@
 # Dein Name · Linktree im Click-Wheel-Look
 
-Eine Linktree-Seite, die aussieht wie ein silberner Click-Wheel-MP3-Player (iPod Classic,
-6./7. Generation) in einem Mac-OS-X-Aqua-Fenster. Gebaut mit **Vite** und **Three.js**,
+Eine Linktree-Seite, die aussieht wie ein Click-Wheel-MP3-Player (iPod Classic, 6./7. Generation,
+silber oder schwarz) in einem Mac-OS-X-Aqua-Fenster auf einem nachtblauen Desktop. Gebaut mit **Vite** und **Three.js**,
 ausgeliefert als statische Seite über GitHub Pages.
 
 Alle Inhalte (Menü, Texte, Links, Playlist, Downloads) stehen in einer einzigen Datei:
@@ -53,6 +53,7 @@ Steht für Kopfzeile, Fenstertitel und Absender.
 | ------------- | ------ | ----------------------------------------------------------- |
 | `name`        | String | Dein Name: Menüleiste, Tab-Titel, Kopf des iPod-Hauptmenüs  |
 | `monogram`    | String | Zwei Buchstaben für Icon, Cover und die Menüleiste auf schmalen Handys (dort statt des Namens), z. B. `"DN"` |
+| `monogramArt` | String | Optional: Pfad zu einem gezeichneten Monogramm für den Boot-Screen, z. B. `"assets/monogram.svg"` (sonst das Kürzel als Text). `node tools/make-monogram.mjs` zeichnet `monogram` in der Markenschrift Bricolage Grotesque, ein Punkt in Mint (braucht einen Mac mit Swift) |
 | `tagline`     | String | Einzeiler: Statuszeile unter dem iPod, Meta-Beschreibung und Text der Social-Media-Vorschau |
 | `windowTitle` | String | Text in der Titelleiste des Aqua-Fensters                    |
 | `email`       | String | Kontaktadresse für „Kontakt“ in der Menüleiste (ohne sie entfällt der Punkt) |
@@ -72,7 +73,7 @@ lokalen Build) bleibt das Vorschaubild relativ und wird von den meisten Diensten
 ### `menu[]`
 
 Die Liste der Einträge im Hauptmenü: eine Zeile pro Eintrag, in genau dieser Reihenfolge.
-Jeder Eintrag hat vier gemeinsame Felder und ein optionales fünftes:
+Jeder Eintrag hat vier gemeinsame Felder und zwei optionale:
 
 | Feld    | Typ    | Bedeutung                                                              |
 | ------- | ------ | ---------------------------------------------------------------------- |
@@ -80,6 +81,7 @@ Jeder Eintrag hat vier gemeinsame Felder und ein optionales fünftes:
 | `label` | String | Beschriftung im Menü                                                    |
 | `type`  | String | Bauart der Unterseite: `list`, `page`, `nowplaying` oder `downloads`   |
 | `title` | String | Überschrift der Unterseite                                              |
+| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt immer das Cover |
 | `lang`  | String | Optional: Sprache von `label` und `title`, wenn sie nicht Deutsch ist, z. B. `"en"` für „Work Together“ (Screenreader sprechen sie dann richtig aus). Gilt für beide Felder: nur setzen, wenn `label` und `title` in dieser Sprache sind |
 
 Je nach `type` kommen weitere Felder dazu. Zeilen (`items[]`, `actions[]`) können ebenfalls ein
@@ -145,6 +147,7 @@ Fehlt ein Feld, fehlt auch der Link.
 
 | Feld         | Typ     | Bedeutung                                                            |
 | ------------ | ------- | -------------------------------------------------------------------- |
+| `finish`     | String  | Farbe der Front: `"black"` (schwarz eloxiert im Nachtblau der Marke, dunkles Click Wheel) oder `"silver"` (Standard, auch bei jedem anderen Wert). Gilt für iPod, Intro, Desktop-Symbol, Favicon und Social-Bild (diese beiden nach `node tools/make-all.mjs`) |
 | `clickSound` | Boolean | `true` spielt beim Navigieren ein Klickgeräusch                      |
 | `intro`      | Boolean | `true` zeigt die 3D-Einstiegsanimation beim ersten Aufruf, `false` nie |
 
@@ -264,6 +267,7 @@ node tools/make-all.mjs        # alles auf einmal
 node tools/make-icons.mjs      # favicon.svg, playlist-cover.svg, apple-touch-icon.png
 node tools/make-og.mjs         # og-image.png (1200x630)
 node tools/make-downloads.mjs  # die drei PDFs
+node tools/make-monogram.mjs   # assets/monogram.svg (Boot-Screen), nur auf einem Mac mit Swift
 ```
 
 Die Skripte suchen sich ein Chromium in dieser Reihenfolge (die Screenshot-Skripte in
@@ -379,7 +383,9 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ make-og.mjs                Social-Media-Bild
 │  ├─ make-downloads.mjs         die drei PDFs
 │  ├─ file-sizes.mjs             Dateigrößen für "size" in config.json
-│  └─ sync-guide.mjs             baut public/guide/ aus dem Gratis-Guide
+│  ├─ sync-guide.mjs             baut public/guide/ aus dem Gratis-Guide
+│  ├─ make-monogram.mjs          Monogramm in der Markenschrift (lib/glyphs.swift, CoreText)
+│  └─ fonts/                     Bricolage Grotesque (SIL OFL) für Monogramm und Social-Bild
 ├─ index.html                    Einstiegspunkt
 ├─ vite.config.js                Build-Konfiguration (füllt Meta-Tags und <noscript> aus config.json)
 ├─ ARCHITECTURE.md               Architektur für Entwickler

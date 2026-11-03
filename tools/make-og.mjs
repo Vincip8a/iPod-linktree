@@ -8,7 +8,7 @@ import { mkdir } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { brand, fontStack, palette, playerSvg } from './lib/brand.mjs'
+import { brand, brandFont, brandFontFace, fontStack, monogramHtml, night, playerSvg } from './lib/brand.mjs'
 import { formatSize, htmlToPng } from './lib/render.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -24,16 +24,20 @@ const subtitle = `<span class="sub-in">${brand.menuLabels.map((l) => `<span clas
 
 const html = `<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><style>
+  ${brandFontFace}
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
     width: ${WIDTH}px; height: ${HEIGHT}px; overflow: hidden;
     font-family: ${fontStack};
+    /* der Nacht-Desktop der Seite: Signalgruen von unten links, Gelb unten rechts */
     background:
-      radial-gradient(120% 90% at 18% 6%, rgba(255,255,255,.45), rgba(255,255,255,0) 58%),
-      linear-gradient(152deg, #86cdff 0%, ${palette.aqua} 46%, #0b3d72 100%);
+      radial-gradient(70% 80% at 12% 112%, rgba(${night.green},.75), rgba(${night.green},0) 70%),
+      radial-gradient(50% 55% at 88% 110%, rgba(${night.yellow},.22), rgba(${night.yellow},0) 70%),
+      radial-gradient(50% 60% at 6% 10%, rgba(${night.mint},.14), rgba(${night.mint},0) 70%),
+      radial-gradient(130% 110% at 50% 118%, ${night.top} 0%, ${night.mid} 36%, ${night.base} 62%, ${night.deep} 100%);
   }
-  /* feine Aqua-Pinstripes */
+  /* feine Pinstripes */
   .stripes {
     position: absolute; inset: 0;
     background: repeating-linear-gradient(180deg, rgba(255,255,255,.055) 0 2px, rgba(255,255,255,0) 2px 5px);
@@ -56,9 +60,10 @@ const html = `<!doctype html>
     width: 42px; height: 42px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     background: linear-gradient(180deg, #ffffff, #d7dee5);
-    color: ${palette.aquaInk}; font-size: 20px; font-weight: 700; letter-spacing: 0;
+    color: ${night.ink}; font: 800 21px ${brandFont}; letter-spacing: 0;
     box-shadow: inset 0 -2px 4px rgba(0,0,0,.12);
   }
+  .badge .mono .dot { color: #24734d; }
   h1 {
     margin: 34px 0 0; font-size: 104px; line-height: 1; font-weight: 700; letter-spacing: -2px;
     text-shadow: 0 3px 16px rgba(4,32,60,.38);
@@ -81,7 +86,7 @@ const html = `<!doctype html>
   <div class="frame"></div>
   <div class="stage">
     <div class="copy">
-      <span class="badge"><span class="mono">${brand.monogram}</span>Links</span>
+      <span class="badge"><span class="mono">${monogramHtml}</span>Links</span>
       <h1>${title}</h1>
       <p class="sub">${subtitle}</p>
       <div class="rule"></div>

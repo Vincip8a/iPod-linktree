@@ -28,7 +28,7 @@
   <circle cx="300" cy="286" r="124" fill="none" stroke="#ffffff" stroke-opacity=".8" stroke-width="3"/>
   <path d="M176 286 a124 124 0 0 1 248 0 Z" fill="url(#pc-sheen)"/>
   <text x="300" y="316" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif" font-size="112"
-        font-weight="700" letter-spacing="2" fill="#0a3763">AP</text>
+        font-weight="700" letter-spacing="2" fill="#0a3763">A.</text>
   <rect x="196" y="474" width="13" height="34" rx="6" fill="#ffffff" fill-opacity="0.32"/>
   <rect x="223" y="450" width="13" height="58" rx="6" fill="#ffffff" fill-opacity="0.46"/>
   <rect x="250" y="422" width="13" height="86" rx="6" fill="#ffffff" fill-opacity="0.6000000000000001"/>

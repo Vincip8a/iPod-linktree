@@ -3,7 +3,7 @@
 import './window.css';
 import { prefersReducedMotion } from '../shared/config.js';
 import { safeHref, firstText } from '../shared/href.js';
-import { aspect } from '../shared/ipodSpec.js';
+import { aspect, finishName } from '../shared/ipodSpec.js';
 import { h } from '../shared/dom.js';
 
 const MOBILE_MQ = '(max-width: 639.98px)';
@@ -44,6 +44,7 @@ export function createDesktop(host, { config, onLinks, onFocus }) {
 
   /* ---------- structure ---------- */
   const el = h('div', 'dt');
+  el.dataset.finish = finishName(config); // the desktop icon of a minimised window wears the iPod's finish
   el.dataset.state = 'open';
 
   const wall = h('div', 'dt-wall', { 'aria-hidden': 'true' });

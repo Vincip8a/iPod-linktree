@@ -11,24 +11,24 @@
   position: fixed; inset: 0; overflow: hidden;
   font-family: "Lucida Grande", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
   font-size: 13px; color: #000;
-  background: #1f6fd0;
+  background: #171c2a;
   user-select: none; -webkit-user-select: none;
 }
 
-/* ---------- wallpaper ---------- */
+/* ---------- wallpaper: anstatt. night (brand night blue, signal green and yellow light) ---------- */
 .dt-wall { position: absolute; inset: 0; overflow: hidden; z-index: 0; }
 .dt-wall-drift {
   position: absolute; inset: -12%;
   background:
-    radial-gradient(60% 38% at 22% 108%, rgba(255,255,255,.55), rgba(255,255,255,0) 70%),
-    radial-gradient(46% 30% at 82% 98%, rgba(190,235,255,.55), rgba(190,235,255,0) 70%),
-    radial-gradient(34% 22% at 70% 16%, rgba(255,255,255,.28), rgba(255,255,255,0) 72%),
-    radial-gradient(40% 52% at 8% 22%, rgba(110,215,255,.50), rgba(110,215,255,0) 70%),
+    radial-gradient(60% 38% at 22% 108%, rgba(36,115,77,.62), rgba(36,115,77,0) 70%),
+    radial-gradient(46% 30% at 82% 98%, rgba(255,214,10,.20), rgba(255,214,10,0) 70%),
+    radial-gradient(34% 22% at 70% 16%, rgba(244,235,216,.07), rgba(244,235,216,0) 72%),
+    radial-gradient(40% 52% at 8% 22%, rgba(141,247,196,.16), rgba(141,247,196,0) 70%),
     conic-gradient(from 196deg at 64% 138%,
-      rgba(255,255,255,0) 0deg, rgba(255,255,255,.34) 22deg, rgba(120,200,255,.0) 46deg,
-      rgba(255,255,255,0) 130deg, rgba(160,225,255,.30) 168deg, rgba(255,255,255,0) 210deg,
+      rgba(255,255,255,0) 0deg, rgba(141,247,196,.10) 22deg, rgba(141,247,196,0) 46deg,
+      rgba(255,255,255,0) 130deg, rgba(244,235,216,.07) 168deg, rgba(255,255,255,0) 210deg,
       rgba(255,255,255,0) 360deg),
-    radial-gradient(130% 100% at 50% 118%, #6cc0f7 0%, #3f9bea 36%, #1f6fd0 62%, #12489f 100%);
+    radial-gradient(130% 100% at 50% 118%, #2b3a4a 0%, #1f2638 36%, #171c2a 62%, #0e1119 100%);
   /* two slow sweeps (there and back, 140 s), then the wallpaper rests: an idle page must not keep the
      compositor redrawing the full screen forever */
   animation: dt-drift 70s ease-in-out 2 alternate both; /* (both: it rests on its first frame, no jump) */
@@ -39,7 +39,7 @@
 }
 .dt-wall::after { /* soft vignette */
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,0) 55%, rgba(0,20,70,.26) 100%);
+  background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,0) 55%, rgba(5,7,12,.42) 100%);
 }
 @keyframes dt-drift {
   0%   { transform: translate3d(-2%, -1%, 0) rotate(-1.2deg) scale(1.02); }
@@ -251,6 +251,8 @@
   background: radial-gradient(circle at 50% 50%, #cfd2d6 0 28%, #e9eaec 30% 100%);
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.22), inset 0 1px 1px #fff;
 }
+.dt[data-finish="black"] .dt-icon-art { background: linear-gradient(135deg, #3a4155 0%, #1d2232 55%, #121520 100%); border-color: rgba(0,0,0,.7); }
+.dt[data-finish="black"] .dt-icon-wheel { background: radial-gradient(circle at 50% 50%, #1f2434 0 28%, #2a3040 30% 100%); box-shadow: inset 0 0 0 1px rgba(0,0,0,.45), inset 0 1px 1px rgba(255,255,255,.12); }
 .dt-icon-label {
   color: #fff; font-size: 12px; line-height: 1; padding: 3px 8px; border-radius: 9px;
   text-shadow: 0 1px 2px rgba(0,0,0,.85);

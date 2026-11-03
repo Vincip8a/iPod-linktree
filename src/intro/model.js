@@ -1,8 +1,8 @@
-// Procedural silver iPod Classic (6th/7th gen) split into its real exploded-view parts.
+// Procedural iPod Classic (6th/7th gen, silver or black front: FINISHES) split into its real exploded-view parts.
 // Model space: mm, origin at the front-face centre, y up, front at z = 0.
 import * as THREE from 'three';
 import { toCreasedNormals, mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { IPOD, PARTS, COLORS } from '../shared/ipodSpec.js';
+import { IPOD, PARTS, COLORS, FINISHES } from '../shared/ipodSpec.js';
 import * as T from './tex.js';
 
 const { PI, abs, cos, hypot, max, min, sign, sin } = Math, V3 = THREE.Vector3;
@@ -117,7 +117,7 @@ function ribbon(mat, from, a, ta, to, b, tb, w, N = 28) {
   return { mesh, update };
 }
 
-export function buildIpod({ maxAniso = 8 } = {}) {
+export function buildIpod({ maxAniso = 8, finish = FINISHES.silver } = {}) {
   // canvas textures are drawn later, one per setup task (runIntro's step chain, before the first upload),
   // so building the model stays one short task: `paint` is a function that returns the drawn canvas
   const textures = [], paints = [];
@@ -152,9 +152,9 @@ export function buildIpod({ maxAniso = 8 } = {}) {
   const swc = [SX(sw.x + sw.width / 2), SY(sw.y + sw.height / 2)], whc = [SX(wh.cx), SY(wh.cy)];
   const R = wh.diameter / 2, CB = IPOD.centerButton.diameter / 2, ro = R - 3;
 
-  { // front plate: brushed anodised aluminium, tone = DOM plate
+  { // front plate: brushed anodised aluminium in the finish's colour, tone = DOM plate
     const p = mk('faceplate'), b = FACE_BEVEL;
-    mats.face = phys({ color: '#e1e4e7', map: fit(() => T.faceToneCanvas(FACE_TONE), W, H), metalness: 0.62, roughness: 0.44, roughnessMap: fine, anisotropy: 0.4, clearcoat: 0.25, clearcoatRoughness: 0.28 });
+    mats.face = phys({ color: finish.face, map: fit(() => T.faceToneCanvas(FACE_TONE), W, H), metalness: 0.62, roughness: 0.44, roughnessMap: fine, anisotropy: 0.4, clearcoat: 0.25, clearcoatRoughness: 0.28 });
     add(p, ext(holed(rr(W, H, IPOD.cornerRadius, b), rrHole(sw.width, sw.height, sw.radius, b, ...swc), circle(R + 0.12 + b, true, 128, ...whc)), 0.8, b, 3, SEG), mats.face);
     mats.lip = mats.face.clone();
     mats.lip.vertexColors = true;
@@ -166,7 +166,7 @@ export function buildIpod({ maxAniso = 8 } = {}) {
     add(p, ext(rr(gw, gh, sw.radius, 0.1), 0.6, 0.1, 2, 8), mats.glass, ...swc);
   }
   {
-    const p = mk('clickWheel'), map = fit(() => T.wheelCanvas(wh.diameter, IPOD.wheelLabels.radiusFactor, CB), wh.diameter), cmap = fit(() => T.centreCanvas(2 * CB), 2 * CB);
+    const p = mk('clickWheel'), map = fit(() => T.wheelCanvas(wh.diameter, IPOD.wheelLabels.radiusFactor, CB, finish), wh.diameter), cmap = fit(() => T.centreCanvas(2 * CB, finish), 2 * CB);
     const glow = { color: '#fff', emissive: '#fff', emissiveIntensity: 0, clearcoat: 0.3, clearcoatRoughness: 0.3 };
     mats.wheel = phys({ ...glow, map, emissiveMap: map, roughness: 0.42 });
     mats.centre = phys({ ...glow, map: cmap, emissiveMap: cmap, metalness: 0.3, roughness: 0.4, roughnessMap: brush, anisotropy: 0.4 });

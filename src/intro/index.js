@@ -3,7 +3,7 @@
 // glint) and the device lands frontal on getTargetRect(). Pure function of t.
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { IPOD } from '../shared/ipodSpec.js';
+import { IPOD, finishOf } from '../shared/ipodSpec.js';
 import { buildIpod, FACE_BEVEL } from './model.js';
 import { stripCanvas, shadowCanvas } from './tex.js';
 
@@ -11,6 +11,9 @@ const { PI, abs, cos, exp, max, min, sign, sin, sqrt, tan } = Math;
 const DEG = PI / 180, HALF_D = IPOD.depth / 2;
 const FOV_HERO = 26, FOV_END = 20, tHero = tan(13 * DEG);
 const STILL = 6.32, D = STILL + 0.22, FADE_MS = 220; // static tail: aligned and still from STILL to D
+// the timeline above is in its own seconds and plays SPEED times as fast (D = 6.54 s takes ~5 s); `duration`,
+// seek() and the tracks keep timeline seconds. The reduced-motion fade plays at its own pace
+const SPEED = 1.3;
 // frame-time watch over windows of WATCH_N frames: when a quarter of them miss 60 Hz (JANK_MS) the pixel
 // ratio steps down along DPR_STEPS (WebKit and Firefox drawing the full-window canvas at 2x lock to 30 Hz
 // or drop frames where Chrome holds 60); a median slower than SLOW_MS (under 20 fps) drops it to 1 at
@@ -137,7 +140,7 @@ export function runIntro(opts = {}) {
       renderer = new THREE.WebGLRenderer({ canvas, context: gl, ...attrs });
       await nextTask();
       if (stopped) throw new Error('stopped');
-      const ipod = buildIpod({ maxAniso: min(8, renderer.capabilities.getMaxAnisotropy()) });
+      const ipod = buildIpod({ maxAniso: min(8, renderer.capabilities.getMaxAnisotropy()), finish: finishOf(opts.config) });
       await nextTask();
       if (stopped) throw new Error('stopped');
       real = start({ ...opts, duration, canvas, renderer, ipod });
@@ -400,6 +403,7 @@ function start({ getTargetRect, getFrameRect, reducedMotion = false, config = nu
     return 1;
   }
 
+  const speed = reducedMotion ? 1 : SPEED;
   let t = 0, playing = false, finished = false, ready = false, raf = 0, last = 0, disposed = false, handedOff = false, lost = false, fadeTimer = 0, resolveDone;
   const done = new Promise((r) => { resolveDone = r; });
   function render() {
@@ -453,7 +457,7 @@ function start({ getTargetRect, getFrameRect, reducedMotion = false, config = nu
     last = now;
     if (dt) watchFrames(dt);
     if (finished) return;
-    t = min(duration, t + min(dt / 1000, MAX_STEP));
+    t = min(duration, t + min((dt / 1000) * speed, MAX_STEP));
     if (t >= duration) return finish();
     render();
     raf = requestAnimationFrame(frame);

@@ -6,9 +6,9 @@
 // Modules: wheel.js (click-wheel input), player.js (simulated playback), screens.js (screen
 // builders), sound.js (WebAudio ticks), art.js (procedural SVG), util.js (helpers, timers).
 import './ipodc.css';
-import { IPOD, COLORS } from '../shared/ipodSpec.js';
+import { IPOD, COLORS, finishOf, finishName } from '../shared/ipodSpec.js';
 import { prefersReducedMotion as isReduced, isOff } from '../shared/config.js';
-import { h, createTimers } from './util.js';
+import { h, createTimers, safeHref } from './util.js';
 import { firstText } from '../shared/href.js';
 import { GLYPH, playIndicator, battery, sharedDefs } from './art.js';
 import { createSound } from './sound.js';
@@ -83,7 +83,9 @@ export function mountIpod(container, { config } = {}) {
   };
   const prop = (k, v) => el.style.setProperty(`--ipodc-${k}`, v);
   for (const k in mm) prop(`mm-${k}`, +mm[k].toFixed(4));
-  for (const k in COLORS) prop(`c-${k}`, COLORS[k]);
+  const finish = finishOf(config);
+  for (const [k, v] of Object.entries({ ...COLORS, ...finish })) if (typeof v === 'string') prop(`c-${k}`, v);
+  el.dataset.finish = finishName(config); // ipodc.css: the finish's own highlights and shadows
 
   // ── skeleton: top edge (hold switch, headphone jack), display window with the 320×240 UI, click
   // wheel (a pointer surface only: the keyboard covers every button, so it is hidden from AT)
@@ -97,7 +99,14 @@ export function mountIpod(container, { config } = {}) {
     + `<div class="ipodc-center"></div></div>${sharedDefs(`${P}s`)}`;
   const [lcd, ind, titleEl, stage, toast, boot, wheel, centerBtn] = ['lcd', 'ind', 'title', 'stage', 'toast', 'boot', 'wheel', 'center']
     .map((c) => el.querySelector(`.ipodc-${c}`));
-  boot.firstChild.textContent = brand.monogram ?? '';
+  // the boot screen shows brand.monogramArt (a drawn monogram, tools/make-monogram.mjs), else the monogram as text
+  const monoArt = brand.monogramArt && safeHref(brand.monogramArt);
+  const monoText = () => { boot.firstChild.textContent = brand.monogram ?? ''; };
+  if (monoArt) {
+    const img = h('img', 'ipodc-boot-art', { src: monoArt, alt: '', draggable: 'false' });
+    img.onerror = monoText;
+    boot.firstChild.append(img);
+  } else monoText();
   // a landmark around the body (display: contents, so it adds no box); the key hint (aria-describedby)
   // and the live region sit beside the body because the listbox may only own options
   const hint = h('div', 'ipodc-sr', { id: hintId, text: L.hint });

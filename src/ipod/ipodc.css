@@ -1,4 +1,4 @@
-/* iPod Classic (6th/7th gen, silver).
+/* iPod Classic (6th/7th gen), silver or black (FINISHES in ipodSpec.js; data-finish, see the end).
    Hardware: every size is calc(var(--ipodc-u) * <mm>) with --ipodc-u = var(--ipod-h) / 103.5;
    the mm values are copied from IPOD (ipodSpec.js) into --ipodc-mm-* by index.js.
    Screen UI: logical 320×240 px. One logical px = --ipodc-p = 100cqw / 320 of the LCD container.
@@ -324,6 +324,19 @@
   font: calc(var(--ipodc-p) * 13)/1 var(--ipodc-font); color: #808387;
 }
 .ipodc-text + .ipodc-list { box-shadow: 0 calc(var(--ipodc-p) * -1) #d3d5d8; }
+/* a text page's icon, centred in the room left under its text and buttons (--ipodc-room, --ipodc-art:
+   logical px, set by listScreen; hidden when the room is too small) */
+.ipodc-page-art {
+  height: calc(var(--ipodc-p) * var(--ipodc-room, 0));
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.ipodc-page-art[hidden] { display: none; }
+.ipodc-page-art-in {
+  width: calc(var(--ipodc-p) * var(--ipodc-art, 0)); height: calc(var(--ipodc-p) * var(--ipodc-art, 0));
+  filter: drop-shadow(0 calc(var(--ipodc-p) * 3) calc(var(--ipodc-p) * 4) #00000029);
+}
+.ipodc-page-art svg { display: block; width: 100%; height: 100%; }
 
 /* ───────────── Now Playing (6G layout) ───────────── */
 .ipodc-np-deco { position: absolute; inset: 0; }
@@ -467,6 +480,7 @@
   color: #e6e8eb;
 }
 .ipodc-boot.show-mono .ipodc-boot-mono { opacity: 1; }
+.ipodc-boot-art { display: block; height: calc(var(--ipodc-p) * 62); width: auto; }
 
 /* ───────────── click wheel ───────────── */
 .ipodc-wheel {
@@ -479,7 +493,7 @@
   touch-action: none;
   cursor: pointer;
   /* matte light-grey plastic, seated in a shallow recess of the face (dark seam, white lower lip) */
-  background: radial-gradient(130% 110% at 50% 16%, #f0f1f2, var(--ipodc-c-wheel) 52%, #d9dbde);
+  background: radial-gradient(130% 110% at 50% 16%, var(--ipodc-c-wheelHi), var(--ipodc-c-wheel) 52%, var(--ipodc-c-wheelLo));
   box-shadow:
     0 calc(var(--ipodc-u) * -.06) 0 calc(var(--ipodc-u) * .2) #0000001f,
     0 0 0 calc(var(--ipodc-u) * .2) #0000001f,
@@ -534,6 +548,47 @@
 }
 .ipodc-center.is-pressed { filter: brightness(.92); transform: scale(.99); }
 
+/* ───────────── black finish ─────────────
+   Dark anodised plate, matte dark wheel and centre button: the same build as silver, with highlights and
+   shadows a dark surface can carry (white lips and rims would glow on it). Colours: FINISHES.black. */
+.ipodc[data-finish="black"] {
+  background:
+    repeating-linear-gradient(#ffffff07 0 .5px, #fff0 0 1.5px, #00000014 0 2px, #0000 0 3.5px, #ffffff06 0 4px, #fff0 0 6.5px),
+    linear-gradient(#ffffff14, #ffffff08 20%, #ffffff03 46%, #00000008 72%, #00000024),
+    linear-gradient(90deg, #00000029, #ffffff0e 7%, transparent 26% 74%, #ffffff0a 93%, #00000029),
+    var(--ipodc-c-aluminium);
+  box-shadow:
+    inset 0 0 0 calc(var(--ipodc-u) * .14) #07080cd9,
+    inset 0 0 0 calc(var(--ipodc-u) * .34) #ffffff2e,
+    inset 0 calc(var(--ipodc-u) * .45) calc(var(--ipodc-u) * .55) calc(var(--ipodc-u) * -.1) #ffffff38,
+    0 calc(var(--ipodc-u) * 1.2) calc(var(--ipodc-u) * 4) #00000052;
+}
+.ipodc[data-finish="black"] .ipodc-window {
+  box-shadow:
+    0 0 0 calc(var(--ipodc-u) * .13) #000000a6,
+    0 calc(var(--ipodc-u) * .15) 0 calc(var(--ipodc-u) * .13) #ffffff1c,
+    inset 0 calc(var(--ipodc-u) * .25) calc(var(--ipodc-u) * .4) #000e;
+}
+.ipodc[data-finish="black"] .ipodc-wheel {
+  box-shadow:
+    0 calc(var(--ipodc-u) * -.06) 0 calc(var(--ipodc-u) * .2) #00000059,
+    0 0 0 calc(var(--ipodc-u) * .2) #0000004d,
+    0 calc(var(--ipodc-u) * .22) 0 calc(var(--ipodc-u) * .2) #ffffff17,
+    inset 0 calc(var(--ipodc-u) * .22) calc(var(--ipodc-u) * .45) #00000047,
+    inset 0 calc(var(--ipodc-u) * -.15) calc(var(--ipodc-u) * .3) #ffffff14;
+}
+/* a pressed sector lightens on the dark plastic (a shade would not show) */
+.ipodc[data-finish="black"] .ipodc-wheel::before { background: radial-gradient(closest-side, #ffffff05 40%, #ffffff14); }
+.ipodc[data-finish="black"] .ipodc-center {
+  background: linear-gradient(#00000038, #00000012 40%, #ffffff08 70%, #ffffff1c), var(--ipodc-c-centerButton);
+  box-shadow:
+    0 0 0 calc(var(--ipodc-u) * .15) #00000094,
+    0 calc(var(--ipodc-u) * .19) 0 calc(var(--ipodc-u) * .13) #ffffff1f,
+    inset 0 calc(var(--ipodc-u) * .35) calc(var(--ipodc-u) * .7) #0000004d,
+    inset 0 calc(var(--ipodc-u) * -.25) calc(var(--ipodc-u) * .45) #ffffff17;
+}
+.ipodc[data-finish="black"] .ipodc-center.is-pressed { filter: brightness(.82); }
+
 /* ───────────── motion ─────────────
    .is-instant suspends the list transitions for one frame while a screen is laid out. Reduced
    motion switches every transition and animation off before any JS runs (the WAAPI screen and
@@ -549,6 +604,7 @@
 /* the preview pane drifts for a while after each change of selection, then rests (an idle page must not
    repaint forever): 6 x 7 s and 4 x 16 s, and they hold their last frame */
 .ipodc-pv.is-on :is(.ipodc-pv-float, .ipodc-pv-float-in) { animation: ipodc-float 7s ease-in-out 6 alternate both; }
+.ipodc-page-art-in { animation: ipodc-float 7s ease-in-out 6 alternate both; }
 .ipodc-pv.is-on .ipodc-pv-cover { animation: ipodc-pan 16s ease-in-out 4 alternate both; }
 .ipodc-toast { transition: .18s; transition-property: opacity, transform; }
 .ipodc-toast.is-on { transform: translate(-50%, -50%) scale(1); }
@@ -562,6 +618,16 @@
       inset 0 0 0 calc(var(--ipodc-u) * .14) #54585e80,
       inset 0 0 0 calc(var(--ipodc-u) * .34) #ffffff80,
       inset 0 calc(var(--ipodc-u) * .45) calc(var(--ipodc-u) * .55) calc(var(--ipodc-u) * -.1) #ffffff80,
+      0 calc(var(--ipodc-u) * 1.2) calc(var(--ipodc-u) * 4) #0000;
+  }
+}
+.ipodc[data-finish="black"].is-revealed { animation-name: ipodc-handoff-black; }
+@keyframes ipodc-handoff-black {
+  from {
+    box-shadow:
+      inset 0 0 0 calc(var(--ipodc-u) * .14) #07080cd9,
+      inset 0 0 0 calc(var(--ipodc-u) * .34) #ffffff2e,
+      inset 0 calc(var(--ipodc-u) * .45) calc(var(--ipodc-u) * .55) calc(var(--ipodc-u) * -.1) #ffffff38,
       0 calc(var(--ipodc-u) * 1.2) calc(var(--ipodc-u) * 4) #0000;
   }
 }

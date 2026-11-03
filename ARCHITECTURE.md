@@ -1,6 +1,7 @@
 # Architecture
 
-A linktree that looks like a silver iPod Classic (6th/7th gen) inside a Mac OS X Aqua window.
+A linktree that looks like an iPod Classic (6th/7th gen, silver or black front) inside a Mac OS X Aqua window on a
+night-blue desktop (the anstatt. brand colours).
 Vite + plain JS, `three` and `gsap` are the only runtime dependencies. All content lives in
 `public/config.json`; no content is hard-coded in modules.
 
@@ -33,7 +34,8 @@ While the chunk is still on its way, a small Aqua spinner appears in the empty w
 600 ms. Degradation: no WebGL 2, a failed chunk load, a chunk that takes longer than 6 s
 (`INTRO_CHUNK_MS`; a chunk that lands later is ignored), a setup (shaders, textures) over 4 s
 (`INTRO_SETUP_MS`; not with the test hooks, dev or `?debug`), an exception in `runIntro`, a lost
-WebGL context, or `settings.intro` off all skip the intro and reveal the iPod directly. On a slow device the intro
+WebGL context, or `settings.intro` off all skip the intro and reveal the iPod directly. The timeline runs `SPEED` (1.3) times as fast as its own seconds (6.54 s → about 5 s;
+`duration` and `seek()` keep timeline seconds). On a slow device the intro
 skips frames rather than playing in slow motion. It watches windows of 12 frames: when a quarter
 of them miss 60 Hz (over 24 ms) the pixel ratio steps down 2 → 1.5 → 1 (WebKit and Firefox drawing
 the full-window canvas at 2x lock to 30 Hz or drop frames where Chrome holds 60); a median over
@@ -50,8 +52,10 @@ with nothing to show, are skipped with a console warning.
 ### `src/shared/ipodSpec.js`: single source of truth
 
 `IPOD` (geometry in mm: body, display window, LCD, click wheel with its MENU label and transport
-glyph paths, edge details), `PARTS` (exploded layers, front to back), `COLORS` (silver palette and
-iPod UI colours), `aspect` (width / height). Every value is read by both iPods or by one of them;
+glyph paths, edge details), `PARTS` (exploded layers, front to back), `FINISHES` (silver, black: plate,
+wheel, labels, centre button, and the 3D plate colour and lip strengths tuned so the intro's last frame
+matches the DOM plate) with `finishOf(config)` / `finishName(config)` (`settings.finish`, silver for anything
+else), `COLORS` (the shared parts and iPod UI colours), `aspect` (width / height). Every value is read by both iPods or by one of them;
 nothing in it is documentation only.
 Both the 3D model and the DOM iPod derive every size from these values, which is why the
 intro's last frame matches the DOM iPod exactly. Change a dimension here, never in a module.
@@ -81,7 +85,7 @@ text: a blank label, title or window title counts as missing).
 ```js
 createDesktop(host, { config, onLinks, onFocus }) → { el, contentEl, setInteractive(bool), destroy() }
 ```
-Aqua wallpaper (CSS only; the drift runs two slow sweeps, then rests), menu bar (monogram,
+Night wallpaper in the brand colours (night blue, signal green and yellow light; CSS only, public/static.css carries the same; the drift runs two slow sweeps, then rests), menu bar (monogram,
 `brand.name`, which ellipsizes first when the bar is narrow and, under 400 px with a monogram, is
 left out (the monogram stands for it), "Links" when `onLinks` is given,
 "Kontakt" when `brand.email` is set; on the right the `config.legal` links and a clock),
@@ -190,7 +194,8 @@ changing them.
   of them `og:image` stays relative. A `config.json` that is not valid JSON stops dev server and
   build with `public/config.json is not valid JSON: …` (line and column).
 
-- `brand`: `name`, `monogram`, `tagline` (status bar, meta description, og:description),
+- `brand`: `name`, `monogram`, `monogramArt` (optional drawn monogram for the boot screen, made by
+  `tools/make-monogram.mjs` from the brand font via CoreText; the text monogram is the fallback), `tagline` (status bar, meta description, og:description),
   `windowTitle`, `email` (the menu bar's Kontakt).
 - `menu[]`: one main-menu row per entry, in order. Common fields `id`, `label`, `type`, `title`,
   optional `lang` (of label and title, e.g. `"en"`).
@@ -203,10 +208,15 @@ changing them.
     vite.config.js); rows
     are `<a download>` (a file on another origin opens in a new tab).
   - A row without `label` shows its detail, address or file name (`rowLabel`).
+  - `icon` (optional, `ICON_KINDS` in `src/ipod/art.js`): the entry's medallion on the preview pane and under a
+    short text page (`iconOf` in screens.js; without it the type picks one). A text page shows it only where
+    the room under its text and buttons is at least `ART_MIN` logical px; it never scrolls into view.
 - `legal`: `{ impressum, datenschutz }`, path or URL of each legal page (a missing one has no
   link), linked from the menu bar, the static pages and the `<noscript>` list.
 - Paths (`cover`, `file`, `legal`) are page-relative; a leading `/` is treated the same.
-- `settings`: `clickSound` (bool), `intro` (bool; once per browser session). Both read as off
+- `settings`: `finish` (`"black"` or `"silver"`, the default; the DOM iPod gets `data-finish` and the finish's
+  colours as `--ipodc-c-*`, ipodc.css adds its highlights; the intro, the minimised desktop icon and the
+  drawn player in `tools/` follow it), `clickSound` (bool), `intro` (bool; once per browser session). Both read as off
   `false`, `0` and the strings `"false"`, `"off"`, `"never"`, `"no"`, `"0"` (`isOff` in
   `src/shared/config.js`).
 
