@@ -83,8 +83,13 @@
         },
         {
           "label": "TikTok",
-          "detail": "@anstattpunkt",
-          "href": "https://www.tiktok.com/@anstattpunkt"
+          "detail": "@viz0ai",
+          "href": "https://www.tiktok.com/@viz0ai"
+        },
+        {
+          "label": "YouTube",
+          "detail": "@dummyvizo",
+          "href": "https://www.youtube.com/@dummyvizo"
         }
       ]
     },
