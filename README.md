@@ -87,7 +87,7 @@ Jeder Eintrag hat vier gemeinsame Felder und zwei optionale:
 | `label` | String | Beschriftung im Menü                                                    |
 | `type`  | String | Bauart der Unterseite: `list`, `page`, `nowplaying`, `downloads` oder `game` |
 | `title` | String | Überschrift der Unterseite                                              |
-| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `game`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt sein Cover rund im selben Medaillon |
+| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `game`, `blocks`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt sein Cover rund im selben Medaillon |
 | `lang`  | String | Optional: Sprache von `label` und `title`, wenn sie nicht Deutsch ist, z. B. `"en"` für „Work Together“ (Screenreader sprechen sie dann richtig aus). Gilt für beide Felder: nur setzen, wenn `label` und `title` in dieser Sprache sind |
 
 Je nach `type` kommen weitere Felder dazu. Zeilen (`items[]`, `actions[]`) können ebenfalls ein
@@ -134,13 +134,22 @@ Die Datei am besten in `public/downloads/` ablegen. Eine Datei auf einem anderen
 einem Cloud-Speicher) öffnet sich in einem neuen Tab, weil Browser dort nicht direkt
 herunterladen.
 
-#### `type: "game"`: Snake
+#### `type: "game"`: Snake oder Blocks
 
-Braucht keine weiteren Felder (`icon: "game"` zeigt eine kleine Schlange in der Vorschau). Die
-Schlange wächst mit jedem Punkt und wird schneller; Wand oder eigener Körper beenden die Runde.
-Gelenkt wird mit den vier Tasten des Rads oder den Pfeiltasten, Drehen am Rad lenkt nach links oder
-rechts, die Mitte (Enter, Leertaste) startet und pausiert. Steht das Spiel, geht „links“ wie überall
-zurück. Der Rekord gilt nur für den Besuch, auf dem Gerät wird nichts gespeichert.
+| Feld   | Typ    | Bedeutung                                                          |
+| ------ | ------ | ------------------------------------------------------------------ |
+| `game` | String | `"snake"` (Standard) oder `"blocks"`                               |
+
+**Snake** (`icon: "game"`): die Schlange wächst mit jedem Punkt und wird schneller; Wand oder
+eigener Körper beenden die Runde. Gelenkt wird mit den vier Tasten des Rads oder den Pfeiltasten,
+Drehen am Rad lenkt nach links oder rechts.
+
+**Blocks** (`icon: "blocks"`): unser eigenes Fallblock-Spiel. Teile aus vier Feldern fallen in einen
+Schacht, eine volle Reihe verschwindet, alle zehn Reihen wird es schneller. Drehen am Rad oder links
+und rechts schiebt das Teil, hoch dreht es, runter lässt es schneller fallen.
+
+Bei beiden startet und pausiert die Mitte (Enter, Leertaste); steht das Spiel, geht „links“ wie
+überall zurück. Der Rekord gilt nur für den Besuch, auf dem Gerät wird nichts gespeichert.
 
 ### `legal`
 

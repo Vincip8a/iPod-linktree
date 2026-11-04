@@ -142,8 +142,10 @@ mountIpod(container, { config, lang }) → {
 ```
 Height is `var(--ipod-h)`, every inner size is `calc(var(--ipod-h) / 103.5 * <mm>)` from `IPOD`.
 The LCD UI is a logical 320×240 px space. Files: `wheel.js` (click-wheel input), `screens.js`
-(main menu with preview pane, list, page, Now Playing, downloads), `game.js` (Snake, menu type
-`game`: a canvas, its own `press` / `move` take the D-pad, the centre and the wheel), `player.js` (simulated
+(main menu with preview pane, list, page, Now Playing, downloads), `game.js` (menu type `game`:
+the frame every game shares, a canvas with start / pause / game over, the record and the option text;
+its `press` / `move` take the D-pad, the centre and the wheel) with `snake.js` and `blocks.js` (the rules
+and drawing of each game, picked by `game` in config.json), `player.js` (simulated
 playback), `sound.js` (WebAudio clicks, `settings.clickSound`), `art.js` (procedural SVG),
 `util.js` (helpers, re-exports `h` from `src/shared/dom.js` and `safeHref`), `ipodc.css`.
 

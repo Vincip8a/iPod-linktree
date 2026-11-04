@@ -139,8 +139,17 @@
       "id": "snake",
       "label": "Snake",
       "type": "game",
+      "game": "snake",
       "icon": "game",
       "title": "Snake"
+    },
+    {
+      "id": "blocks",
+      "label": "Blocks",
+      "type": "game",
+      "game": "blocks",
+      "icon": "blocks",
+      "title": "Blocks"
     },
     {
       "id": "about",

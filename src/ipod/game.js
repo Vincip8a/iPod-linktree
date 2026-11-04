@@ -1,29 +1,33 @@
-// Snake on the logical 320×240 LCD (menu type "game"). The snake moves one cell per tick and grows with
-// every dot it eats; a wall or its own body ends the round, and each dot makes it a little faster. The four
-// wheel zones and the arrow keys steer, turning the wheel turns it to its left or right, the centre (Enter,
-// Space) starts and pauses. While it is not running, left goes back as on every screen. Drawn on a canvas
-// in the iPod's own blue; the record lasts for the visit (nothing is stored on the device).
+// The game screen on the logical 320×240 LCD (menu type "game"; `game` picks one of GAMES: Snake in
+// snake.js, Blocks in blocks.js). This frame is the same for every game: the canvas, the start / pause /
+// game over states with their hint over the board, the record (for the visit only: nothing is stored on
+// the device), the option text a screen reader reads, and how the iPod's presses reach the game. The
+// centre (Enter, Space) starts and pauses; while a round runs, the four zones, the arrow keys and the
+// wheel are the game's; while it is not running, left goes back as on every screen.
 import { h } from './util.js';
 import { COLORS } from '../shared/ipodSpec.js';
+import { snake } from './snake.js';
+import { blocks } from './blocks.js';
 
+const GAMES = { snake, blocks };
+export const GAME_KINDS = Object.keys(GAMES);
 const W = 320;          // logical px
-const CELL = 10;
-const COLS = 30;
-const ROWS = 19;
-const BOARD_X = (W - COLS * CELL) / 2;
-const TICK_MS = 150;    // the first speed
-const TICK_MIN = 75;    // the fastest
-const SPEEDUP = 3;      // ms faster per dot
-const WHEEL_TURN = 3;   // wheel steps (about 45–60°) per turn
-const OVER_LOCK = 500;  // a press this soon after the crash does not start the next round at once
-const DIRS = { up: [0, -1], right: [1, 0], down: [0, 1], left: [-1, 0] };
-const FOOD = '#24734d'; // the brand's signal green
-const HEAD = '#1b56b0';
-let best = 0;
+const OVER_LOCK = 500;  // a press this soon after game over does not start the next round at once
+const ARROWS = ['up', 'right', 'down', 'left'];
+const best = {};        // per game
 
-export function gameScreen(ctx, id, title) {
+/**
+ * A game is a factory returning { score, over, hints, delay(), reset(), begin(btn)?, tick() → false when the
+ * round ended, input(btn) → true when it used the press, turn(dir), status(L), area(H) → [x, y, w, h] for the
+ * hint, draw(g, H, paint) }. `paint`: { k, font, L, best, cell(x, y, fill, size?), blue(size?) }.
+ */
+export function gameScreen(ctx, id, title, kind) {
   const { L, timers } = ctx;
-  const node = h('div', 'ipodc-screen ipodc-screen--game');
+  if (kind != null && !Object.hasOwn(GAMES, kind)) console.warn(`[ipod] config.json: unknown game "${kind}" (one of ${GAME_KINDS.join(', ')}), Snake instead`);
+  const name = Object.hasOwn(GAMES, kind) ? kind : 'snake';
+  const game = GAMES[name]();
+  best[name] ??= 0;
+  const node = h('div', `ipodc-screen ipodc-screen--game ipodc-screen--${name}`);
   const canvas = h('canvas', 'ipodc-game', { 'aria-hidden': 'true' });
   // the drawn board is aria-hidden: the score and what to press next are this option's text
   const sr = h('div', 'ipodc-sr', { id: ctx.nid('t'), role: 'option', 'aria-selected': 'true' });
@@ -32,54 +36,20 @@ export function gameScreen(ctx, id, title) {
   let font = 'sans-serif';
   let k = 1; // canvas px per logical px
   let state = 'ready'; // ready → run ⇄ pause, run → over → run
-  let snake, dir, queue, food, score, record;
+  let record = false;
   let tickT = 0;
   let overAt = 0;
-  let wAcc = 0;
 
-  const same = (a, b) => a[0] === b[0] && a[1] === b[1];
-  function reset() {
-    const y = ROWS - 5; // below the start text
-    snake =[[8, y], [7, y], [6, y], [5, y]];
-    dir = DIRS.right;
-    queue = [];
-    score = 0;
-    record = false;
-    wAcc = 0;
-    placeFood();
-  }
-  function placeFood() {
-    const free = [];
-    for (let x = 0; x < COLS; x++) for (let y = 0; y < ROWS; y++) if (!snake.some((c) => same(c, [x, y]))) free.push([x, y]);
-    food = free.length ? free[Math.floor(Math.random() * free.length)] : null;
-  }
-  const last = () => queue[queue.length - 1] ?? dir;
-  /** queues a turn (two at most, one is taken per tick), never straight back into the neck */
-  function steer(d) {
-    const l = last();
-    if (queue.length < 2 && !same(d, l) && !same(d, [-l[0], -l[1]])) queue.push(d);
-  }
-
-  function tick() {
+  function loop() {
     tickT = 0;
-    if (queue.length) dir = queue.shift();
-    const head = [snake[0][0] + dir[0], snake[0][1] + dir[1]];
-    const eats = !!food && same(head, food);
-    const body = eats ? snake : snake.slice(0, -1); // the tail moves on unless the snake grows
-    if (head[0] < 0 || head[1] < 0 || head[0] >= COLS || head[1] >= ROWS || body.some((c) => same(c, head))) return end();
-    snake.unshift(head);
-    if (eats) {
-      score++;
-      placeFood();
-      if (!food) return end(); // the board is full
-    } else snake.pop();
+    if (!game.tick()) return end();
     draw();
-    tickT = timers.later(tick, Math.max(TICK_MIN, TICK_MS - score * SPEEDUP));
+    tickT = timers.later(loop, game.delay());
   }
   function run() {
     state = 'run';
     timers.cancel(tickT);
-    tickT = timers.later(tick, TICK_MS);
+    tickT = timers.later(loop, game.delay());
     sync();
   }
   function pause(quiet) {
@@ -92,67 +62,45 @@ export function gameScreen(ctx, id, title) {
     tickT = timers.cancel(tickT);
     state = 'over';
     overAt = performance.now();
-    record = score > best;
-    best = Math.max(best, score);
+    record = game.score > best[name];
+    best[name] = Math.max(best[name], game.score);
     sync();
-    ctx.announce(`${L.gameOver}. ${L.score}: ${score}.${record ? ` ${L.newBest}` : ''}`);
+    ctx.announce(`${L.gameOver}. ${game.status(L)}.${record ? ` ${L.newBest}` : ''}`);
   }
 
+  // rounded cells in the selection blue (or any fill), shared by the games
+  const paint = {
+    cell(x, y, fill, size = 10) {
+      g.setTransform(k, 0, 0, k, x * k, y * k);
+      g.fillStyle = fill;
+      g.beginPath();
+      g.roundRect(1, 1, size - 2, size - 2, size / 5);
+      g.fill();
+      g.setTransform(k, 0, 0, k, 0, 0);
+    },
+    blue(size = 10) {
+      const b = g.createLinearGradient(0, 1, 0, size - 1);
+      b.addColorStop(0, COLORS.uiHighlightTop);
+      b.addColorStop(1, COLORS.uiHighlightBottom);
+      return b;
+    },
+  };
   function draw() {
     const H = canvas.height / k;
-    const by = Math.round(H - ROWS * CELL - 7);
-    const bw = COLS * CELL;
-    const bh = ROWS * CELL;
     g.setTransform(k, 0, 0, k, 0, 0);
     g.fillStyle = COLORS.uiBackground;
     g.fillRect(0, 0, W, H);
-    g.font = `700 12px ${font}`;
-    g.textAlign = 'left';
-    g.fillStyle = COLORS.uiText;
-    g.fillText(`${L.score} ${score}`, BOARD_X, by - 6);
-    g.textAlign = 'right';
-    g.fillStyle = '#6b6f75';
-    g.fillText(`${L.best} ${best}`, BOARD_X + bw, by - 6);
-    // the board: a light well with a fine frame
-    g.fillStyle = '#eef1f5';
-    g.fillRect(BOARD_X, by, bw, bh);
-    g.strokeStyle = '#b9bfc8';
-    g.lineWidth = 1;
-    g.strokeRect(BOARD_X - 0.5, by - 0.5, bw + 1, bh + 1);
-    if (food) {
-      g.fillStyle = FOOD;
-      g.beginPath();
-      g.arc(BOARD_X + food[0] * CELL + CELL / 2, by + food[1] * CELL + CELL / 2, 3.6, 0, 7);
-      g.fill();
-    }
-    // the snake in the selection blue, its head darker with two eyes looking ahead
-    const blue = g.createLinearGradient(0, 1, 0, CELL - 1);
-    blue.addColorStop(0, COLORS.uiHighlightTop);
-    blue.addColorStop(1, COLORS.uiHighlightBottom);
-    for (let i = snake.length - 1; i >= 0; i--) { // tail first: the head is drawn last, the eyes on it
-      const [x, y] = snake[i];
-      g.setTransform(k, 0, 0, k, (BOARD_X + x * CELL) * k, (by + y * CELL) * k);
-      g.fillStyle = i ? blue : HEAD;
-      g.beginPath();
-      g.roundRect(1, 1, CELL - 2, CELL - 2, 2);
-      g.fill();
-    }
-    const [dx, dy] = dir;
-    g.fillStyle = '#fff';
-    for (const side of [-1, 1]) {
-      g.beginPath();
-      g.arc(CELL / 2 + dx * 1.6 - dy * side * 2, CELL / 2 + dy * 1.6 + dx * side * 2, 1.2, 0, 7);
-      g.fill();
-    }
+    game.draw(g, H, Object.assign(paint, { k, font, L, best: best[name] }));
     g.setTransform(k, 0, 0, k, 0, 0);
     if (state === 'run') return;
     // not running: the board fades and says what the centre does now
     const [big, ...lines] = state === 'over'
-      ? [L.gameOver, `${L.score}: ${score}${record ? ` · ${L.newBest}` : ''}`, L.gameAgain]
-      : state === 'pause' ? [L.gamePaused, L.gameResume] : [title, L.gameStart, L.gameSteer];
+      ? [L.gameOver, `${game.status(L)}${record ? ` · ${L.newBest}` : ''}`, L.gameAgain]
+      : state === 'pause' ? [L.gamePaused, L.gameResume] : [title, L.gameStart, ...game.hints.map((t) => L[t])];
+    const [ax, ay, aw, ah] = game.area(H);
     g.fillStyle = 'rgba(255,255,255,.84)';
-    g.fillRect(BOARD_X, by, bw, bh);
-    let y = Math.round(by + bh / 2 - (22 + lines.length * 17) / 2 + 15);
+    g.fillRect(ax, ay, aw, ah);
+    let y = Math.round(ay + ah / 2 - (22 + lines.length * 17) / 2 + 15);
     g.textAlign = 'center';
     g.fillStyle = COLORS.uiText;
     g.font = `700 17px ${font}`;
@@ -181,31 +129,29 @@ export function gameScreen(ctx, id, title) {
       font = getComputedStyle(node).fontFamily || font;
       draw();
     },
-    /** the four zones (and arrow keys) steer; left, MENU and Escape go back while the snake is not running */
+    /** while a round runs the game takes the zones and arrow keys; the centre pauses; left, MENU and
+     *  Escape go back while it is not running */
     press(btn) {
-      const d = DIRS[btn];
       if (state === 'run') {
-        if (d) steer(d);
-        else if (btn === 'center' || btn === 'play') pause();
-        else return false;
+        if (btn === 'center' || btn === 'play') pause();
+        else if (ARROWS.includes(btn) && game.input(btn)) {
+          if (game.over) end(); else draw();
+        } else return false;
         return true;
       }
-      if (btn === 'left' || !(d || btn === 'center' || btn === 'play')) return false;
+      const arrow = ARROWS.includes(btn) && btn !== 'left';
+      if (!(arrow || btn === 'center' || btn === 'play')) return false;
       if (state === 'over' && performance.now() - overAt < OVER_LOCK) return true;
-      if (state !== 'pause') reset();
-      if (d) steer(d); // an arrow starts the round in its direction
+      if (state !== 'pause') game.reset();
+      if (arrow) game.begin?.(btn);
       run();
       return true;
     },
-    /** a wheel step: turning the wheel turns the snake (clockwise: to its right) */
+    /** a wheel step while a round runs: the game's (Snake turns, Blocks slides) */
     move(d) {
       if (state !== 'run') return false;
-      wAcc = Math.sign(wAcc) === d ? wAcc + d : d;
-      if (Math.abs(wAcc) >= WHEEL_TURN) {
-        wAcc = 0;
-        const [x, y] = last();
-        steer(d > 0 ? [-y, x] : [y, -x]);
-      }
+      game.turn(d);
+      if (game.over) end(); else draw();
       return true;
     },
     jump: () => false,
@@ -213,15 +159,15 @@ export function gameScreen(ctx, id, title) {
     activate: () => s.press('center'),
     currentLabel: () => '',
     currentLang: () => null,
-    summary: () => [`${L.score}: ${score}`, ...(state === 'run' ? [] : state === 'over' ? [L.gameOver, L.gameAgain]
-      : state === 'pause' ? [L.gamePaused, L.gameResume] : [L.gameStart, L.gameSteer])].join('. '),
+    summary: () => [game.status(L), ...(state === 'run' ? [] : state === 'over' ? [L.gameOver, L.gameAgain]
+      : state === 'pause' ? [L.gamePaused, L.gameResume] : [L.gameStart, ...game.hints.map((t) => L[t])])].join('. '),
     onShow() { document.addEventListener('visibilitychange', onVisibility); },
     onHide() {
       document.removeEventListener('visibilitychange', onVisibility);
       if (state === 'run') pause(true);
     },
   };
-  reset();
+  game.reset();
   sr.textContent = s.summary();
   return s;
 }

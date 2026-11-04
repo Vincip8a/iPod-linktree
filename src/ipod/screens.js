@@ -1,6 +1,6 @@
 // Screen builders for the logical 320×240 LCD: option rows, the scrolling list screen (also used
 // for text pages and the Now Playing footer), the split main menu with its preview pane, and the
-// Now Playing layout (the game screen is game.js). All geometry is in logical px; `ctx` is supplied by index.js.
+// Now Playing layout (the game screens are game.js with snake.js and blocks.js). All geometry is in logical px; `ctx` is supplied by index.js.
 import { h, clamp, fmtTime, safeHref } from './util.js';
 import { linkAttrs, fileName, rowLabel, langOf, serviceName, firstText } from '../shared/href.js';
 import { CHEVRON, SPEAKER_LO, SPEAKER_HI, SPEAKER_NOW, previewIcon, ICON_KINDS } from './art.js';
@@ -285,7 +285,7 @@ export function createScreens(ctx) {
       case 'nowplaying':
         return nowPlayingScreen(item, id);
       case 'game':
-        return gameScreen(ctx, id, title);
+        return gameScreen(ctx, id, title, item.game);
       default: {
         // the entry's icon fills the free space under a short text, as on the preview pane
         const art = h('div', 'ipodc-page-art', { 'aria-hidden': 'true' });

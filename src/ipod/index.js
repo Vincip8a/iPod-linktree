@@ -45,7 +45,7 @@ UI.de = {
   back: 'Zurück',
   empty: 'Keine Einträge',
   hint: 'Pfeil hoch und runter blättern, rechts oder Enter wählt, links oder Escape zurück, Leertaste Wiedergabe.',
-  // the game (game.js)
+  // the games (game.js, snake.js, blocks.js)
   score: 'Punkte',
   best: 'Rekord',
   gameStart: 'Start: Mitte oder Enter',
@@ -55,6 +55,11 @@ UI.de = {
   gameOver: 'Game over',
   gameAgain: 'Nochmal: Mitte · Zurück: links',
   newBest: 'Neuer Rekord!',
+  lines: 'Reihen',
+  level: 'Stufe',
+  next: 'Nächster',
+  blocksSteer: 'Schieben: Rad oder Pfeile · Drehen: hoch',
+  blocksDrop: 'Schneller fallen: runter',
 };
 UI.en = {
   nowPlaying: 'Now Playing',
@@ -83,6 +88,11 @@ UI.en = {
   gameOver: 'Game over',
   gameAgain: 'Again: centre · Back: left',
   newBest: 'New best!',
+  lines: 'Lines',
+  level: 'Level',
+  next: 'Next',
+  blocksSteer: 'Move: wheel or arrows · Turn: up',
+  blocksDrop: 'Drop faster: down',
 };
 
 /** `config`: one language's config (localize in src/shared/i18n.js); `lang`: the language of the UI words */
