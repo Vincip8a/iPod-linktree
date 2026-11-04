@@ -61,6 +61,14 @@
       },
       "items": [
         {
+          "label": {
+            "de": "E-Mail",
+            "en": "Email"
+          },
+          "detail": "hallo@anstattpunkt.com",
+          "href": "mailto:hallo@anstattpunkt.com"
+        },
+        {
           "label": "Instagram",
           "detail": "@anstattpunkt",
           "href": "https://www.instagram.com/anstattpunkt"
@@ -69,14 +77,6 @@
           "label": "TikTok",
           "detail": "@anstattpunkt",
           "href": "https://www.tiktok.com/@anstattpunkt"
-        },
-        {
-          "label": {
-            "de": "E-Mail",
-            "en": "Email"
-          },
-          "detail": "hallo@anstattpunkt.com",
-          "href": "mailto:hallo@anstattpunkt.com"
         }
       ]
     },
