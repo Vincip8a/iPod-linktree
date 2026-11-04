@@ -85,9 +85,9 @@ Jeder Eintrag hat vier gemeinsame Felder und zwei optionale:
 | ------- | ------ | ---------------------------------------------------------------------- |
 | `id`    | String | Eindeutiger Schlüssel, intern verwendet (klein, ohne Leerzeichen)      |
 | `label` | String | Beschriftung im Menü                                                    |
-| `type`  | String | Bauart der Unterseite: `list`, `page`, `nowplaying`, `downloads` oder `game` |
+| `type`  | String | Bauart der Unterseite: `list`, `page`, `nowplaying`, `downloads`, `game` oder `menu` |
 | `title` | String | Überschrift der Unterseite                                              |
-| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `game`, `blocks`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt sein Cover rund im selben Medaillon |
+| `icon`  | String | Optional: das Bild des Eintrags in der Vorschau rechts im Hauptmenü und unter kurzen Texten: `book`, `box`, `film`, `person`, `games`, `game`, `blocks`, `contacts`, `chat`, `download` oder `monogram` (das Kürzel). Ohne `icon` wählt der Typ: `contacts` für `list`, `download` für `downloads`, `chat` für eine Seite mit Schaltflächen, sonst `monogram`. `nowplaying` zeigt sein Cover rund im selben Medaillon |
 | `lang`  | String | Optional: Sprache von `label` und `title`, wenn sie nicht Deutsch ist, z. B. `"en"` für „Work Together“ (Screenreader sprechen sie dann richtig aus). Gilt für beide Felder: nur setzen, wenn `label` und `title` in dieser Sprache sind |
 
 Je nach `type` kommen weitere Felder dazu. Zeilen (`items[]`, `actions[]`) können ebenfalls ein
@@ -133,6 +133,14 @@ Dateinamen; eine Zeile ganz ohne Angaben wird mit einem Hinweis in der Browser-K
 Die Datei am besten in `public/downloads/` ablegen. Eine Datei auf einem anderen Server (z. B.
 einem Cloud-Speicher) öffnet sich in einem neuen Tab, weil Browser dort nicht direkt
 herunterladen.
+
+#### `type: "menu"`: ein Untermenü
+
+| Feld    | Typ   | Bedeutung                                                                 |
+| ------- | ----- | ------------------------------------------------------------------------- |
+| `items` | Array | Einträge wie im Hauptmenü (gleiche Felder und Typen), z. B. die beiden Spiele |
+
+So stehen Snake und Blocks unter „Spiele“ / „Games“ (`icon: "games"`, ein Gamepad).
 
 #### `type: "game"`: Snake oder Blocks
 

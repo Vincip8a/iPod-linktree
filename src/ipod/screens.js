@@ -286,6 +286,11 @@ export function createScreens(ctx) {
         return nowPlayingScreen(item, id);
       case 'game':
         return gameScreen(ctx, id, title, item.game);
+      case 'menu':
+        // a submenu (the games): its entries open like the main menu's
+        return listScreen('submenu', id, title, ctx.entries(item.items).map((sub) => ({
+          label: firstText(sub.label, sub.title), lang: langOf(sub), sub: true, onActivate: () => ctx.open(sub),
+        })));
       default: {
         // the entry's icon fills the free space under a short text, as on the preview pane
         const art = h('div', 'ipodc-page-art', { 'aria-hidden': 'true' });

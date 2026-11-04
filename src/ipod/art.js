@@ -41,6 +41,8 @@ const ICON = {
   box: '<path d="M50 26.5 72 37v26L50 73.5 28 63V37z"/><path d="M50 26.5 72 37 50 47.5 28 37z" fill="#fff" fill-opacity=".35"/><path d="M50 47.5v26" fill="none"/>',
   // a film clapperboard, its arm open
   film: '<path d="M29 47h42v21a4 4 0 0 1-4 4H33a4 4 0 0 1-4-4z"/><path d="m28.2 44.6-1.7-7.2 40.9-9.6 1.7 7.2z"/><path d="m33.5 35.8 6.6 5 6.2-1.5-6.6-5zm14.2-3.3 6.6 5 6.2-1.5-6.6-5z" fill="#fff" fill-opacity=".8" stroke="none"/>',
+  // the games submenu: a game pad with its cross and two buttons
+  games: '<g transform="translate(50 50) scale(.86) translate(-50 -52)"><path d="M35 36h30c9 0 15 6 17 15l3 12c1 6-5 10-10 6l-8-7H33l-8 7c-5 4-11 0-10-6l3-12c2-9 8-15 17-15z"/><path d="M33 45h4v-4h4v4h4v4h-4v4h-4v-4h-4z" fill="#fff" fill-opacity=".85" stroke="none"/><circle cx="63" cy="45" r="3" fill="#fff" fill-opacity=".85" stroke="none"/><circle cx="70" cy="51" r="3" fill="#fff" fill-opacity=".85" stroke="none"/></g>',
   // Blocks: a stack with a gap and the falling piece that fits it
   blocks: '<rect x="27" y="62" width="10" height="10" rx="2"/><rect x="39" y="62" width="10" height="10" rx="2"/><rect x="51" y="62" width="10" height="10" rx="2"/><rect x="63" y="62" width="10" height="10" rx="2"/><rect x="27" y="50" width="10" height="10" rx="2"/><rect x="39" y="50" width="10" height="10" rx="2"/><rect x="63" y="50" width="10" height="10" rx="2"/><g fill-opacity=".6"><rect x="39" y="26" width="10" height="10" rx="2"/><rect x="51" y="26" width="10" height="10" rx="2"/><rect x="63" y="26" width="10" height="10" rx="2"/><rect x="51" y="38" width="10" height="10" rx="2"/></g>',
   // Snake: a snake of five cells heading for a green dot

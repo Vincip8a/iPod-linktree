@@ -22,7 +22,7 @@ const SLIDE_MS = 260;
 // never also the first link on the screen it opened (going back is not guarded)
 const SETTLE_MS = 450;
 const EASE = 'cubic-bezier(.32,.08,.24,1)';
-const SCREEN_TYPES = ['list', 'page', 'nowplaying', 'downloads', 'game'];
+const SCREEN_TYPES = ['list', 'page', 'nowplaying', 'downloads', 'game', 'menu'];
 let seq = 0;
 
 // UI strings (not content), per language: the 6G firmware wording in German and English.
@@ -100,11 +100,13 @@ export function mountIpod(container, { config, lang = 'de' } = {}) {
   config ??= {};
   const brand = config.brand ?? {};
   // entries without a name or with an unknown type would be blank or broken rows: skip them, with a hint
-  const menu = (Array.isArray(config.menu) ? config.menu : []).filter((m) => {
+  // (the main menu's, and those of a submenu, type "menu")
+  const entries = (list) => (Array.isArray(list) ? list : []).filter((m) => {
     const ok = m && typeof m === 'object' && firstText(m.label, m.title) && SCREEN_TYPES.includes(m.type);
-    if (!ok) console.warn('[ipod] config.json: menu entry skipped (needs label or title and type list | page | nowplaying | downloads | game):', m);
+    if (!ok) console.warn(`[ipod] config.json: menu entry skipped (needs label or title and type ${SCREEN_TYPES.join(' | ')}):`, m);
     return ok;
   });
+  const menu = entries(config.menu);
   const L = uiText(UI, lang);
   const P = `ipodc${++seq}`;
   let uid = 0;
@@ -381,7 +383,7 @@ export function mountIpod(container, { config, lang = 'de' } = {}) {
   }
 
   const { menuScreen, buildScreen } = createScreens({
-    L, brand, menu, P, nid, timers, player, isReduced, isCurrent, pxPer, syncAD, announce, showToast, followLink, open,
+    L, brand, menu, entries, P, nid, timers, player, isReduced, isCurrent, pxPer, syncAD, announce, showToast, followLink, open,
   });
 
   const focusRoot = () => { const t = keyTarget(); if (document.activeElement !== t) t.focus({ preventScroll: true }); };

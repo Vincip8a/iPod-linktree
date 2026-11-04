@@ -136,20 +136,35 @@
       ]
     },
     {
-      "id": "snake",
-      "label": "Snake",
-      "type": "game",
-      "game": "snake",
-      "icon": "game",
-      "title": "Snake"
-    },
-    {
-      "id": "blocks",
-      "label": "Blocks",
-      "type": "game",
-      "game": "blocks",
-      "icon": "blocks",
-      "title": "Blocks"
+      "id": "games",
+      "label": {
+        "de": "Spiele",
+        "en": "Games"
+      },
+      "type": "menu",
+      "icon": "games",
+      "title": {
+        "de": "Spiele",
+        "en": "Games"
+      },
+      "items": [
+        {
+          "id": "snake",
+          "label": "Snake",
+          "type": "game",
+          "game": "snake",
+          "icon": "game",
+          "title": "Snake"
+        },
+        {
+          "id": "blocks",
+          "label": "Blocks",
+          "type": "game",
+          "game": "blocks",
+          "icon": "blocks",
+          "title": "Blocks"
+        }
+      ]
     },
     {
       "id": "about",
