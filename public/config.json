@@ -70,8 +70,16 @@
         },
         {
           "label": "Instagram",
-          "detail": "@anstattpunkt",
-          "href": "https://www.instagram.com/anstattpunkt"
+          "detail": "@anstatt.ai",
+          "href": "https://www.instagram.com/anstatt.ai"
+        },
+        {
+          "label": {
+            "de": "Vizo auf Instagram",
+            "en": "Vizo on Instagram"
+          },
+          "detail": "@viz0.ai",
+          "href": "https://www.instagram.com/viz0.ai"
         },
         {
           "label": "TikTok",
@@ -97,7 +105,7 @@
             "de": "Nachricht schreiben",
             "en": "Send a message"
           },
-          "href": "https://ig.me/m/anstattpunkt"
+          "href": "https://ig.me/m/anstatt.ai"
         }
       ]
     },
