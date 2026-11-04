@@ -102,8 +102,8 @@ Night wallpaper in the brand colours (night blue, signal green and yellow light;
 left out (the monogram stands for it), "Links" when `onLinks` is given,
 "Kontakt" when `brand.email` is set; on the right the `config.legal` links and a clock),
 brushed-metal window titled `brand.windowTitle` (else `brand.name`) with `brand.tagline` in the status bar.
-Draggable by the title bar and clamped to the viewport; red/yellow minimise to a desktop icon
-(genie with gsap, loaded on idle; the icon shows its focus halo to keyboard users only), green
+Draggable by the title bar and clamped to the viewport; red/yellow minimise to a desktop icon in the
+middle of the desktop (genie with gsap, loaded on idle; the icon shows its focus halo to keyboard users only), green
 zooms (a FLIP transform; zooming out restores the frame from before; wherever zoom would grow the
 iPod by less than 12 px, i.e. on phones, short screens and up to ~660 px high where both sizes hit
 the 500 px floor, the green light is disabled: two hidden probes resolve both `--ipod-h` values,

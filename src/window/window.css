@@ -230,9 +230,10 @@
 .dt-status:empty { display: none; }
 
 /* ---------- minimised icon ---------- */
+/* in the middle of the desktop under the menu bar, where the window was (the genie flies there) */
 .dt-icon {
   appearance: none; background: none; border: 0; margin: 0; padding: 6px 8px 4px;
-  position: absolute; z-index: 20; right: 22px; bottom: 22px;
+  position: absolute; z-index: 20; left: 50%; top: calc(50% + var(--bar-h) / 2); transform: translate(-50%, -50%);
   display: flex; flex-direction: column; align-items: center; gap: 4px;
   font: inherit; cursor: default; visibility: hidden; opacity: 0; border-radius: 6px;
   -webkit-tap-highlight-color: transparent;
@@ -297,7 +298,6 @@
     .dt-content, .dt.is-zoomed .dt-content { --ipod-h: max(var(--ipod-floor), min(calc(100svh - 96px), calc((100vw - 38px) / var(--ipod-aspect)))); }
   }
   .dt-status { display: none; }
-  .dt-icon { right: 14px; bottom: 14px; }
   .dt-brand { padding-right: 4px; }
   .dt-bar-left { overflow: hidden; }
   .dt-bar-links { display: none; } /* "Links" (focuses the iPod) makes room for the legal links */
