@@ -14,49 +14,63 @@
   },
   "menu": [
     {
-      "id": "guide",
-      "label": "Free Guide",
-      "lang": "en",
-      "type": "page",
+      "id": "guides",
+      "label": "Free Guides",
+      "type": "menu",
       "icon": "book",
-      "title": "Free Guide",
-      "body": {
-        "de": "Wie kurze KI-Videos entstehen, in 6 Teilen. Jeder Teil hat echte Zahlen aus meinen 28 Videos, auch von den Flops. Der Guide ist kostenlos und auf Englisch. Eine Anmeldung ist nicht nötig.",
-        "en": "How short AI videos get made, in 6 parts. Each part shows real numbers from my 28 videos, the flops too. The guide is free, and you don't need to sign up."
-      },
-      "actions": [
+      "title": "Free Guides",
+      "items": [
         {
+          "id": "linkseite",
           "label": {
-            "de": "Guide lesen",
-            "en": "Read the guide"
+            "de": "Link-Seite bauen",
+            "en": "Build this page"
           },
-          "href": "guide/"
-        }
-      ]
-    },
-    {
-      "id": "linkseite",
-      "label": {
-        "de": "Link-Seite bauen",
-        "en": "Build this page"
-      },
-      "type": "page",
-      "icon": "blocks",
-      "title": {
-        "de": "Link-Seite bauen",
-        "en": "Build this page"
-      },
-      "body": {
-        "de": "So hab ich diesen iPod mit Claude Code gebaut: das Turnier, drei Prompts zum Kopieren und gratis online stellen. Kostenlos und ohne Anmeldung, auf Deutsch.",
-        "en": "How I built this iPod with Claude Code: the tournament, three prompts to copy and free hosting. Free, no sign-up, in German."
-      },
-      "actions": [
+          "type": "page",
+          "icon": "blocks",
+          "title": {
+            "de": "Link-Seite bauen",
+            "en": "Build this page"
+          },
+          "body": {
+            "de": "So hab ich diesen iPod mit Claude Code gebaut: das Turnier, drei Prompts zum Kopieren und gratis online stellen. Kostenlos und ohne Anmeldung, auf Deutsch.",
+            "en": "How I built this iPod with Claude Code: the tournament, three prompts to copy and free hosting. Free, no sign-up, in German."
+          },
+          "actions": [
+            {
+              "label": {
+                "de": "Anleitung lesen",
+                "en": "Read the how-to"
+              },
+              "href": "linkseite/"
+            }
+          ]
+        },
         {
+          "id": "guide",
           "label": {
-            "de": "Anleitung lesen",
-            "en": "Read the how-to"
+            "de": "KI-Videos machen",
+            "en": "Making AI videos"
           },
-          "href": "linkseite/"
+          "type": "page",
+          "icon": "book",
+          "title": {
+            "de": "KI-Videos machen",
+            "en": "Making AI videos"
+          },
+          "body": {
+            "de": "Wie kurze KI-Videos entstehen, in 6 Teilen. Jeder Teil hat echte Zahlen aus meinen 28 Videos, auch von den Flops. Der Guide ist kostenlos und auf Englisch. Eine Anmeldung ist nicht nötig.",
+            "en": "How short AI videos get made, in 6 parts. Each part shows real numbers from my 28 videos, the flops too. The guide is free, and you don't need to sign up."
+          },
+          "actions": [
+            {
+              "label": {
+                "de": "Guide lesen",
+                "en": "Read the guide"
+              },
+              "href": "guide/"
+            }
+          ]
         }
       ]
     },

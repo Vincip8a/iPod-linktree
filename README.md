@@ -138,9 +138,11 @@ herunterladen.
 
 | Feld    | Typ   | Bedeutung                                                                 |
 | ------- | ----- | ------------------------------------------------------------------------- |
-| `items` | Array | Einträge wie im Hauptmenü (gleiche Felder und Typen), z. B. die beiden Spiele |
+| `items` | Array | Einträge wie im Hauptmenü (gleiche Felder und Typen), z. B. die beiden Spiele oder die beiden Guides |
 
-So stehen Snake und Blocks unter „Spiele“ / „Games“ (`icon: "games"`, ein Gamepad).
+So stehen Snake und Blocks unter „Spiele“ / „Games“ (`icon: "games"`, ein Gamepad) und die beiden
+Guides unter „Free Guides“ (`icon: "book"`). In der Linkliste ohne JavaScript bekommen die Einträge
+eines Untermenüs eigene Abschnitte, wie Einträge im Hauptmenü.
 
 #### `type: "game"`: Snake oder Blocks
 
@@ -337,8 +339,8 @@ Gestaltung und Farben liegen zentral in [`tools/lib/brand.mjs`](tools/lib/brand.
 ## Gratis-Guide unter `/guide/`
 
 `public/guide/index.html` ist der englische Gratis-Guide „The 6 parts of every AI video pipeline“,
-erreichbar unter `anstattpunkt.com/guide/` und im iPod-Menü unter „Free Guide“. Die Seite wird
-nicht von Hand bearbeitet: Sie entsteht aus `free_guide.html` im Motion-Studio (ein
+erreichbar unter `anstattpunkt.com/guide/` und im iPod-Menü unter „Free Guides“ → „KI-Videos
+machen“. Die Seite wird nicht von Hand bearbeitet: Sie entsteht aus `free_guide.html` im Motion-Studio (ein
 Artifact-Body ohne `<head>`).
 
 ```bash
@@ -357,8 +359,8 @@ Entwicklungsserver liefert `/guide/` wie GitHub Pages aus (jeder Ordner in `publ
 ## Link-Seiten-Anleitung unter `/linkseite/`
 
 `public/linkseite/index.html` ist die deutsche Anleitung „So baust du deine Link-Seite mit Claude
-Code“ unter `anstattpunkt.com/linkseite/`, im iPod-Menü unter „Link-Seite bauen“ („Build this
-page“). Sie entsteht wie der Guide aus einer Quelle im Motion-Studio
+Code“ unter `anstattpunkt.com/linkseite/`, im iPod-Menü unter „Free Guides“ → „Link-Seite bauen“
+(„Build this page“). Sie entsteht wie der Guide aus einer Quelle im Motion-Studio
 (`sales/creator/linkseite_guide.html`) und wird nicht von Hand bearbeitet.
 
 ```bash

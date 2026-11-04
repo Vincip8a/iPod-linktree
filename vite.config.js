@@ -59,9 +59,10 @@ function noscriptHtml(config, origin = null) {
     return `<li${lang}><a href="${esc(a.href)}"${attrs}>${esc(label)}</a></li>`;
   };
   const items = (a) => (Array.isArray(a) ? a : []).filter((x) => x && typeof x === 'object');
+  // a submenu's entries (the guides under "Free Guides") get their own sections; the games have no links
+  const flat = (list) => items(list).flatMap((m) => (m.type === 'menu' ? flat(m.items) : [m]));
   const sections = [];
-  for (const item of Array.isArray(config.menu) ? config.menu : []) {
-    if (!item || typeof item !== 'object') continue;
+  for (const item of flat(config.menu)) {
     let rows = [];
     if (item.type === 'list' || item.type === 'page') {
       rows = items(item.type === 'list' ? item.items : item.actions).map((i) => {
