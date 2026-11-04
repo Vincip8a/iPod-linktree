@@ -1,4 +1,4 @@
-// Gemeinsamer Teil von sync-guide.mjs und sync-offer.mjs: macht aus einem Artifact-Body (ohne doctype und
+// Gemeinsamer Teil von sync-guide.mjs, sync-offer.mjs und sync-linkseite.mjs: macht aus einem Artifact-Body (ohne doctype und
 // <head>) eine Seite der Website. Alles bis zum ersten </style> wird Kopf, der Rest Seite; dazu kommen Meta-
 // und og-Tags, Footer-Links auf Impressum und Datenschutz, und die Google-Fonts-Links der Quelle werden zu
 // @font-face-Regeln auf die Dateien in public/fonts/: die Seiten laden keine Schrift bei Google, so geht

@@ -2,14 +2,14 @@
   "_comment": "Alle Inhalte des Linktrees. Texte und Links hier ändern, kein Code-Change nötig. Ein Text kann { \"de\": …, \"en\": … } sein (settings.languages).",
   "siteUrl": "https://anstattpunkt.com/",
   "brand": {
-    "name": "Anstattpunkt.",
+    "name": "Anstattpunkt",
     "monogram": "A.",
     "monogramArt": "assets/monogram.svg",
     "tagline": {
       "de": "Erklärvideos für Software-Firmen, in einer Woche fertig",
       "en": "Explainer videos for software companies, done in a week"
     },
-    "windowTitle": "Anstattpunkt.",
+    "windowTitle": "Anstattpunkt",
     "email": "hallo@anstattpunkt.com"
   },
   "menu": [
@@ -31,6 +31,32 @@
             "en": "Read the guide"
           },
           "href": "guide/"
+        }
+      ]
+    },
+    {
+      "id": "linkseite",
+      "label": {
+        "de": "Link-Seite bauen",
+        "en": "Build this page"
+      },
+      "type": "page",
+      "icon": "blocks",
+      "title": {
+        "de": "Link-Seite bauen",
+        "en": "Build this page"
+      },
+      "body": {
+        "de": "So hab ich diesen iPod mit Claude Code gebaut: das Turnier, drei Prompts zum Kopieren und gratis online stellen. Kostenlos und ohne Anmeldung, auf Deutsch.",
+        "en": "How I built this iPod with Claude Code: the tournament, three prompts to copy and free hosting. Free, no sign-up, in German."
+      },
+      "actions": [
+        {
+          "label": {
+            "de": "Anleitung lesen",
+            "en": "Read the how-to"
+          },
+          "href": "linkseite/"
         }
       ]
     },
@@ -120,8 +146,8 @@
       "type": "nowplaying",
       "title": "Chill VibeCoding",
       "artist": {
-        "de": "Kuratiert von Anstattpunkt.",
-        "en": "Curated by Anstattpunkt."
+        "de": "Kuratiert von Anstattpunkt",
+        "en": "Curated by Anstattpunkt"
       },
       "cover": "assets/playlist-cover.jpg",
       "spotifyUrl": "https://open.spotify.com/playlist/0EjGjK4QwBUUF1FIwLn6jI",

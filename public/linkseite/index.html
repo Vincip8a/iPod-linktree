@@ -1,0 +1,540 @@
+<!doctype html>
+<!-- Erzeugt von tools/sync-linkseite.mjs aus linkseite_guide.html. Nicht hier ändern, sondern in der Quelle, dann neu synchronisieren. -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>So baust du deine Link-Seite mit Claude Code</title>
+<meta name="description" content="Meine Link-Seite ist ein iPod, mit Snake und einem eigenen Blockspiel. Ich hab keine Zeile Code davon getippt. Hier steht, wie Claude Code sie gebaut hat, mit drei Prompts zum Kopieren.">
+<link rel="canonical" href="https://anstattpunkt.com/linkseite/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Anstattpunkt">
+<meta property="og:title" content="So baust du deine Link-Seite mit Claude Code">
+<meta property="og:description" content="Meine Link-Seite ist ein iPod, mit Snake und einem eigenen Blockspiel. Ich hab keine Zeile Code davon getippt. Hier steht, wie Claude Code sie gebaut hat, mit drei Prompts zum Kopieren.">
+<meta property="og:url" content="https://anstattpunkt.com/linkseite/">
+<meta property="og:image" content="https://anstattpunkt.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+/* Schriften von dieser Seite statt von Google Fonts (SIL Open Font License 1.1) */
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(../fonts/bricolage-grotesque-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 600; font-stretch: 100%; font-display: swap; src: url(../fonts/instrument-sans-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 600; font-stretch: 100%; font-display: swap; src: url(../fonts/instrument-sans-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(../fonts/jetbrains-mono-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(../fonts/jetbrains-mono-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+</style>
+<style>
+/* Layout: a tournament bracket as the hero (the real rounds from the repo history), then numbered steps as
+   two-column rows (sticky step label left, text right) that stack on phones. Same tokens as the video guide. */
+:root {
+  --bg: #f6f1e6;
+  --surface: #fffcf5;
+  --ink: #171c2a;
+  --muted: #566074;
+  --line: #e0d7c3;
+  --accent: #24734d;
+  --alarm: #c2392c;
+  --hl: #ffd60a;
+  --hl-ink: #171c2a;
+  --code-bg: #171c2a;
+  --code-ink: #f4ebd8;
+  --code-fill: #ffd60a;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --step-s: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.7rem, 4vw, 2.3rem);
+  --step-3: clamp(2.3rem, 7vw, 4.2rem);
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171c2a; --surface: #212839; --ink: #f4ebd8; --muted: #8e9bb0; --line: #313a52;
+    --accent: #8df7c4; --alarm: #ff6a5b; --code-bg: #0e1119; --code-ink: #f4ebd8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171c2a; --surface: #212839; --ink: #f4ebd8; --muted: #8e9bb0; --line: #313a52;
+  --accent: #8df7c4; --alarm: #ff6a5b; --code-bg: #0e1119; --code-ink: #f4ebd8;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1080px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1, h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+mark { background: var(--hl); color: var(--hl-ink); padding: 0 0.2em; border-radius: 3px; font-variant-numeric: tabular-nums; }
+code { font: 0.9em var(--f-mono); background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 0.1em 0.35em; border-radius: 4px; overflow-wrap: anywhere; }
+.label { font: 600 0.74rem/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Top bar */
+.top .wrap { padding-block: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { font: 800 1.45rem var(--f-display); letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--accent); }
+.top nav a { font-weight: 600; font-size: var(--step-s); }
+
+/* Hero */
+.hero .wrap { padding-block: 32px 56px; display: flex; flex-direction: column; gap: 28px; }
+.hero-copy { display: flex; flex-direction: column; gap: 16px; max-width: 46rem; }
+.lead { font-size: var(--step-1); line-height: 1.5; color: var(--muted); max-width: 40rem; }
+
+/* Bracket */
+.br-fig { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.bracket { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.rd { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.rd + .rd::before { content: ""; position: absolute; top: 50%; left: -22px; width: 16px; height: 2px; background: var(--muted); }
+.rd + .rd::after { content: ""; position: absolute; top: calc(50% - 5px); left: -10px; border: 6px solid transparent; border-left-color: var(--muted); border-right: 0; }
+.rd-no { font: 600 0.72rem/1.2 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.duel { display: flex; align-items: center; gap: 8px; }
+.v { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--line); font: 800 1.25rem var(--f-display); color: var(--muted); }
+.v.won { border: 2px solid var(--accent); color: var(--ink); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent); }
+.v.rival { border-style: dashed; }
+.vs { font: 400 0.72rem var(--f-mono); color: var(--muted); }
+.res { font-weight: 600; }
+.res b { font: 800 1.35rem var(--f-display); font-variant-numeric: tabular-nums; }
+.score { font-size: var(--step-s); color: var(--muted); }
+.verdict { font-size: var(--step-s); font-weight: 600; }
+.verdict.alarm { color: var(--alarm); }
+.rd.live { border: 2px solid var(--ink); justify-content: center; }
+.live-time { font: 800 1.6rem/1.1 var(--f-display); }
+.br-fig figcaption { color: var(--muted); font-size: var(--step-s); max-width: 46rem; }
+
+/* Intro */
+.intro .wrap { padding-block: 0 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; }
+.facts div { border-top: 1px solid var(--line); padding-top: 10px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.facts dt { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-weight: 500; }
+
+/* Steps */
+.part { border-top: 1px solid var(--line); }
+.part .wrap { padding-block: 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.side { align-self: start; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); display: flex; flex-direction: column; gap: 10px; }
+.part-no { font: 600 0.8rem var(--f-mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+.does { font-size: var(--step-1); line-height: 1.45; color: var(--muted); }
+.body { display: flex; flex-direction: column; gap: 28px; min-width: 0; max-width: 65ch; }
+.blk { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.blk h3 { font: 600 0.74rem/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.blk ul, .blk ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+.mistake, .win { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+.mistake h3, .win h3 { display: flex; align-items: center; gap: 8px; }
+.mistake h3 { color: var(--alarm); }
+.win h3 { color: var(--accent); }
+.mistake h3::before, .win h3::before { content: ""; width: 8px; height: 8px; border-radius: 50%; }
+.mistake h3::before { background: var(--alarm); box-shadow: 0 0 8px var(--alarm); }
+.win h3::before { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.try h3 { color: var(--accent); }
+.try p { font-weight: 500; }
+.fine { font-size: var(--step-s); color: var(--muted); }
+
+/* Prompt boxes */
+.prompt { border-radius: var(--radius); background: var(--code-bg); color: var(--code-ink); overflow: hidden; min-width: 0; }
+.prompt-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-bottom: 1px solid color-mix(in srgb, var(--code-ink) 14%, transparent); }
+.prompt-bar .label { color: color-mix(in srgb, var(--code-ink) 70%, transparent); }
+.copy { min-height: 36px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid color-mix(in srgb, var(--code-ink) 45%, transparent); background: transparent; color: var(--code-ink); font: 600 0.82rem var(--f-body); cursor: pointer; }
+.copy:hover { border-color: var(--code-ink); }
+.copy:focus-visible { outline-color: var(--code-fill); }
+.prompt pre { margin: 0; padding: 14px 16px 18px; font: 400 0.86rem/1.6 var(--f-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.prompt .fill { background: none; color: var(--code-fill); padding: 0; text-decoration: underline dotted; text-underline-offset: 4px; }
+
+/* This week */
+.week .wrap { padding-block: 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; border-top: 1px solid var(--line); }
+.todo { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; max-width: 65ch; }
+.todo label { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); cursor: pointer; }
+.todo input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--accent); }
+.todo input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--muted); }
+
+/* More */
+.more { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.more .wrap { padding-block: 64px; display: flex; flex-direction: column; gap: 20px; }
+.more p { color: var(--muted); font-size: var(--step-1); line-height: 1.5; max-width: 46rem; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; justify-content: center; align-items: center; min-height: 48px; padding: 12px 22px; border-radius: 999px; font: 600 1rem var(--f-body); text-decoration: none; background: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+
+footer .wrap { padding-block: 28px 40px; display: flex; flex-direction: column; gap: 8px; font-size: var(--step-s); color: var(--muted); }
+.ph { font-family: var(--f-mono); font-size: 0.8rem; }
+
+@media (max-width: 860px) {
+  .intro .wrap, .part .wrap, .week .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .side { position: static; }
+  .bracket { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rd:nth-child(3)::before, .rd:nth-child(3)::after { display: none; }
+}
+@media (max-width: 560px) {
+  .bracket { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .rd + .rd::before { top: -20px; left: 50%; width: 2px; height: 14px; }
+  .rd + .rd::after { top: -9px; left: calc(50% - 5px); border: 6px solid transparent; border-top-color: var(--muted); border-bottom: 0; }
+  .rd:nth-child(3)::before, .rd:nth-child(3)::after { display: block; }
+  .facts { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top">anstatt<span>.</span></a>
+    <nav aria-label="Auf dieser Seite"><a href="#brief">Zum ersten Prompt</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="label">Gratis-Anleitung · 8 Minuten Lesezeit</span>
+        <h1>So baust du deine Link-Seite mit Claude Code</h1>
+        <p class="lead">Meine Link-Seite ist ein iPod, mit Snake und einem eigenen Blockspiel. Ich hab keine Zeile Code davon getippt. Hier steht, wie Claude Code sie gebaut hat, mit drei Prompts zum Kopieren.</p>
+      </div>
+
+      <figure class="br-fig">
+        <ol class="bracket">
+          <li class="rd">
+            <span class="rd-no">Runde 1</span>
+            <div class="duel" aria-label="Version A gegen Version B"><span class="v won">A</span><span class="vs">gegen</span><span class="v">B</span></div>
+            <p class="res">A gewinnt <b>2:1</b></p>
+            <p class="score">Schnitt <mark>7,13</mark> von 10. Die Latte lag bei 7,5.</p>
+            <p class="verdict alarm">Keine war gut genug.</p>
+          </li>
+          <li class="rd">
+            <span class="rd-no">Runde 2</span>
+            <div class="duel" aria-label="Version C gegen Version A"><span class="v won">C</span><span class="vs">gegen</span><span class="v">A</span></div>
+            <p class="res">C gewinnt <b>3:0</b></p>
+            <p class="score">Schnitt <mark>7,8</mark> von 10.</p>
+            <p class="verdict">C entstand aus der Kritik der Richter.</p>
+          </li>
+          <li class="rd">
+            <span class="rd-no">Finale</span>
+            <div class="duel" aria-label="Version C gegen Version F"><span class="v won">C</span><span class="vs">gegen</span><span class="v rival">F</span></div>
+            <p class="res">C gewinnt <b>3:0</b></p>
+            <p class="score"><mark>7,27</mark> zu 6,23 Punkten.</p>
+            <p class="verdict">F kam von einem zweiten KI-Modell.</p>
+          </li>
+          <li class="rd live">
+            <span class="rd-no">Online</span>
+            <p class="live-time">2. Oktober</p>
+            <p class="score">Nach drei Prüfrunden, rund 21 Stunden nach dem ersten Schritt.</p>
+          </li>
+        </ol>
+        <figcaption>Das Turnier um den iPod-Bildschirm, aus dem Verlauf meines Projekts. Für das 3D-Intro lief dasselbe Turnier. Auch dort gewann C zweimal 3:0.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="intro" aria-labelledby="h-start">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Bevor du anfängst</span>
+        <h2 id="h-start">Du musst nicht programmieren können</h2>
+      </div>
+      <div class="body">
+        <p>Claude Code schreibt den Code, testet ihn und baut die Seite. Du sagst klar, was du willst, und legst fest, wann etwas gut genug ist. Die sieben Schritte unten zeigen, wie das bei mir lief.</p>
+        <dl class="facts">
+          <div><dt>Bauzeit</dt><dd>Rund 21 Stunden vom ersten Schritt bis online, eine Nacht inklusive</dd></div>
+          <div><dt>Kosten</dt><dd>Claude Pro 20 $ im Monat (enthält Claude Code). Hosting 0 €. Meine Domain 16,99 $ im Jahr</dd></div>
+          <div><dt>Code</dt><dd>11.543 Zeilen, keine davon von mir</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="idee" aria-labelledby="h-idee">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 1</span>
+        <h2 id="h-idee">Ein echtes Ding als Vorbild</h2>
+        <p class="does">Damit deine Seite nach dir aussieht.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Warum ein Ding</h3><p>Eine Link-Seite ist eine Liste mit Knöpfen. Ohne Vorbild sieht sie schnell aus wie jede andere. Ein echtes Gerät gibt Claude Code klare Regeln. Es hat Maße, eine Bedienung und Details, an denen man Fehler sofort sieht.</p></div>
+        <div class="blk"><h3>Ideen</h3>
+          <ul>
+            <li>Ein Gameboy, der Menü und Spiele zeigt</li>
+            <li>Ein Kassettenrekorder, bei dem jeder Link eine Kassette ist</li>
+            <li>Ein altes Tastenhandy mit SMS als Links</li>
+            <li>Ein Getränkeautomat, bei dem jeder Knopf einen Link ausgibt</li>
+          </ul>
+        </div>
+        <div class="blk mistake"><h3>Häufiger Fehler</h3><p>„Bau mir eine coole Link-Seite.“ Mit so einem Satz muss die KI raten, was du mit „cool“ meinst.</p></div>
+        <div class="blk try"><h3>Probier das</h3><p>Schreib einen Satz: Meine Seite sieht aus wie ___ und man bedient sie wie ___.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="brief" aria-labelledby="h-brief">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 2</span>
+        <h2 id="h-brief">Der erste Prompt</h2>
+        <p class="does">Sagt Claude Code, was „fertig“ heißt.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><p>Mein erster Prompt steckt in einer alten Sitzung. So würde ich ihn heute schreiben. Ersetz die gelben Stellen.</p></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span class="label">Prompt 1 · Der Brief</span><button type="button" class="copy" data-copy="p-brief">Kopieren</button></div>
+<pre id="p-brief">Bau mir eine Link-Seite, die aussieht wie <mark class="fill">[DEIN VORBILD]</mark>.
+
+Inhalt:
+- Name: <mark class="fill">[DEIN NAME]</mark>
+- Links: <mark class="fill">[Instagram-Link, TikTok-Link, YouTube-Link, E-Mail]</mark>
+- Zwei Sätze über mich: <mark class="fill">[TEXT]</mark>
+
+Bedienung:
+- <mark class="fill">[Wie bedient man das Vorbild? Zum Beispiel: Rad drehen, Knopf drücken]</mark>
+- Auf dem Handy genauso gut wie am Laptop.
+
+Technik:
+- Eine statische Seite für GitHub Pages.
+- Alle Texte und Links in einer Datei, public/config.json. Ich will sie ohne Code ändern können.
+- Alle Grafiken selbst gezeichnet. Keine fremden Bilder oder Logos.
+- Schriften als Dateien auf der Seite, nicht von Google geladen.
+- Ohne JavaScript erscheint eine einfache Linkliste.
+
+Bevor du baust:
+1. Leg ein Fundament an. Eine Datei mit allen Maßen und Regeln, und wer welche Datei bearbeitet.
+2. Bau ein Werkzeug, das Screenshots der Seite macht.
+3. Frag mich alles, was unklar ist.</pre>
+        </div>
+        <div class="blk win"><h3>Was das Fundament bringt</h3><p>Bei mir legte Claude Code zuerst eine Datei mit allen Maßen des iPods an. Das 3D-Intro und der iPod auf der Seite lesen beide daraus. Deshalb passt das Intro am Ende genau auf die Seite, auf <mark>0,01 Pixel</mark>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="turnier" aria-labelledby="h-turnier">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 3</span>
+        <h2 id="h-turnier">Das Turnier</h2>
+        <p class="does">Aus einem Glückstreffer wird eine Auswahl.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>So lief es bei mir</h3>
+          <ol>
+            <li>Claude Code baute zwei Versionen gleichzeitig, A und B.</li>
+            <li>Drei KI-Richter bewerteten beide. Jeder Richter hatte ein Thema: Echtheit, Bedienung, Technik.</li>
+            <li>A gewann 2:1. Aber der Schnitt lag bei 7,13, und die Latte bei 7,5. Keine war gut genug.</li>
+            <li>Also baute Claude Code eine dritte Version, C, aus der ganzen Kritik. C schlug A mit 3:0.</li>
+            <li>Im Finale baute ein zweites KI-Modell seine eigene Version. Diesmal kam jeder Richter von einem anderen Modell. C gewann wieder 3:0.</li>
+            <li>Danach kamen Ausbesserungsrunden mit festen Mängellisten. Eine unabhängige Prüfung fand am Ende 0 offene Fehler.</li>
+          </ol>
+        </div>
+        <div class="prompt">
+          <div class="prompt-bar"><span class="label">Prompt 2 · Das Turnier</span><button type="button" class="copy" data-copy="p-turnier">Kopieren</button></div>
+<pre id="p-turnier">Bau zwei Versionen von <mark class="fill">[TEIL, zum Beispiel dem Startbildschirm]</mark> gleichzeitig, jede in ihrem eigenen Ordner.
+
+Dann lass drei Richter beide Versionen bewerten. Jeder Richter prüft ein Thema:
+1. Echtheit: Sieht es aus wie <mark class="fill">[DEIN VORBILD]</mark>?
+2. Bedienung: Fühlt es sich richtig an, auf dem Handy und am Laptop?
+3. Technik: Lädt es schnell? Gibt es Fehler?
+Die Richter sehen Screenshots, nicht nur den Code. Punkte von 1 bis 10, mit Begründung.
+
+Die Latte liegt bei 7,5 im Schnitt. Schafft das keine Version, bau eine dritte aus der ganzen Kritik. Lass sie gegen die bessere antreten.
+
+Behalt nur die Siegerin und lösch die anderen. Dann bessere sie aus, bis ein frischer Prüfer keine Fehler mehr findet.</pre>
+        </div>
+        <div class="blk"><h3>Warum das klappt</h3><p>Eine Seite bewerten ist leichter, als sie zu bauen. Zwei Versionen zeigen, was geht. Die Kritik daran zeigt, was fehlt. Version C war bei mir die erste, die auf all dieser Kritik aufbaute.</p></div>
+        <div class="blk mistake"><h3>Was es kostet</h3><p>Ein Turnier braucht ein Vielfaches an Nutzung. Mit Pro kann es sein, dass du zwischendurch auf dein Limit wartest. Fang mit einem Teil an, zum Beispiel dem Startbildschirm.</p></div>
+        <div class="blk try"><h3>Probier das</h3><p>Leg die Latte fest, bevor du die Ergebnisse siehst. Sonst nimmst du die erste Version, die halbwegs passt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="pruefen" aria-labelledby="h-pruefen">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 4</span>
+        <h2 id="h-pruefen">Prüfrunden</h2>
+        <p class="does">Finden, was im Turnier niemand gesehen hat.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><p>Um 22:58 setzte Claude Code die Sieger zu einer Seite zusammen. Dann liefen drei Prüfrunden durch die Nacht. Am nächsten Vormittag war die Seite online.</p></div>
+        <div class="blk"><h3>Was die Prüfrunden fanden</h3>
+          <ul>
+            <li>Zu wenig Kontrast bei kleinen Texten</li>
+            <li>Ein Tipp auf den Mittelknopf zählte manchmal doppelt</li>
+            <li>Mit der Tastatur ging nach einem Klick der Fokus verloren</li>
+            <li>Auf dem Handy im Querformat war der iPod schlecht lesbar</li>
+            <li>Auf langsamen Geräten ruckelte das Intro</li>
+            <li>Links in der Config wurden zu wenig geprüft</li>
+          </ul>
+        </div>
+        <div class="prompt">
+          <div class="prompt-bar"><span class="label">Prompt 3 · Prüfrunde</span><button type="button" class="copy" data-copy="p-pruefen">Kopieren</button></div>
+<pre id="p-pruefen">Prüf die ganze Seite wie ein strenger Prüfer, der sie zum ersten Mal sieht.
+Teste: Handy hoch und quer, ein langsames Gerät, nur Tastatur, Screenreader, ohne JavaScript, ein kaputter Link in der Config.
+Sortier die Funde nach hoch, mittel und niedrig. Beheb hoch und mittel.
+Dann prüf noch einmal. Hör auf, wenn eine Runde nichts Wichtiges mehr findet.</pre>
+        </div>
+        <div class="blk try"><h3>Probier das</h3><p>Starte für die Prüfung eine neue Sitzung. Ein Prüfer, der den Code nicht selbst geschrieben hat, sieht mehr.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="inhalte" aria-labelledby="h-inhalte">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 5</span>
+        <h2 id="h-inhalte">Inhalte ohne Code ändern</h2>
+        <p class="does">Für einen neuen Link änderst du drei Zeilen.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><p>Alle Texte, Links und Menüs meiner Seite stehen in <code>public/config.json</code>. So sieht mein Kontakt-Menü darin aus, gekürzt:</p></div>
+        <div class="prompt">
+          <div class="prompt-bar"><span class="label">public/config.json · Auszug</span><button type="button" class="copy" data-copy="p-config">Kopieren</button></div>
+<pre id="p-config">{
+  "label": "Instagram",
+  "detail": "@anstatt.ai",
+  "href": "https://www.instagram.com/anstatt.ai"
+}</pre>
+        </div>
+        <div class="blk"><p>Für einen neuen Link kopiere ich so einen Block und ändere drei Zeilen. Seit Oktober kamen zwei Sprachen dazu, ein Spiele-Menü, meine Video-Anleitung und mein Angebot. Alle Menüpunkte stehen in dieser Datei. Snake, das Blockspiel und die Sprachumschaltung hat Claude Code dazugebaut.</p></div>
+        <div class="blk try"><h3>Probier das</h3><p>Lass Claude Code eine Anleitung schreiben, die jedes Feld der Datei erklärt. Meine liegt als README im Projekt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="online" aria-labelledby="h-online">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 6</span>
+        <h2 id="h-online">Gratis online stellen</h2>
+        <p class="does">GitHub Pages hostet die Seite ohne Monatsgebühr.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>So geht's</h3>
+          <ol>
+            <li>Leg ein kostenloses Konto auf <a href="https://github.com/">github.com</a> an.</li>
+            <li>Leg ein öffentliches Repository an. Im Gratis-Plan läuft GitHub Pages nur mit öffentlichen Repositorys.</li>
+            <li>Sag Claude Code: „Richte das Deployment auf GitHub Pages mit GitHub Actions ein.“</li>
+            <li>Auf GitHub unter Settings → Pages bei Source „GitHub Actions“ wählen.</li>
+            <li>Hochladen. Ein paar Minuten später ist die Seite unter <code>deinname.github.io/repo</code> online.</li>
+          </ol>
+        </div>
+        <div class="blk mistake"><h3>Achtung</h3><p>Öffentlich heißt, jeder kann deinen Code lesen. Schreib also keine Passwörter oder Zugangsschlüssel hinein.</p></div>
+        <p class="fine">Quelle: <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">GitHub Docs, About GitHub Pages</a>, abgerufen am 4. November 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="domain" aria-labelledby="h-domain">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Schritt 7</span>
+        <h2 id="h-domain">Eigene Domain</h2>
+        <p class="does">Optional. Eine Adresse, die man sich merkt.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><p>Meine Seite läuft unter anstattpunkt.com. Die Domain kostet mich 16,99 $ im Jahr.</p></div>
+        <div class="blk"><h3>So geht's</h3>
+          <ol>
+            <li>Kauf eine Domain bei einem Anbieter deiner Wahl.</li>
+            <li>Trag sie auf GitHub unter Settings → Pages → Custom domain ein.</li>
+            <li>Leg beim Anbieter in den DNS-Einstellungen vier A-Einträge für die Domain an: <code>185.199.108.153</code>, <code>185.199.109.153</code>, <code>185.199.110.153</code> und <code>185.199.111.153</code>.</li>
+            <li>Leg dazu einen CNAME-Eintrag für <code>www</code> an, der auf <code>deinname.github.io</code> zeigt.</li>
+            <li>Warte, bis GitHub das Zertifikat ausstellt. Dann hak „Enforce HTTPS“ an.</li>
+          </ol>
+        </div>
+        <p class="fine">Quelle: <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site">GitHub Docs, Managing a custom domain</a>, abgerufen am 4. November 2026.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="recht" aria-labelledby="h-recht">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Zum Schluss</span>
+        <h2 id="h-recht">Rechtliches in Österreich und Deutschland</h2>
+        <p class="does">Kurz, aber wichtig. In Österreich gilt ein Teil davon für jede Website.</p>
+      </div>
+      <div class="body">
+        <div class="blk"><h3>Impressum</h3><p>In Österreich braucht jede Website eine Offenlegung nach § 25 Mediengesetz. Bei einer rein privaten Seite reichen Name und Wohnort. Bietest du etwas an, kommen die Angaben nach § 5 E-Commerce-Gesetz dazu. In Deutschland gilt für geschäftliche Seiten § 5 Digitale-Dienste-Gesetz.</p></div>
+        <div class="blk"><h3>Schriften</h3><p>Leg Schriften als Dateien auf deine eigene Seite. Lädt die Seite sie bei Google, geht die IP-Adresse jedes Besuchers dorthin. Das Landgericht München hat das 2022 als Datenschutzverstoß gewertet.</p></div>
+        <div class="blk"><h3>Marken</h3><p>Nimm keine fremden Logos als Deko. Mein iPod ist selbst gezeichnet. Der Name „iPod“ gehört Apple und steht bei mir nur, um zu beschreiben, was man sieht.</p></div>
+        <p class="fine">Das ist keine Rechtsberatung. Im Zweifel frag bei der Wirtschaftskammer oder der IHK nach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="week" aria-labelledby="h-week">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Du bist dran</span>
+        <h2 id="h-week">Diese Woche</h2>
+      </div>
+      <ol class="todo">
+        <li><label for="lk1"><input type="checkbox" id="lk1"><span>Vorbild wählen und den einen Satz aus Schritt 1 aufschreiben.</span></label></li>
+        <li><label for="lk2"><input type="checkbox" id="lk2"><span>Prompt 1 ausfüllen und an Claude Code schicken.</span></label></li>
+        <li><label for="lk3"><input type="checkbox" id="lk3"><span>Ein Turnier für den wichtigsten Teil laufen lassen, mit der Latte bei 7,5.</span></label></li>
+        <li><label for="lk4"><input type="checkbox" id="lk4"><span>Eine Prüfrunde in einer neuen Sitzung.</span></label></li>
+        <li><label for="lk5"><input type="checkbox" id="lk5"><span>Auf GitHub Pages stellen und den Link in deine Bio setzen.</span></label></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="h-more">
+    <div class="wrap">
+      <span class="label">Mehr von anstatt.</span>
+      <h2 id="h-more">Schick mir deine Seite</h2>
+      <p>Wenn du nach dieser Anleitung baust, will ich das Ergebnis sehen. Wie meine kurzen Videos entstehen, steht in meiner zweiten Gratis-Anleitung, auf Englisch.</p>
+      <div class="btns">
+        <a class="btn" href="https://anstattpunkt.com/">Meinen iPod ansehen</a>
+        <a class="btn ghost" href="https://anstattpunkt.com/guide/">Video-Anleitung lesen</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Alle Zahlen stammen aus dem Verlauf meines Projekts, außer wo eine Quelle steht. Preise von claude.com/pricing, Stand 4. November 2026.</span>
+    <span>Kontakt: <a href="mailto:hallo@anstattpunkt.com">hallo@anstattpunkt.com</a> · Instagram <a href="https://www.instagram.com/anstatt.ai">@anstatt.ai</a></span>
+    <span><a href="../impressum.html">Impressum</a> · <a href="../datenschutz.html">Datenschutz</a></span>
+    <span>© 2026 anstatt.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Copy buttons: copy the prompt text without the yellow markup.
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var text = document.getElementById(btn.getAttribute("data-copy")).textContent;
+      function done(ok) {
+        btn.textContent = ok ? "Kopiert" : "Bitte markieren";
+        setTimeout(function () { btn.textContent = "Kopieren"; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else {
+        done(false);
+      }
+    });
+  });
+
+  // "Diese Woche" ticks are remembered in this browser only.
+  ["lk1", "lk2", "lk3", "lk4", "lk5"].forEach(function (id) {
+    var box = document.getElementById(id);
+    try { box.checked = localStorage.getItem("linkseite-" + id) === "1"; } catch (e) {}
+    box.addEventListener("change", function () {
+      try { localStorage.setItem("linkseite-" + id, box.checked ? "1" : "0"); } catch (e) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>

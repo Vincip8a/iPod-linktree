@@ -354,6 +354,22 @@ und das Entwurfsbanner stehen in der Quelle: dort ändern und neu synchronisiere
 Entwicklungsserver liefert `/guide/` wie GitHub Pages aus (jeder Ordner in `public/` mit eigener
 `index.html`).
 
+## Link-Seiten-Anleitung unter `/linkseite/`
+
+`public/linkseite/index.html` ist die deutsche Anleitung „So baust du deine Link-Seite mit Claude
+Code“ unter `anstattpunkt.com/linkseite/`, im iPod-Menü unter „Link-Seite bauen“ („Build this
+page“). Sie entsteht wie der Guide aus einer Quelle im Motion-Studio
+(`sales/creator/linkseite_guide.html`) und wird nicht von Hand bearbeitet.
+
+```bash
+node tools/sync-linkseite.mjs                              # Quelle: ../motion_studio/sales/creator/linkseite_guide.html
+node tools/sync-linkseite.mjs pfad/linkseite_guide.html    # andere Quelle
+node tools/sync-linkseite.mjs --check                      # ändert nichts, Code 1, wenn die Seite veraltet ist
+```
+
+Sprache `de`, Footer-Links „Impressum · Datenschutz“, Schriften aus `public/fonts/`. Die Seite hat
+keine eigenen Medien.
+
 ## Angebotsseite unter `/angebot/`
 
 `public/angebot/` ist die deutsche B2B-Angebotsseite „Erklärvideos aus Code“ unter
@@ -375,7 +391,7 @@ Videos und Standbilder kosten zusammen knapp 10 MB im Repository; ein Video läd
 
 ### Schriften
 
-Guide und Angebotsseite nutzen Bricolage Grotesque, Instrument Sans und JetBrains Mono (alle SIL
+Guide, Link-Seiten-Anleitung und Angebotsseite nutzen Bricolage Grotesque, Instrument Sans und JetBrains Mono (alle SIL
 Open Font License 1.1). Sie liegen als variable woff2 in `public/fonts/`, je Familie eine Datei für
 Latin und eine für Latin Extended, so wie Google Fonts sie ausliefert; der Browser lädt Latin
 Extended nur bei Bedarf. Die Sync-Skripte ersetzen die Google-Fonts-Links der Quellen durch
@@ -431,8 +447,9 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ assets/
 │  │  └─ playlist-cover.svg      600x600, Album-Cover der Playlist
 │  ├─ guide/index.html           Gratis-Guide, erzeugt von tools/sync-guide.mjs
+│  ├─ linkseite/index.html       Link-Seiten-Anleitung, erzeugt von tools/sync-linkseite.mjs
 │  ├─ angebot/                   Angebotsseite mit media/, erzeugt von tools/sync-offer.mjs
-│  ├─ fonts/                     Schriften für Guide und Angebotsseite (woff2, SIL OFL)
+│  ├─ fonts/                     Schriften für Guide, Anleitung und Angebotsseite (woff2, SIL OFL)
 │  └─ downloads/                 die drei Platzhalter-PDFs
 ├─ src/                          Anwendungscode
 │  ├─ main.js                    Ablauf: Desktop, iPod, Intro, Übergabe
@@ -456,8 +473,9 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ make-downloads.mjs         die drei PDFs
 │  ├─ file-sizes.mjs             Dateigrößen für "size" in config.json
 │  ├─ sync-guide.mjs             baut public/guide/ aus dem Gratis-Guide
+│  ├─ sync-linkseite.mjs         baut public/linkseite/ aus der Link-Seiten-Anleitung
 │  ├─ sync-offer.mjs             baut public/angebot/ aus der Angebotsseite, samt Videos
-│  ├─ lib/artifact-page.mjs      gemeinsamer Teil der beiden: Kopf, Schriften, Footer-Links
+│  ├─ lib/artifact-page.mjs      gemeinsamer Teil der drei: Kopf, Schriften, Footer-Links
 │  ├─ make-monogram.mjs          Monogramm in der Markenschrift (lib/glyphs.swift, CoreText)
 │  └─ fonts/                     Bricolage Grotesque (SIL OFL) für Monogramm und Social-Bild
 ├─ index.html                    Einstiegspunkt
