@@ -347,11 +347,43 @@ node tools/sync-guide.mjs pfad/free_guide.html   # andere Quelle
 node tools/sync-guide.mjs --check                # ändert nichts, Code 1, wenn die Seite veraltet ist
 ```
 
-Das Skript ergänzt doctype, Viewport, Beschreibung und og-Tags (absolute Adressen aus `siteUrl`)
-und ersetzt den Impressum-Platzhalter im Footer durch Links auf die Seiten aus `legal`. Shop-Links
+Das Skript ergänzt doctype, Viewport, Beschreibung und og-Tags (absolute Adressen aus `siteUrl`),
+lädt die Schriften aus `public/fonts/` statt von Google Fonts (siehe [Schriften](#schriften)) und
+ersetzt den Impressum-Platzhalter im Footer durch Links auf die Seiten aus `legal`. Shop-Links
 und das Entwurfsbanner stehen in der Quelle: dort ändern und neu synchronisieren. Der
 Entwicklungsserver liefert `/guide/` wie GitHub Pages aus (jeder Ordner in `public/` mit eigener
 `index.html`).
+
+## Angebotsseite unter `/angebot/`
+
+`public/angebot/` ist die deutsche B2B-Angebotsseite „Erklärvideos aus Code“ unter
+`anstattpunkt.com/angebot/`. Sie steht nicht im iPod-Menü. Wie der Guide entsteht sie aus einer
+Quelle im Motion-Studio (`sales/offer_page.html`) und wird nicht von Hand bearbeitet.
+
+```bash
+node tools/sync-offer.mjs                        # Quelle: ../motion_studio/sales/offer_page.html
+node tools/sync-offer.mjs pfad/offer_page.html   # andere Quelle (Videos und Bilder relativ zu deren Ordner)
+node tools/sync-offer.mjs --check                # ändert nichts, Code 1, wenn Seite oder Medien veraltet sind
+```
+
+Das Skript baut `index.html` wie beim Guide (Sprache `de`, og-Bild = Standbild des ersten Videos,
+Footer-Links „Impressum · Datenschutz“) und kopiert die Medien nach `public/angebot/media/`: ein
+Video `media/<name>.mp4` aus `demos/deliver/preview/<name>_preview.mp4`, ein Standbild
+`media/<name>_poster.jpg` aus `offer_media/`. Dateien in `media/`, auf die die Seite nicht mehr
+zeigt, löscht es. Zum Schluss prüft es, dass jede relative Adresse der Seite auf eine Datei zeigt.
+Videos und Standbilder kosten zusammen knapp 10 MB im Repository; ein Video lädt erst, wenn jemand auf Play drückt.
+
+### Schriften
+
+Guide und Angebotsseite nutzen Bricolage Grotesque, Instrument Sans und JetBrains Mono (alle SIL
+Open Font License 1.1). Sie liegen als variable woff2 in `public/fonts/`, je Familie eine Datei für
+Latin und eine für Latin Extended, so wie Google Fonts sie ausliefert; der Browser lädt Latin
+Extended nur bei Bedarf. Die Sync-Skripte ersetzen die Google-Fonts-Links der Quellen durch
+`@font-face`-Regeln auf diese Dateien (Tabelle `FONTS` in `tools/lib/artifact-page.mjs`), damit
+beim Aufruf keine IP-Adresse an Google geht. Braucht eine Quelle eine neue Schrift oder eine
+Stärke außerhalb der Dateien, bricht das Skript mit einer Meldung ab: dann die woff2-Dateien von
+Google Fonts (`fonts.googleapis.com/css2?family=…`, darin die Adressen für `latin` und
+`latin-ext`) nach `public/fonts/` legen und `FONTS` ergänzen.
 
 ---
 
@@ -399,6 +431,8 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ assets/
 │  │  └─ playlist-cover.svg      600x600, Album-Cover der Playlist
 │  ├─ guide/index.html           Gratis-Guide, erzeugt von tools/sync-guide.mjs
+│  ├─ angebot/                   Angebotsseite mit media/, erzeugt von tools/sync-offer.mjs
+│  ├─ fonts/                     Schriften für Guide und Angebotsseite (woff2, SIL OFL)
 │  └─ downloads/                 die drei Platzhalter-PDFs
 ├─ src/                          Anwendungscode
 │  ├─ main.js                    Ablauf: Desktop, iPod, Intro, Übergabe
@@ -422,6 +456,8 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ make-downloads.mjs         die drei PDFs
 │  ├─ file-sizes.mjs             Dateigrößen für "size" in config.json
 │  ├─ sync-guide.mjs             baut public/guide/ aus dem Gratis-Guide
+│  ├─ sync-offer.mjs             baut public/angebot/ aus der Angebotsseite, samt Videos
+│  ├─ lib/artifact-page.mjs      gemeinsamer Teil der beiden: Kopf, Schriften, Footer-Links
 │  ├─ make-monogram.mjs          Monogramm in der Markenschrift (lib/glyphs.swift, CoreText)
 │  └─ fonts/                     Bricolage Grotesque (SIL OFL) für Monogramm und Social-Bild
 ├─ index.html                    Einstiegspunkt

@@ -1,0 +1,612 @@
+<!doctype html>
+<!-- Erzeugt von tools/sync-offer.mjs aus offer_page.html. Nicht hier ändern, sondern in der Quelle, dann neu synchronisieren. -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Erklärvideos aus Code</title>
+<meta name="description" content="Wir bauen jedes Video in Code: 3D, animierte App-Screens, Untertitel und Sprecher. Text, Zahlen und Sprache sind Daten. Deshalb kostet eine Änderung oder eine neue Sprachversion fast nichts.">
+<link rel="canonical" href="https://anstattpunkt.com/angebot/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Anstattpunkt.">
+<meta property="og:title" content="Erklärvideos aus Code">
+<meta property="og:description" content="Wir bauen jedes Video in Code: 3D, animierte App-Screens, Untertitel und Sprecher. Text, Zahlen und Sprache sind Daten. Deshalb kostet eine Änderung oder eine neue Sprachversion fast nichts.">
+<meta property="og:url" content="https://anstattpunkt.com/angebot/">
+<meta property="og:image" content="https://anstattpunkt.com/angebot/media/rotavo_demoA_de_poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+/* Schriften von dieser Seite statt von Google Fonts (SIL Open Font License 1.1) */
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(../fonts/bricolage-grotesque-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 600; font-stretch: 100%; font-display: swap; src: url(../fonts/instrument-sans-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 600; font-stretch: 100%; font-display: swap; src: url(../fonts/instrument-sans-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(../fonts/jetbrains-mono-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(../fonts/jetbrains-mono-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+</style>
+<style>
+/* Layout: a render bench. Data rows on the left turn into a video frame on the right; every section below is a plain column with true formats (16:9, 9:16) drawn as frame guides. */
+:root {
+  --bg: #f2f3f0;
+  --surface: #ffffff;
+  --ink: #1a1d27;
+  --muted: #5b6070;
+  --line: #d9dbd4;
+  --accent: #2c45e8;
+  --accent-ink: #ffffff;
+  --mark: #c97a12;
+  --frame-bg: #12141c;
+  --frame-fg: #eef0f5;
+  --frame-dim: #8d93a6;
+  --frame-accent: #ffb547;
+  --draft-bg: #fff1d6;
+  --draft-fg: #7a4a00;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.6rem;
+  --step-3: clamp(1.9rem, 4.2vw, 2.6rem);
+  --step-4: clamp(2.3rem, 6vw, 3.9rem);
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111319; --surface: #191c25; --ink: #e9ebf1; --muted: #a2a7b6; --line: #2c303c;
+    --accent: #8696ff; --accent-ink: #0d0f16; --mark: #f0b455;
+    --frame-bg: #07080c; --frame-fg: #eef0f5; --frame-dim: #8d93a6; --frame-accent: #ffb547;
+    --draft-bg: #3a2a0c; --draft-fg: #ffd58a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111319; --surface: #191c25; --ink: #e9ebf1; --muted: #a2a7b6; --line: #2c303c;
+  --accent: #8696ff; --accent-ink: #0d0f16; --mark: #f0b455;
+  --frame-bg: #07080c; --frame-fg: #eef0f5; --frame-dim: #8d93a6; --frame-accent: #ffb547;
+  --draft-bg: #3a2a0c; --draft-fg: #ffd58a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: var(--step-0);
+  line-height: 1.6;
+}
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.08; margin: 0; text-wrap: balance; color: var(--ink); }
+h1 { font-size: var(--step-4); font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: var(--step-3); font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: var(--step-1); font-weight: 700; }
+p { margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.label {
+  font-family: var(--f-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Draft notice */
+.draft {
+  background: var(--draft-bg);
+  color: var(--draft-fg);
+  font-size: 0.9rem;
+}
+.draft .wrap { padding-block: 8px; }
+.ph { font-family: var(--f-mono); font-size: 0.92em; background: var(--draft-bg); color: var(--draft-fg); padding: 0 4px; border-radius: 3px; }
+
+/* Header */
+header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-block: 18px; }
+.brand { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+.brand .dot { color: var(--accent); }
+nav { display: flex; gap: 20px; flex-wrap: wrap; }
+nav a { color: var(--muted); text-decoration: none; font-weight: 500; }
+nav a:hover { color: var(--ink); }
+
+/* Hero */
+.hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center; padding-block: 40px 72px; }
+.hero-copy { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.lead { font-size: var(--step-1); color: var(--muted); max-width: 34em; }
+.ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: 600 1rem var(--f-body);
+  padding: 12px 20px; border-radius: 999px; text-decoration: none; cursor: pointer;
+  border: 1.5px solid var(--accent);
+}
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-ghost { background: transparent; color: var(--accent); }
+
+/* Data to video bench */
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.bench-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.sheet-scroll { overflow-x: auto; }
+table.sheet { width: 100%; border-collapse: collapse; font-family: var(--f-mono); font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.sheet th, .sheet td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.sheet th { color: var(--muted); font-weight: 600; }
+.sheet td.num, .sheet th.num { text-align: right; }
+.sheet tbody tr { cursor: pointer; }
+.sheet tbody tr:hover td { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.sheet tbody tr[aria-selected="true"] td { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--ink); }
+.sheet .rowno { color: var(--muted); width: 1%; }
+
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  background: var(--frame-bg);
+  color: var(--frame-fg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 5% 6%;
+  display: flex; flex-direction: column; justify-content: center; gap: 0.35em;
+  font-family: var(--f-display);
+  container-type: inline-size;
+}
+.frame .chip { position: absolute; top: 5%; left: 6%; font: 600 max(10px, 2.4cqw) var(--f-mono); letter-spacing: 0.08em; color: var(--frame-dim); }
+.frame .hello { font-size: 7cqw; font-weight: 800; line-height: 1; }
+.frame .sub { font-size: 3.4cqw; color: var(--frame-dim); font-family: var(--f-body); }
+.frame .big { display: flex; align-items: baseline; gap: 0.3em; font-size: 9cqw; font-weight: 800; color: var(--frame-accent); line-height: 1; margin-top: 0.15em; }
+.frame .big small { font-size: 3.2cqw; color: var(--frame-fg); font-weight: 500; font-family: var(--f-body); }
+.frame .meter { height: max(4px, 1.4cqw); background: color-mix(in srgb, var(--frame-fg) 14%, transparent); border-radius: 99px; overflow: hidden; margin-top: 0.6em; width: 70%; }
+.frame .meter i { display: block; height: 100%; width: 0; background: var(--frame-accent); border-radius: 99px; transition: width 0.9s cubic-bezier(.2,.8,.2,1); }
+.frame .scrub { position: absolute; left: 6%; right: 6%; bottom: 5%; display: flex; align-items: center; gap: 10px; font: 400 max(9px, 2.2cqw) var(--f-mono); color: var(--frame-dim); font-variant-numeric: tabular-nums; }
+.frame .track { flex: 1; height: 3px; background: color-mix(in srgb, var(--frame-fg) 18%, transparent); border-radius: 2px; overflow: hidden; }
+.frame .track b { display: block; height: 100%; width: 100%; background: var(--frame-fg); transform-origin: left; transform: scaleX(0); }
+.frame.playing .track b { animation: play 6s linear forwards; }
+@keyframes play { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.try { display: grid; grid-template-columns: 1.2fr 1.4fr 0.8fr; gap: 10px; }
+.try label { display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem; color: var(--muted); min-width: 0; }
+.try input {
+  font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; width: 100%; min-width: 0;
+}
+.note { font-size: 0.82rem; color: var(--muted); }
+
+/* Sections */
+section.block .wrap { padding-block: 64px; display: flex; flex-direction: column; gap: 32px; }
+section.block + section.block .wrap { border-top: 1px solid var(--line); }
+.sec-head { display: flex; flex-direction: column; gap: 10px; max-width: 46em; }
+.sec-head p { color: var(--muted); }
+
+/* Demos */
+.demos { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.demo { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.player { aspect-ratio: 16 / 9; max-width: 100%; border-radius: var(--radius); overflow: hidden; background: var(--frame-bg); }
+.player video { display: block; width: 100%; height: 100%; object-fit: contain; background: var(--frame-bg); }
+.demo p { color: var(--muted); }
+.switch { display: flex; gap: 6px; flex-wrap: wrap; }
+.switch button { font: 600 0.85rem var(--f-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.measured { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.measured div { border-top: 2px solid var(--accent); padding-top: 12px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.measured strong { font-family: var(--f-display); font-size: var(--step-3); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+.measured p { color: var(--muted); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chips span { font-size: 0.82rem; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--muted); }
+
+/* Why code */
+.why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.why div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.why code { font-family: var(--f-mono); font-size: 0.8rem; color: var(--mark); }
+.why p { color: var(--muted); }
+
+/* Packages */
+.packs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+.pack { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.pack.featured { border: 2px solid var(--accent); }
+.pack .price { font-family: var(--f-display); font-size: var(--step-3); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+.pack .price small { font-size: 1rem; font-weight: 500; color: var(--muted); font-family: var(--f-body); }
+.pack ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pack li { padding-left: 22px; position: relative; }
+.pack li::before { content: ""; position: absolute; left: 2px; top: 0.62em; width: 10px; height: 6px; border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg); }
+.pack .who { color: var(--muted); font-size: 0.92rem; }
+.addons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.addons div { border-top: 2px solid var(--line); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.addons strong { font-family: var(--f-display); }
+.addons span { color: var(--muted); font-size: 0.92rem; }
+.fine { font-size: 0.85rem; color: var(--muted); }
+
+/* Process */
+ol.steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; counter-reset: s; }
+ol.steps li { counter-increment: s; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+ol.steps li::before { content: counter(s); font: 700 1.6rem var(--f-display); color: var(--accent); }
+ol.steps li span { color: var(--muted); font-size: 0.95rem; }
+
+/* Facts + FAQ */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.facts { display: flex; flex-direction: column; gap: 16px; }
+.facts div, details { min-width: 0; }
+.facts p, details p { color: var(--muted); }
+details { border-bottom: 1px solid var(--line); padding-block: 12px; }
+details summary { cursor: pointer; font-weight: 600; }
+details p { margin-top: 8px; }
+
+/* Contact */
+.contact { background: var(--ink); color: var(--bg); }
+.contact .wrap { padding-block: 64px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+.contact h2 { color: var(--bg); }
+.contact p { color: color-mix(in srgb, var(--bg) 78%, var(--ink)); }
+.mailbox { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.mailbox output { font: 600 1.1rem var(--f-mono); background: color-mix(in srgb, var(--bg) 12%, var(--ink)); color: var(--bg); padding: 10px 14px; border-radius: 8px; user-select: all; overflow-wrap: anywhere; }
+.mailbox button, .mailbox a { font: 600 0.95rem var(--f-body); background: var(--bg); color: var(--ink); border: 0; border-radius: 999px; padding: 10px 16px; cursor: pointer; text-decoration: none; }
+footer .wrap { padding-block: 24px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .hero .wrap, .demos, .measured, .two, .contact .wrap { grid-template-columns: 1fr; }
+  .why, .packs, .addons { grid-template-columns: 1fr; }
+  ol.steps { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+  .try { grid-template-columns: 1fr 1fr; }
+  .try label:first-child { grid-column: 1 / -1; }
+  ol.steps { grid-template-columns: 1fr; }
+  nav { gap: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .frame.playing .track b { animation: none; transform: scaleX(1); }
+  .frame .meter i { transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top" id="top">anstatt<span class="dot">.</span></a>
+    <nav aria-label="Seitenbereiche">
+      <a href="#demos">Demos</a>
+      <a href="#pakete">Pakete</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="label">Videos für Software-Firmen · Österreich, Deutschland, Schweiz</span>
+        <h1>Erklärvideos für Ihre Software, in einer Woche fertig.</h1>
+        <p class="lead">Wir bauen jedes Video in Code: 3D, animierte App-Screens, Untertitel und Sprecher. Text, Zahlen und Sprache sind Daten. Deshalb kostet eine Änderung oder eine neue Sprachversion fast nichts.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#kontakt">Pilotprojekt anfragen</a>
+          <a class="btn btn-ghost" href="#pakete">Pakete und Preise</a>
+        </div>
+      </div>
+
+      <div class="bench" aria-label="Beispiel: aus einer Tabellenzeile wird ein Video">
+        <div class="bench-head">
+          <h3>Eine Zeile, ein Video</h3>
+          <span class="label">kunden.csv · Beispieldaten</span>
+        </div>
+        <div class="sheet-scroll">
+          <table class="sheet" id="sheet">
+            <thead>
+              <tr><th class="rowno">#</th><th>Firma</th><th>Vorname</th><th class="num">Team</th><th class="num">Std./Monat</th></tr>
+            </thead>
+            <tbody>
+              <tr data-i="0" tabindex="0" aria-selected="true"><td class="rowno">1</td><td>Muster Logistik GmbH</td><td>Lena</td><td class="num">12</td><td class="num">14</td></tr>
+              <tr data-i="1" tabindex="0" aria-selected="false"><td class="rowno">2</td><td>Beispiel Café OG</td><td>Jonas</td><td class="num">6</td><td class="num">7</td></tr>
+              <tr data-i="2" tabindex="0" aria-selected="false"><td class="rowno">3</td><td>Demo Praxis Wien</td><td>Aylin</td><td class="num">25</td><td class="num">31</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="frame playing" id="frame" aria-live="polite">
+          <span class="chip">VIDEO 1 VON 3 · 16:9</span>
+          <div class="hello" id="f-hello">Hallo Lena,</div>
+          <div class="sub" id="f-sub">so viel Zeit spart Muster Logistik GmbH jeden Monat:</div>
+          <div class="big"><span id="f-hours">14 Std.</span><small id="f-team">für Ihr Team mit 12 Personen</small></div>
+          <div class="meter"><i id="f-meter"></i></div>
+          <div class="scrub"><span>00:00</span><span class="track"><b></b></span><span>00:18</span></div>
+        </div>
+
+        <div class="try">
+          <label for="in-company">Ihre Firma<input id="in-company" type="text" value="Muster Logistik GmbH" maxlength="40" autocomplete="off"></label>
+          <label for="in-name">Vorname<input id="in-name" type="text" value="Lena" maxlength="24" autocomplete="off"></label>
+          <label for="in-hours">Std./Monat<input id="in-hours" type="number" value="14" min="1" max="200" inputmode="numeric"></label>
+        </div>
+        <p class="note">Probieren Sie Ihre eigenen Daten. So entstehen persönliche Sales-Videos aus Ihrer Kundenliste: jede Zeile wird ein eigenes Video mit Stimme.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="demos">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Demos</span>
+        <h2>Zwei Beispiele für eine erfundene Software</h2>
+        <p>Die Marke in den Demos ist erfunden. So sehen Sie den Stil, ohne dass wir Arbeit von Kunden zeigen.</p>
+      </div>
+      <div class="demos">
+        <div class="demo">
+          <div class="player"><video id="v-a" controls playsinline preload="none" poster="media/rotavo_demoA_de_poster.jpg" src="media/rotavo_demoA_de.mp4" aria-label="Erklärvideo für die erfundene Software Rotavo"></video></div>
+          <h3>Erklärvideo</h3>
+          <div class="switch" role="group" aria-label="Fassung wählen" data-player="v-a">
+            <button type="button" aria-pressed="true" data-src="media/rotavo_demoA_de.mp4" data-poster="media/rotavo_demoA_de_poster.jpg">Deutsch · 45 s</button>
+            <button type="button" aria-pressed="false" data-src="media/rotavo_demoA_en.mp4" data-poster="media/rotavo_demoA_en_poster.jpg">Englisch · 43 s</button>
+            <button type="button" aria-pressed="false" data-src="media/rotavo_demoA_en_9x16.mp4">Hochformat · 19 s</button>
+          </div>
+          <p>Die englische Fassung hat dasselbe Bild und Timing. Neu sind nur Text und Stimme.</p>
+        </div>
+        <div class="demo">
+          <div class="player"><video id="v-b" controls playsinline preload="none" poster="media/rotavo_showcase_de_poster.jpg" src="media/rotavo_showcase_de.mp4" aria-label="Persönliche Sales-Videos aus einer Tabelle"></video></div>
+          <h3>Persönliche Sales-Videos</h3>
+          <div class="switch" role="group" aria-label="Video wählen" data-player="v-b">
+            <button type="button" aria-pressed="true" data-src="media/rotavo_showcase_de.mp4" data-poster="media/rotavo_showcase_de_poster.jpg">So entsteht es</button>
+            <button type="button" aria-pressed="false" data-src="media/rotavo_demoB_1_cafe_mohnwinkel.mp4" data-poster="media/rotavo_demoB_1_cafe_mohnwinkel_poster.jpg">Lena, Wien</button>
+            <button type="button" aria-pressed="false" data-src="media/rotavo_demoB_2_backerei_feldkern.mp4" data-poster="media/rotavo_demoB_2_backerei_feldkern_poster.jpg">Tobias, München</button>
+            <button type="button" aria-pressed="false" data-src="media/rotavo_demoB_3_zwirbel_zest.mp4" data-poster="media/rotavo_demoB_3_zwirbel_zest_poster.jpg">Sam, Berlin (EN)</button>
+            <button type="button" aria-pressed="false" data-src="media/rotavo_demoB_4_velo_brunnli.mp4" data-poster="media/rotavo_demoB_4_velo_brunnli_poster.jpg">Nina, Zürich</button>
+          </div>
+          <p>Vier Videos aus einer Tabelle. Vorname, Firma, Teamgröße und gesparte Stunden stehen im Bild und kommen in der Stimme vor.</p>
+        </div>
+      </div>
+      <div class="measured">
+        <div>
+          <span class="label">Gemessen an Demo A</span>
+          <strong>1 Min. 40 Sek.</strong>
+          <p>für eine neue Sprachversion: neue Stimme, dann baut ein Befehl das ganze Video neu. Dazu kommen Übersetzung und die Prüfung durch eine Muttersprachlerin oder einen Muttersprachler.</p>
+        </div>
+        <div>
+          <span class="label">Gemessen an Demo B</span>
+          <strong>44 Sek.</strong>
+          <p>von der neuen Zeile in der Tabelle bis zum fertigen Video mit Stimme.</p>
+        </div>
+      </div>
+      <p class="fine">Reine Rechenzeit auf einem Mac mit M4-Chip, gemessen am 3. November 2026. Skript, Abstimmung und Korrekturen brauchen mehr Zeit. Dafür planen wir die 7 Werktage ein.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Warum Code</span>
+        <h2>Ein Video, das Sie später noch ändern können</h2>
+      </div>
+      <div class="why">
+        <div>
+          <code>preis: 29 → 39</code>
+          <h3>Änderungen ohne Neuproduktion</h3>
+          <p>Neuer Preis, neues Feature, anderer Slogan: Wir ändern eine Zeile und rendern neu. Kleine Änderungen später ab €90.</p>
+        </div>
+        <div>
+          <code>sprache: de → en</code>
+          <h3>Jede Sprache inklusive</h3>
+          <p>Wir tauschen Text und Stimme. Bild und Timing bleiben gleich. Deutsch und Englisch sind im Paket schon drin.</p>
+        </div>
+        <div>
+          <code>kunden.csv → 100 Videos</code>
+          <h3>Ein Video pro Kunde</h3>
+          <p>Aus Ihrer Kundenliste werden persönliche Videos mit Name, Firma und Zahlen. Gut für Vertrieb, Onboarding und Angebote.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="pakete">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Pakete</span>
+        <h2>Feste Preise, feste Termine</h2>
+        <p>Sie wissen vorher, was Sie bekommen und was es kostet. Zwei Korrekturrunden sind immer dabei.</p>
+      </div>
+      <div class="packs">
+        <article class="pack">
+          <h3>Pilot</h3>
+          <div class="price">€350 <small><s>€1.200</s></small></div>
+          <p class="who">Einführungspreis für die ersten 3 Kunden. Dafür dürfen wir das Video als Referenz zeigen.</p>
+          <ul>
+            <li>1 Erklärvideo, 30–45 Sekunden, 16:9</li>
+            <li>1 Hochformat-Schnitt für Social Media</li>
+            <li>1 Sprache, mit Untertiteln</li>
+            <li>2 Korrekturrunden</li>
+            <li>Lieferung 7 Werktage nach Skript-Freigabe</li>
+          </ul>
+        </article>
+        <article class="pack featured">
+          <h3>Paket</h3>
+          <div class="price">€2.800</div>
+          <p class="who">Für Website, Messe und Vertrieb</p>
+          <ul>
+            <li>1 Erklärvideo, 45–60 Sekunden, 16:9</li>
+            <li>3 Hochformat-Schnitte für Social Media und Ads</li>
+            <li>Deutsch und Englisch</li>
+            <li>Ihre Marke als Vorlage für Folgevideos</li>
+            <li>2 Korrekturrunden, Lieferung in 10 Werktagen</li>
+          </ul>
+        </article>
+        <article class="pack">
+          <h3>Monatlich</h3>
+          <div class="price">€1.800 <small>pro Monat</small></div>
+          <p class="who">Laufend neue Videos</p>
+          <ul>
+            <li>4 Kurzvideos pro Monat, Hochformat</li>
+            <li>Ihr Look als feste Vorlage</li>
+            <li>Je 2 Sprachen</li>
+            <li>1 Themen-Call pro Monat</li>
+            <li>Monatlich kündbar</li>
+          </ul>
+        </article>
+      </div>
+      <div class="addons">
+        <div><strong>Persönliche Sales-Videos</strong><span>Vorlage ab €1.500, Preis pro Video nach Menge</span></div>
+        <div><strong>Menschlicher Sprecher</strong><span>statt KI-Stimme, ab €250 pro Sprache</span></div>
+        <div><strong>Weitere Sprache</strong><span>ab €300 pro Video</span></div>
+      </div>
+      <p class="fine">Alle Preise in Euro, netto. 50 % Anzahlung bei Auftrag, der Rest bei Lieferung.</p>
+    </div>
+  </section>
+
+  <section class="block" id="ablauf">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="label">Ablauf</span>
+        <h2>Vom ersten Call zum fertigen Video</h2>
+      </div>
+      <ol class="steps">
+        <li><h3>Kurzer Call</h3><span>20 Minuten: Produkt, Zielgruppe, Ziel des Videos.</span></li>
+        <li><h3>Skript</h3><span>In 2 Werktagen. Sie geben frei oder ändern.</span></li>
+        <li><h3>Erste Fassung</h3><span>Komplett animiert, mit Stimme und Untertiteln.</span></li>
+        <li><h3>Korrekturen</h3><span>Zwei Runden für Text, Timing und Farben.</span></li>
+        <li><h3>Lieferung</h3><span>MP4 in 16:9 und 9:16, Untertitel als Datei, Nutzungsrechte.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="two">
+        <div class="facts">
+          <div class="sec-head"><span class="label">Gut zu wissen</span><h2>Was wir nicht machen</h2></div>
+          <div><h3>Keine Dreharbeiten</h3><p>Wir zeigen Ihr Produkt mit 3D, Grafik und echten Screens. Gefilmte Personen gibt es bei uns nicht.</p></div>
+          <div><h3>KI-Stimme, klar gekennzeichnet</h3><p>Standard ist eine KI-Stimme. Einen menschlichen Sprecher buchen Sie jederzeit dazu.</p></div>
+          <div><h3>Klare 3D-Grafik statt Fotorealismus</h3><p>Unser Stil ist sauber und lesbar. Fotorealistische Szenen bieten wir nicht an.</p></div>
+        </div>
+        <div>
+          <div class="sec-head"><span class="label">Fragen</span><h2>Häufige Fragen</h2></div>
+          <details id="faq-need"><summary>Was brauchen Sie von uns?</summary><p>Logo, Farben, Screenshots oder einen Testzugang zu Ihrer Software und 20 Minuten für den ersten Call.</p></details>
+          <details id="faq-rights"><summary>Wem gehört das Video?</summary><p>Sie bekommen die Nutzungsrechte für Website, Social Media und Werbung, zeitlich unbegrenzt.</p></details>
+          <details id="faq-later"><summary>Was kostet eine Änderung später?</summary><p>Kleine Änderungen an Text oder Zahlen ab €90. Wir ändern die Daten und rendern neu.</p></details>
+          <details id="faq-speed"><summary>Geht es auch schneller?</summary><p>Oft ja. Sagen Sie uns Ihren Termin, dann sagen wir ehrlich, ob er klappt.</p></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="kontakt">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Pilotprojekt anfragen</h2>
+        <p>Schreiben Sie uns in zwei Sätzen, was Ihre Software macht. Sie bekommen innerhalb eines Werktags eine Antwort mit einer ersten Skript-Idee.</p>
+      </div>
+      <div class="mailbox">
+        <output id="mail">hallo@anstattpunkt.com</output>
+        <a href="mailto:hallo@anstattpunkt.com?subject=Pilotprojekt">E-Mail schreiben</a>
+        <button type="button" id="copy">Adresse kopieren</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span><a href="../impressum.html">Impressum</a> · <a href="../datenschutz.html">Datenschutz</a></span>
+    <span>Alle Videos in den Demos zeigen eine erfundene Marke.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var rows = [
+    { company: "Muster Logistik GmbH", name: "Lena", team: 12, hours: 14 },
+    { company: "Beispiel Café OG", name: "Jonas", team: 6, hours: 7 },
+    { company: "Demo Praxis Wien", name: "Aylin", team: 25, hours: 31 }
+  ];
+  var current = 0;
+  var team = rows[0].team;
+  var el = function (id) { return document.getElementById(id); };
+  var frame = el("frame");
+  var inCompany = el("in-company"), inName = el("in-name"), inHours = el("in-hours");
+
+  function render(restart) {
+    var name = inName.value.trim() || "Lena";
+    var company = inCompany.value.trim() || "Ihre Firma";
+    var hours = Math.max(1, Math.min(200, parseInt(inHours.value, 10) || 1));
+    el("f-hello").textContent = "Hallo " + name + ",";
+    el("f-sub").textContent = "so viel Zeit spart " + company + " jeden Monat:";
+    el("f-hours").textContent = hours + " Std.";
+    el("f-team").textContent = "für Ihr Team mit " + team + " Personen";
+    el("f-meter").style.width = Math.min(100, Math.round(hours / 40 * 100)) + "%";
+    frame.querySelector(".chip").textContent = "VIDEO " + (current + 1) + " VON 3 · 16:9";
+    if (restart) {
+      frame.classList.remove("playing");
+      void frame.offsetWidth;
+      frame.classList.add("playing");
+    }
+  }
+
+  function select(i) {
+    current = i;
+    var r = rows[i];
+    team = r.team;
+    inCompany.value = r.company;
+    inName.value = r.name;
+    inHours.value = r.hours;
+    document.querySelectorAll("#sheet tbody tr").forEach(function (tr) {
+      tr.setAttribute("aria-selected", tr.getAttribute("data-i") === String(i) ? "true" : "false");
+    });
+    render(true);
+  }
+
+  document.querySelectorAll("#sheet tbody tr").forEach(function (tr) {
+    var i = parseInt(tr.getAttribute("data-i"), 10);
+    tr.addEventListener("click", function () { select(i); });
+    tr.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(i); }
+    });
+  });
+  [inCompany, inName, inHours].forEach(function (input) {
+    input.addEventListener("input", function () { render(false); });
+  });
+
+  requestAnimationFrame(function () { render(false); });
+
+  el("copy").addEventListener("click", function () {
+    var text = el("mail").textContent;
+    var btn = this;
+    var done = function () { btn.textContent = "Kopiert"; setTimeout(function () { btn.textContent = "Adresse kopieren"; }, 1800); };
+    var fallback = function () {
+      var range = document.createRange();
+      range.selectNodeContents(el("mail"));
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      btn.textContent = "Markiert, jetzt kopieren";
+    };
+    try {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } catch (e) { fallback(); }
+  });
+
+  var videos = document.querySelectorAll(".player video");
+  videos.forEach(function (v) {
+    v.addEventListener("play", function () {
+      videos.forEach(function (other) { if (other !== v) other.pause(); });
+    });
+  });
+  document.querySelectorAll(".switch").forEach(function (group) {
+    var video = el(group.getAttribute("data-player"));
+    group.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        group.querySelectorAll("button").forEach(function (b) {
+          b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+        });
+        var poster = btn.getAttribute("data-poster");
+        if (poster) video.setAttribute("poster", poster); else video.removeAttribute("poster");
+        video.src = btn.getAttribute("data-src");
+        var p = video.play();
+        if (p && p.catch) p.catch(function () {});
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
