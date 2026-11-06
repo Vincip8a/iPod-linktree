@@ -372,6 +372,24 @@ node tools/sync-linkseite.mjs --check                      # ändert nichts, Cod
 Sprache `de`, Footer-Links „Impressum · Datenschutz“, Schriften aus `public/fonts/`. Die Seite hat
 keine eigenen Medien.
 
+## 3D-Regeln unter `/3d-regeln/`
+
+`public/3d-regeln/` ist die deutsche Gratis-Seite „Meine 12 Regeln für 3D-Renders mit Claude“ unter
+`anstattpunkt.com/3d-regeln/`, im iPod-Menü unter „Free Guides“ → „3D-Renders mit Claude“ („3D renders
+with Claude“, Icon `cube`). Sie entsteht aus einer Quelle im Motion-Studio (`sales/creator/3d_regeln.html`)
+und wird nicht von Hand bearbeitet.
+
+```bash
+node tools/sync-3d-regeln.mjs                         # Quelle: ../motion_studio/sales/creator/3d_regeln.html
+node tools/sync-3d-regeln.mjs pfad/3d_regeln.html      # andere Quelle (Bilder aus 3d_regeln_media/ daneben)
+node tools/sync-3d-regeln.mjs --check                  # ändert nichts, Code 1, wenn Seite oder Bilder veraltet sind
+```
+
+Sprache `de`, Footer-Links „Impressum · Datenschutz“, Schriften aus `public/fonts/`. Die Bilder
+`media/<name>` kommen aus `sales/creator/3d_regeln_media/<name>`, dazu `og.jpg` als Vorschaubild
+(1200x630, flach | fertig). Dateien in `media/`, auf die die Seite nicht mehr zeigt, löscht das Skript.
+Zusammen gut 0,7 MB.
+
 ## Angebotsseite unter `/angebot/`
 
 `public/angebot/` ist die deutsche B2B-Angebotsseite „Erklärvideos aus Code“ unter
@@ -450,6 +468,7 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  │  └─ playlist-cover.svg      600x600, Album-Cover der Playlist
 │  ├─ guide/index.html           Gratis-Guide, erzeugt von tools/sync-guide.mjs
 │  ├─ linkseite/index.html       Link-Seiten-Anleitung, erzeugt von tools/sync-linkseite.mjs
+│  ├─ 3d-regeln/                 3D-Regeln mit media/, erzeugt von tools/sync-3d-regeln.mjs
 │  ├─ angebot/                   Angebotsseite mit media/, erzeugt von tools/sync-offer.mjs
 │  ├─ fonts/                     Schriften für Guide, Anleitung und Angebotsseite (woff2, SIL OFL)
 │  └─ downloads/                 die drei Platzhalter-PDFs
@@ -476,8 +495,9 @@ Aufbau, Ablauf und Modul-Schnittstellen im Detail: [`ARCHITECTURE.md`](ARCHITECT
 │  ├─ file-sizes.mjs             Dateigrößen für "size" in config.json
 │  ├─ sync-guide.mjs             baut public/guide/ aus dem Gratis-Guide
 │  ├─ sync-linkseite.mjs         baut public/linkseite/ aus der Link-Seiten-Anleitung
+│  ├─ sync-3d-regeln.mjs         baut public/3d-regeln/ aus den 3D-Regeln, samt Bildern
 │  ├─ sync-offer.mjs             baut public/angebot/ aus der Angebotsseite, samt Videos
-│  ├─ lib/artifact-page.mjs      gemeinsamer Teil der drei: Kopf, Schriften, Footer-Links
+│  ├─ lib/artifact-page.mjs      gemeinsamer Teil der vier: Kopf, Schriften, Footer-Links
 │  ├─ make-monogram.mjs          Monogramm in der Markenschrift (lib/glyphs.swift, CoreText)
 │  └─ fonts/                     Bricolage Grotesque (SIL OFL) für Monogramm und Social-Bild
 ├─ index.html                    Einstiegspunkt

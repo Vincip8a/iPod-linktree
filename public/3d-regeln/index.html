@@ -1,0 +1,442 @@
+<!doctype html>
+<!-- Erzeugt von tools/sync-3d-regeln.mjs aus 3d_regeln.html. Nicht hier ändern, sondern in der Quelle, dann neu synchronisieren. -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meine 12 Regeln für 3D-Renders mit Claude</title>
+<meta name="description" content="Diese Küche ist kein Foto, und keine Bild-KI hat sie gemalt. Sie ist Code, den Claude Code geschrieben hat. Zieh am Regler: Links ist dieselbe Küche ohne Schatten, Texturen und Lichteffekte. Rechts gelten alle zwölf Regeln.">
+<link rel="canonical" href="https://anstattpunkt.com/3d-regeln/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Anstattpunkt">
+<meta property="og:title" content="Meine 12 Regeln für 3D-Renders mit Claude">
+<meta property="og:description" content="Diese Küche ist kein Foto, und keine Bild-KI hat sie gemalt. Sie ist Code, den Claude Code geschrieben hat. Zieh am Regler: Links ist dieselbe Küche ohne Schatten, Texturen und Lichteffekte. Rechts gelten alle zwölf Regeln.">
+<meta property="og:url" content="https://anstattpunkt.com/3d-regeln/">
+<meta property="og:image" content="https://anstattpunkt.com/3d-regeln/media/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+/* Schriften von dieser Seite statt von Google Fonts (SIL Open Font License 1.1) */
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(../fonts/bricolage-grotesque-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Bricolage Grotesque'; font-style: normal; font-weight: 500 800; font-stretch: 100%; font-display: swap; src: url(../fonts/bricolage-grotesque-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 600; font-stretch: 100%; font-display: swap; src: url(../fonts/instrument-sans-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 600; font-stretch: 100%; font-display: swap; src: url(../fonts/instrument-sans-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(../fonts/jetbrains-mono-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 600; font-display: swap; src: url(../fonts/jetbrains-mono-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+</style>
+<style>
+/* Layout: hero = before/after slider of one code-rendered kitchen (flat vs finished), then the 12 rules in four groups
+   (sticky group label left, rules right, stacking on phones), then one copy block with all rules. Same tokens as the
+   Link-Seite guide. Media paths media/… are mapped by tools/sync-3d-regeln.mjs in the link-page repo. */
+:root {
+  --bg: #f6f1e6;
+  --surface: #fffcf5;
+  --ink: #171c2a;
+  --muted: #566074;
+  --line: #e0d7c3;
+  --accent: #24734d;
+  --alarm: #c2392c;
+  --hl: #ffd60a;
+  --hl-ink: #171c2a;
+  --code-bg: #171c2a;
+  --code-ink: #f4ebd8;
+  --code-fill: #ffd60a;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --step-s: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: clamp(1.7rem, 4vw, 2.3rem);
+  --step-3: clamp(2.3rem, 7vw, 4.2rem);
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171c2a; --surface: #212839; --ink: #f4ebd8; --muted: #8e9bb0; --line: #313a52;
+    --accent: #8df7c4; --alarm: #ff6a5b; --code-bg: #0e1119; --code-ink: #f4ebd8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171c2a; --surface: #212839; --ink: #f4ebd8; --muted: #8e9bb0; --line: #313a52;
+  --accent: #8df7c4; --alarm: #ff6a5b; --code-bg: #0e1119; --code-ink: #f4ebd8;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-0)/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1080px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1, h2 { font-family: var(--f-display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+h1 { font-size: var(--step-3); }
+h2 { font-size: var(--step-2); }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+code { font: 0.9em var(--f-mono); background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 0.1em 0.35em; border-radius: 4px; overflow-wrap: anywhere; }
+.label { font: 600 0.74rem/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Top bar */
+.top .wrap { padding-block: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.brand { font: 800 1.45rem var(--f-display); letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--accent); }
+.top nav a { font-weight: 600; font-size: var(--step-s); }
+
+/* Hero: copy left, slider right; stacked on phones */
+.hero .wrap { padding-block: 24px 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 48px; align-items: center; }
+.hero-copy { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.lead { font-size: var(--step-1); line-height: 1.5; color: var(--muted); max-width: 36rem; }
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 8px 0 0; }
+.facts div { border-top: 1px solid var(--line); padding-top: 10px; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.facts dt { font: 600 0.72rem var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-weight: 500; }
+
+/* Before/after slider */
+.ba { margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ba-stage { position: relative; width: 100%; max-width: 400px; aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: var(--line); --pos: 50%; touch-action: pan-y; }
+.ba-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; -webkit-user-drag: none; }
+.ba-stage .before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ba-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: #fffcf5; box-shadow: 0 0 0 1px rgba(23, 28, 42, 0.25); pointer-events: none; }
+.ba-knob { position: absolute; top: 50%; left: var(--pos); width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: #fffcf5; color: #171c2a; display: grid; place-items: center; font: 600 1rem var(--f-mono); box-shadow: 0 2px 10px rgba(23, 28, 42, 0.3); pointer-events: none; }
+.ba-tag { position: absolute; top: 12px; padding: 4px 10px; border-radius: 999px; font: 600 0.72rem/1.3 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; background: rgba(23, 28, 42, 0.78); color: #f4ebd8; pointer-events: none; }
+.ba-tag.l { left: 12px; }
+.ba-tag.r { right: 12px; }
+.ba-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.ba-stage:has(.ba-range:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ba figcaption { color: var(--muted); font-size: var(--step-s); max-width: 400px; }
+
+/* How to use */
+.how .wrap { padding-block: 0 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 14px; max-width: 65ch; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 12px; align-items: start; }
+.steps li::before { content: counter(s); display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--accent); color: var(--accent); font: 800 1rem var(--f-display); }
+
+/* Rule groups */
+.part { border-top: 1px solid var(--line); }
+.part .wrap { padding-block: 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.side { align-self: start; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); display: flex; flex-direction: column; gap: 10px; }
+.part-no { font: 600 0.8rem var(--f-mono); color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+.does { font-size: var(--step-1); line-height: 1.45; color: var(--muted); }
+.rules { display: flex; flex-direction: column; gap: 40px; min-width: 0; max-width: 65ch; }
+.rule { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.rule h3 { display: flex; align-items: baseline; gap: 12px; font: 800 var(--step-1)/1.25 var(--f-display); letter-spacing: -0.01em; }
+.rule h3 .n { flex: none; font: 600 0.85rem var(--f-mono); color: var(--accent); }
+.say { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: var(--radius); padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; }
+.say .label { color: var(--accent); }
+.say p { font-weight: 500; }
+.shot { margin: 4px 0 0; display: flex; flex-direction: column; gap: 6px; }
+.shot img { display: block; width: 100%; height: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+.shot.tall img { width: auto; max-width: 100%; max-height: 420px; }
+.shot figcaption { font-size: var(--step-s); color: var(--muted); }
+
+/* Copy block */
+.all { border-top: 1px solid var(--line); }
+.all .wrap { padding-block: 56px; display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; }
+.prompt { border-radius: var(--radius); background: var(--code-bg); color: var(--code-ink); overflow: hidden; min-width: 0; }
+.prompt-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 8px 8px 16px; border-bottom: 1px solid color-mix(in srgb, var(--code-ink) 14%, transparent); }
+.prompt-bar .label { color: color-mix(in srgb, var(--code-ink) 70%, transparent); }
+.copy { min-height: 36px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid color-mix(in srgb, var(--code-ink) 45%, transparent); background: transparent; color: var(--code-ink); font: 600 0.82rem var(--f-body); cursor: pointer; }
+.copy:hover { border-color: var(--code-ink); }
+.copy:focus-visible { outline-color: var(--code-fill); }
+.prompt pre { margin: 0; padding: 14px 16px 18px; font: 400 0.86rem/1.6 var(--f-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.traps { margin-top: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; }
+.traps h3 { font: 600 0.74rem/1.3 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--alarm); }
+.traps ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+
+/* More */
+.more { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.more .wrap { padding-block: 64px; display: flex; flex-direction: column; gap: 20px; }
+.more p { color: var(--muted); font-size: var(--step-1); line-height: 1.5; max-width: 46rem; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; justify-content: center; align-items: center; min-height: 48px; padding: 12px 22px; border-radius: 999px; font: 600 1rem var(--f-body); text-decoration: none; background: var(--ink); color: var(--bg); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+
+footer .wrap { padding-block: 28px 40px; display: flex; flex-direction: column; gap: 8px; font-size: var(--step-s); color: var(--muted); }
+.ph { font-family: var(--f-mono); font-size: 0.8rem; }
+
+@media (max-width: 860px) {
+  .hero .wrap, .how .wrap, .part .wrap, .all .wrap { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .side { position: static; }
+  .ba-stage { max-width: 360px; }
+  /* phones: the picture right under the headline, the lead after it */
+  .hero .wrap { display: flex; flex-direction: column; align-items: stretch; gap: 18px; }
+  .hero-copy { display: contents; }
+  .hero-copy .label { order: 1; }
+  .hero-copy h1 { order: 2; }
+  .ba { order: 3; margin-block: 6px; }
+  .hero-copy .lead { order: 4; }
+  .hero-copy .facts { order: 5; }
+}
+@media (max-width: 560px) {
+  .facts { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top">anstatt<span>.</span></a>
+    <nav aria-label="Auf dieser Seite"><a href="#alle">Alle Regeln kopieren</a></nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="label">Gratis · 12 Regeln · 6 Minuten Lesezeit</span>
+        <h1>Meine 12 Regeln für 3D-Renders mit Claude</h1>
+        <p class="lead">Diese Küche ist kein Foto, und keine Bild-KI hat sie gemalt. Sie ist Code, den Claude Code geschrieben hat. Zieh am Regler: Links ist dieselbe Küche ohne Schatten, Texturen und Lichteffekte. Rechts gelten alle zwölf Regeln.</p>
+        <dl class="facts">
+          <div><dt>Das Bild</dt><dd>1.012 Zeilen Code, alle von Claude Code</dd></div>
+          <div><dt>Gerechnet mit</dt><dd>SceneKit, Apples 3D-Engine</dd></div>
+          <div><dt>Gilt für</dt><dd>jedes Bild aus Code: Produkt, Raum, Figur</dd></div>
+        </dl>
+      </div>
+
+      <figure class="ba">
+        <div class="ba-stage" id="ba">
+          <img class="after" src="media/fertig.jpg" width="900" height="1600" alt="Die fertige Küche: Sonne durchs Fenster, Lichtstrahlen, Holz mit Maserung, glänzende Fliesen, Kaffeemaschine mit Wasserfenster.">
+          <img class="before" src="media/flach.jpg" width="900" height="1600" alt="Dieselbe Küche ohne Schatten, Texturen und Lichteffekte: einfarbige Flächen, keine Sonne.">
+          <span class="ba-tag l">Ohne</span>
+          <span class="ba-tag r">Mit den Regeln</span>
+          <span class="ba-line"></span>
+          <span class="ba-knob" aria-hidden="true">↔</span>
+          <input class="ba-range" type="range" min="0" max="100" value="50" aria-label="Vergleich: ohne Regeln links, mit Regeln rechts">
+        </div>
+        <figcaption>Gleiche Szene, gleiche Kamera. Links sind Schatten, Texturen und Lichteffekte abgeschaltet.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="how" aria-labelledby="h-how">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Vorab</span>
+        <h2 id="h-how">So nutzt du sie</h2>
+      </div>
+      <ol class="steps">
+        <li><p>Kopier den <a href="#alle">Block ganz unten</a>. In Claude Code kommt er in deine <code>CLAUDE.md</code>, in claude.ai in die Projekt-Anweisungen. Dann gelten die Regeln in jedem Chat.</p></li>
+        <li><p>Lass Claude dein erstes Bild rendern. Das Motiv ist egal: Produkt, Zimmer, Figur.</p></li>
+        <li><p>Schau dir Ausschnitte an und sag in deinen Worten, was dich stört. „Das Wasser ist nur ein blauer Strich“ reicht. Die Ursache sucht Claude selbst.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="h-licht">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Regeln 1–3</span>
+        <h2 id="h-licht">Licht</h2>
+        <p class="does">Das Licht entscheidet, ob ein Bild echt wirkt. Es kommt vor allem anderen.</p>
+      </div>
+      <div class="rules">
+        <article class="rule">
+          <h3><span class="n">01</span>Ein Licht, das es wirklich gibt</h3>
+          <p>Das Hauptlicht braucht eine Quelle, die man versteht: die Sonne durchs Fenster oder eine Lampe. Dann zeigen alle Schatten in dieselbe Richtung. Licht von der Kamera aus macht alles flach.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Das Hauptlicht ist die Sonne durchs linke Fenster. Kein Fülllicht von der Kamera aus.“</p></div>
+          <figure class="shot"><img src="media/r01_licht.jpg" width="1080" height="760" loading="lazy" alt="Sonnenflecken auf den Fliesen hinter der Kaffeemaschine."><figcaption>Die Sonnenflecken auf den Fliesen zeigen, woher das Licht kommt.</figcaption></figure>
+        </article>
+        <article class="rule">
+          <h3><span class="n">02</span>Schatten sind nie schwarz</h3>
+          <p>Auch in den Schatten fällt noch Licht. Kühles Licht kommt vom Himmel, warmes von hellen Flächen in der Sonne. Ohne dieses Licht sehen Schatten aus wie Löcher.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Die Schattenseite bekommt kühles, weiches Licht vom Fenster. Dazu kommt ein schwacher, warmer Bounce von den sonnigen Flächen.“</p></div>
+        </article>
+        <article class="rule">
+          <h3><span class="n">03</span>Licht sieht man in der Luft, aber leise</h3>
+          <p>Lichtstrahlen und ein paar Staubkörner zeigen, dass Luft im Raum ist. Der Staub bleibt weich und dunkel. Helle Punkte mit Leuchten sehen aus wie Glitzer.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Weiche Lichtstrahlen durchs Fenster. Staub nur als dunkle, weiche Flecken, ohne hellen Kern.“</p></div>
+          <figure class="shot"><img src="media/r03_luft.jpg" width="600" height="520" loading="lazy" alt="Lichtstrahlen und Staub über der Kaffeemaschine."><figcaption>Die Strahlen sind schwach, der Staub ist nur angedeutet.</figcaption></figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="h-flaeche">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Regeln 4–7</span>
+        <h2 id="h-flaeche">Oberflächen</h2>
+        <p class="does">Perfekt glatte Flächen verraten den Computer sofort.</p>
+      </div>
+      <div class="rules">
+        <article class="rule">
+          <h3><span class="n">04</span>Nichts ist perfekt</h3>
+          <p>Echte Dinge werden benutzt. Holz hat Abrieb an den Kanten, Metall hat Fingerabdrücke. Fliesen sitzen ein kleines bisschen schief. Diese Spuren machen ein Bild glaubwürdig.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Jede Fläche bekommt Gebrauchsspuren: Abrieb, Flecken, ungleichmäßiger Glanz.“</p></div>
+          <figure class="shot"><img src="media/r04_holz.jpg" width="760" height="560" loading="lazy" alt="Arbeitsplatte aus Holz mit Maserung, Serviette, Löffel und Tasse."><figcaption>Die Arbeitsplatte hat Maserung, Abrieb und einen ungleichmäßigen Glanz.</figcaption></figure>
+        </article>
+        <article class="rule">
+          <h3><span class="n">05</span>Jedes Material hat drei Schichten</h3>
+          <p>Farbe allein reicht nicht. Jedes Material braucht dazu ein Relief (Normal Map) und einen Glanz (Roughness). Holz bekommt eine Maserung, Papier Knicke und Stoff eine Webung.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Jedes Material bekommt eine Farb-, eine Relief- und eine Glanz-Textur.“</p></div>
+          <figure class="shot tall"><img src="media/r05_tuete.jpg" width="320" height="560" loading="lazy" alt="Kaffeetüte aus Kraftpapier mit Knicken und Etikett."><figcaption>Kraftpapier mit Knicken, Falz und Etikett.</figcaption></figure>
+        </article>
+        <article class="rule">
+          <h3><span class="n">06</span>Texturen in echter Größe</h3>
+          <p>Eine Textur muss zur echten Größe der Fläche passen. Sonst wird sie gestreckt und zieht Streifen. Stell sie deshalb auf Wiederholen. Details unter zwei Pixeln im fertigen Bild sieht keiner.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Skalier Texturen nach der echten Länge der Fläche und stell sie auf Wiederholen. Details mindestens zwei Pixel groß.“</p></div>
+        </article>
+        <article class="rule">
+          <h3><span class="n">07</span>Alles braucht Tiefe</h3>
+          <p>Was nur als Farbfläche aufgemalt ist, wirkt wie ein Aufkleber. Das gilt für Wasserstände, Anzeigen und Schalter. Tiefe heißt: eine Vertiefung, ein Volumen dahinter und eine eigene Oberfläche. Dazu kommt eine Kante, wo es an die Wand stößt.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Nichts als flache Leuchtfläche. Fenster und Anzeigen bekommen eine Vertiefung, ein Volumen und einen Rand.“</p></div>
+          <figure class="shot tall"><img src="media/r07_tiefe.jpg" width="380" height="520" loading="lazy" alt="Das Wasserfenster an der Seite der Kaffeemaschine."><figcaption>Das Wasserfenster ist eine Vertiefung mit echtem Wasser und einer Skala auf der Scheibe.</figcaption></figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="h-form">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Regeln 8–10</span>
+        <h2 id="h-form">Form</h2>
+        <p class="does">Wie Dinge gebaut sind und wie sie zueinander stehen.</p>
+      </div>
+      <div class="rules">
+        <article class="rule">
+          <h3><span class="n">08</span>Rund bleibt rund</h3>
+          <p>Was in echt gebogen oder weich ist, bekommt Kurven statt Kanten: Henkel, Tücher, Tüten. Jeder Gegenstand ist ein Stück. Ein Löffel aus zwei zusammengesteckten Teilen fällt sofort auf.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Bau gebogene Dinge als glatte Kurven. Jeder Gegenstand ist ein Stück.“</p></div>
+        </article>
+        <article class="rule">
+          <h3><span class="n">09</span>Wo Dinge nah sind, wird es dunkel</h3>
+          <p>Wo sich zwei Dinge berühren oder fast berühren, kommt weniger Licht hin. Das gilt für die Tasse am Haken, die Tüte an der Wand und die Falten im Tuch. Ohne diese Kontaktschatten schwebt alles.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Kontaktschatten hinter und unter jedem Gegenstand. Kleine Falten bekommen eine eingebackene Verschattung.“</p></div>
+          <figure class="shot"><img src="media/r09_tassen.jpg" width="440" height="340" loading="lazy" alt="Zwei Tassen hängen an Haken vor den Fliesen und werfen Schatten."><figcaption>Hinter den Tassen ist die Wand dunkler.</figcaption></figure>
+        </article>
+        <article class="rule">
+          <h3><span class="n">10</span>Glas gibt nur Licht dazu</h3>
+          <p>Klares Glas ist eine ganz leichte Tönung mit hellen Reflexen. Graue oder weiße halbdurchsichtige Schichten machen es schmutzig. Spiegelt sich der dunkle Raum frontal darin, wirkt es wie Rauchglas.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Glas bekommt eine leichte Tönung und Glanzlichter, die nur Licht dazugeben. Keine frontale Spiegelung des Raums.“</p></div>
+          <figure class="shot"><img src="media/r10_glas.jpg" width="560" height="560" loading="lazy" alt="Die Glastür des Hängeschranks mit einem schwachen Lichtstreif."><figcaption>In der Schranktür sieht man nur einen schwachen Streif und die Kante.</figcaption></figure>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" aria-labelledby="h-pruefen">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Regeln 11–12</span>
+        <h2 id="h-pruefen">Prüfen</h2>
+        <p class="does">Die meisten Fehler sieht man erst beim zweiten Blick.</p>
+      </div>
+      <div class="rules">
+        <article class="rule">
+          <h3><span class="n">11</span>Nichts steckt ineinander, nichts flackert</h3>
+          <p>Gegenstände dürfen sich berühren, aber nicht durchdringen. Liegen zwei Flächen genau aufeinander, flackern sie im Video. Der Rechner weiß dann nicht, welche vorne ist.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Prüf, dass nichts ineinander steckt und keine zwei Flächen genau aufeinander liegen.“</p></div>
+        </article>
+        <article class="rule">
+          <h3><span class="n">12</span>Zweimal rendern, dann reinzoomen</h3>
+          <p>Rechne dasselbe Bild zweimal. Sieht es verschieden aus, stimmt etwas nicht. Prüf danach Ausschnitte statt nur das ganze Bild. Die meisten Fehler zeigen sich erst beim Reinzoomen.</p>
+          <div class="say"><span class="label">Sag Claude</span><p>„Rendere das Bild zweimal und vergleiche. Dann zeig mir Ausschnitte von jedem Gegenstand.“</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="all" id="alle" aria-labelledby="h-alle">
+    <div class="wrap">
+      <div class="side">
+        <span class="part-no">Zum Kopieren</span>
+        <h2 id="h-alle">Alle 12 Regeln in einem Block</h2>
+        <p class="does">In deine <code>CLAUDE.md</code> oder in die Projekt-Anweisungen.</p>
+      </div>
+      <div>
+        <div class="prompt">
+          <div class="prompt-bar"><span class="label">3D-Regeln · CLAUDE.md</span><button type="button" class="copy" data-copy="p-regeln">Kopieren</button></div>
+<pre id="p-regeln"># 3D-Regeln für jedes Bild, das du mit Code renderst
+
+## Licht
+1. Ein Hauptlicht mit echter Quelle (Sonne durchs Fenster, eine Lampe). Kein Fülllicht von der Kamera aus. Alle Schatten zeigen in dieselbe Richtung.
+2. Schatten sind nie schwarz: kühles, weiches Licht von der Fensterseite, dazu ein schwacher warmer Bounce von den sonnigen Flächen.
+3. Licht in der Luft zeigen: weiche Lichtstrahlen. Staub nur als dunkle, weiche Flecken ohne hellen Kern und ohne Glow.
+
+## Oberflächen
+4. Nichts ist perfekt: jede Fläche bekommt Gebrauchsspuren (Abrieb an Kanten, Fingerabdrücke, Flecken, ungleichmäßige Rauheit, Fliesen minimal schief).
+5. Jedes Material hat drei Schichten: Farbe, Relief (Normal Map) und Glanz (Roughness). Holz mit Maserung, Papier mit Knicken, Stoff mit Webung.
+6. Texturen nach der echten Größe der Fläche skalieren und auf Wiederholen stellen. Details mindestens 2 Pixel groß im fertigen Bild.
+7. Nichts als flache Farb- oder Leuchtfläche aufmalen (Anzeigen, Wasserstände, Schalter). Tiefe = Vertiefung, Volumen, eigene Oberfläche, Kante zur Wand.
+
+## Form
+8. Was in echt gebogen oder weich ist, bekommt glatte Kurven (Henkel, Tücher, Tüten). Jeder Gegenstand ist ein Stück, nicht zusammengesteckt.
+9. Kontaktschatten überall, wo sich Dinge berühren oder nah sind (Tasse am Haken, Tüte an der Wand, Falten im Stoff). Kleine Falten bekommen eingebackene Verschattung.
+10. Glas: leichte Tönung plus Glanzlichter, die nur Licht dazugeben. Keine grauen oder weißen halbdurchsichtigen Schichten, keine frontale Spiegelung des Raums.
+
+## Prüfen
+11. Nichts steckt ineinander, nichts schwebt. Keine zwei Flächen genau aufeinander (die flackern im Video).
+12. Jedes Bild zweimal rendern und vergleichen. Dann Ausschnitte von jedem Gegenstand prüfen, nicht nur das ganze Bild.</pre>
+        </div>
+
+        <div class="traps">
+          <h3>Vier Fallen, falls Claude mit SceneKit rendert</h3>
+          <ul>
+            <li>Texturen stehen am Anfang nicht auf Wiederholen. Dann wird die letzte Pixelreihe über die Fläche verschmiert. Setz <code>wrapS</code> und <code>wrapT</code> auf <code>.repeat</code>.</li>
+            <li>Ein Objekt bekommt höchstens acht Lichter. Sind es mehr, fällt bei jedem Render ein anderes weg. Genau das findet Regel 12.</li>
+            <li>Ein Flächenlicht (<code>.area</code>) zeichnet sein Rechteck ins Bild, solange <code>drawsArea</code> nicht <code>false</code> ist.</li>
+            <li>Glas als PBR-Material mit wenig <code>transparency</code> kam bei mir undurchsichtig heraus. Mit Blinn und Reflexion blieb es klar.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="h-more">
+    <div class="wrap">
+      <span class="label">Mehr von anstatt.</span>
+      <h2 id="h-more">Schick mir dein Bild</h2>
+      <p>Wenn du mit diesen Regeln renderst, will ich das Ergebnis sehen. Wie ich meine Link-Seite mit Claude Code gebaut habe, steht in meiner zweiten Gratis-Anleitung.</p>
+      <div class="btns">
+        <a class="btn" href="https://anstattpunkt.com/">Meinen iPod ansehen</a>
+        <a class="btn ghost" href="https://anstattpunkt.com/linkseite/">Link-Seite bauen</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Alle Beispielbilder stammen aus meinem Kaffeemaschinen-Bild vom 6. November 2026.</span>
+    <span>Kontakt: <a href="mailto:hallo@anstattpunkt.com">hallo@anstattpunkt.com</a> · Instagram <a href="https://www.instagram.com/anstatt.ai">@anstatt.ai</a></span>
+    <span><a href="../impressum.html">Impressum</a> · <a href="../datenschutz.html">Datenschutz</a></span>
+    <span>© 2026 anstatt.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Before/after slider: the range input sits invisibly over the picture and moves the clip line.
+  var stage = document.getElementById("ba");
+  var range = stage.querySelector(".ba-range");
+  function set() { stage.style.setProperty("--pos", range.value + "%"); }
+  range.addEventListener("input", set);
+  set();
+
+  // Copy button: copy the rules block as plain text.
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var text = document.getElementById(btn.getAttribute("data-copy")).textContent;
+      function done(ok) {
+        btn.textContent = ok ? "Kopiert" : "Bitte markieren";
+        setTimeout(function () { btn.textContent = "Kopieren"; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else {
+        done(false);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

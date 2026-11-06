@@ -39,6 +39,8 @@ const ICON = {
   book: '<path d="M50 35c-6-4.5-13.5-6.5-22-6.5v35c8.5 0 16 2 22 6.5 6-4.5 13.5-6.5 22-6.5v-35c-8.5 0-16 2-22 6.5z"/><path d="M50 35v35" fill="none"/>',
   // a closed box seen from above, its lid lighter
   box: '<path d="M50 26.5 72 37v26L50 73.5 28 63V37z"/><path d="M50 26.5 72 37 50 47.5 28 37z" fill="#fff" fill-opacity=".35"/><path d="M50 47.5v26" fill="none"/>',
+  // a 3D cube: lit top, darker right face (the 3D-Regeln guide)
+  cube: '<path d="M50 25 72 37.5v25L50 75 28 62.5v-25z"/><path d="M50 25 72 37.5 50 50 28 37.5z" fill="#fff" fill-opacity=".45"/><path d="M50 50 72 37.5v25L50 75z" fill="#0d3a7a" fill-opacity=".35"/><path d="M50 50v25" fill="none"/>',
   // a film clapperboard, its arm open
   film: '<path d="M29 47h42v21a4 4 0 0 1-4 4H33a4 4 0 0 1-4-4z"/><path d="m28.2 44.6-1.7-7.2 40.9-9.6 1.7 7.2z"/><path d="m33.5 35.8 6.6 5 6.2-1.5-6.6-5zm14.2-3.3 6.6 5 6.2-1.5-6.6-5z" fill="#fff" fill-opacity=".8" stroke="none"/>',
   // the games submenu: a game pad with its cross and two buttons

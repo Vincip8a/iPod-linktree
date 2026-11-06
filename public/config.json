@@ -21,6 +21,32 @@
       "title": "Free Guides",
       "items": [
         {
+          "id": "3d-regeln",
+          "label": {
+            "de": "3D-Renders mit Claude",
+            "en": "3D renders with Claude"
+          },
+          "type": "page",
+          "icon": "cube",
+          "title": {
+            "de": "3D-Renders mit Claude",
+            "en": "3D renders with Claude"
+          },
+          "body": {
+            "de": "Meine 12 Regeln für 3D-Bilder aus Code: Licht, Oberflächen, Form, Prüfen. Mit einem Block zum Kopieren für Claude. Kostenlos und ohne Anmeldung, auf Deutsch.",
+            "en": "My 12 rules for 3D pictures made from code: light, surfaces, shape, checks. With one block to copy into Claude. Free, no sign-up, in German."
+          },
+          "actions": [
+            {
+              "label": {
+                "de": "Regeln lesen",
+                "en": "Read the rules"
+              },
+              "href": "3d-regeln/"
+            }
+          ]
+        },
+        {
           "id": "linkseite",
           "label": {
             "de": "Link-Seite bauen",
